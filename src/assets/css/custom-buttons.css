@@ -60,10 +60,6 @@
 }
 
 
-input {
-    visibility: hidden;
-}
-
 input:checked+.square {
     background: linear-gradient(to right, #21c8cc, #2595ec);
 }

@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import env from './env'
 import normalize from 'normalize.css'
+import VeeValidate from 'vee-validate';
 import Multiselect from 'vue-multiselect'
 import multiselectStyle from 'vue-multiselect/dist/vue-multiselect.min.css'
 
@@ -14,6 +15,7 @@ import './assets/css/custom-buttons.css'
 Vue.config.productionTip = false
 
 Vue.use(normalize);
+Vue.use(VeeValidate);
 Vue.use(multiselectStyle);
 Vue.component('multiselect', Multiselect);
 

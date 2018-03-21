@@ -97,7 +97,7 @@
           {
             icon: './src/assets/img/icons/products.svg', text: 'Produkty', path: '', children: [
               {icon: 'now-ui-icons files_paper', text: 'Lista produktów', path: ''},
-              {icon: 'now-ui-icons files_paper', text: 'Kategorie', path: ''},
+              {icon: 'now-ui-icons files_paper', text: 'Kategorie', path: '/categories'},
               {icon: 'now-ui-icons location_bookmark', text: 'Atrybuty', path: '/attribute-sets'},
               {icon: 'now-ui-icons files_box', text: 'Warianty', path: ''},
               {icon: 'now-ui-icons shopping_box', text: 'Producenci', path: ''},

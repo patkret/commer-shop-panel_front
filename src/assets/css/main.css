@@ -18,6 +18,9 @@ textarea:focus {
 ul li {
     list-style-type: none;
 }
+.visibility-hidden {
+    visibility: hidden;
+}
 
 #main{
     display: grid;
@@ -361,6 +364,6 @@ select {
 
 .component-container{
     grid-area: component-container;
-    justify-self: center;
+    margin-left: 50px;
 }
 

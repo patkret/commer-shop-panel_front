@@ -1,8 +1,9 @@
 <template>
     <div>
-        <!--<form>-->
-        <p>Tu formularz</p>
-        <!--</form>-->
+        <form>
+            <label class="labels">Nazwa</label>
+            <input type="text" placeholder="" name="name">
+        </form>
     </div>
 </template>
 
