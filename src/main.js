@@ -16,7 +16,7 @@ import './assets/css/custom-buttons.css'
 Vue.config.productionTip = false
 
 Vue.use(normalize);
-Vue.use(VeeValidate);
+Vue.use (VeeValidate);
 Vue.use(multiselectStyle);
 Vue.component('multiselect', Multiselect);
 

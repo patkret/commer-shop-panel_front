@@ -144,9 +144,7 @@ select {
     height: 80px;
     display: block;
 }
-
 .user-container {
-    line-height: 80px;
     height: 80px;
     position: relative;
     padding-left: 20px;
@@ -172,13 +170,14 @@ select {
 }
 .user-menu {
     position: absolute;
-    top: 75%;
+    top: 70%;
+    right: 12%;
     font-size: 12px;
     list-style: none;
     border: 1px solid #dde0e5;
     border-radius: 10px;
     background: #ffffff;
-    padding-left: 0!important;
+    padding-left: 0;
 }
 .user-menu-arrow {
 
@@ -202,9 +201,7 @@ select {
     color: #000000;
     text-decoration: none;
 }
-
 /*sidebar*/
-
 #sidebar {
     background: linear-gradient(#2595ec, #21c8cc);
     min-height: 90vh;
@@ -220,7 +217,6 @@ select {
     grid-area: main-sidebar;
 
 }
-
 .sidebar-items {
     margin-top: 45px;
     grid-area: items;
@@ -228,7 +224,6 @@ select {
     flex-direction: column;
     padding: 0 !important;
 }
-
 .item {
     display: flex;
     flex-direction: row;
@@ -237,7 +232,6 @@ select {
     margin-bottom: 28px;
     margin-left: 45px;
 }
-
 .item-active{
     padding-left: 45px;
     margin-bottom: 28px;

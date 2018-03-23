@@ -43,7 +43,7 @@
                     <li class="user-menu-item"><a class="user-menu-a" href="">Ustawienia konta</a></li>
                     <li class="user-menu-item"><a class="user-menu-a" href="">Rozliczenia</a></li>
                     <li class="user-menu-item"><a class="user-menu-a" href="">Pomoc</a></li>
-                    <li class="user-menu-item"><a class="user-menu-a" href="">Wyloguj</a></li>
+                    <li class="user-menu-item"><a class="user-menu-a" @click="logout()">Wyloguj</a></li>
                 </ul>
             </div>
         </div>
@@ -78,9 +78,21 @@
 
     </div>
 </template>
+<style scoped>
+   .shop-select {
+        background-color: #f5f7fa;
+    }
+    .multiselect .multiselect__tags {
+        background-color: #f5f7fa;
 
+    }
+    .multiselect .multiselect__single {
+        background-color: #f5f7fa;
+    }
+</style>
 <script>
-    import icons from './assets/icons'
+  import icons from './assets/icons'
+
   export default {
     name: 'admin',
     data () {
@@ -91,7 +103,6 @@
         current_path: '',
         item: '',
         items: [
-
           {icon: icons.dashboard, text: 'Dashboard', path: '/dashboard'},
           {icon: icons.orders, text: 'Sprzedaż', path: '#2'},
           {icon: icons.products, text: 'Produkty', path: '', children:
@@ -109,7 +120,6 @@
           {icon: icons.reports, text: 'Raporty', path: '#5'},
           {icon: icons.settings, text: 'Ustawienia', path: '#6'},
           {icon: icons.integrations, text: 'Integracje', path: '/buttons'},
-
         ],
         options: [
           {id: 1, name: 'SHOP 1'},
@@ -117,7 +127,8 @@
           {id: 3, name: 'SHOP 3'},
           {id: 4, name: 'SHOP 4'},
         ],
-        value: ''
+
+        value: '',
       }
     },
 

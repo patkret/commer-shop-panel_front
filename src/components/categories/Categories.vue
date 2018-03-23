@@ -5,77 +5,102 @@
             <div class="categories-list">
                 <div class="list-container">
                     <ul :list="items" >
-                        <li v-for="item in items">{{item.id}}. {{item.name}}</li>
+                        <draggable>
+                            <li class="categories-list-item" v-for="item in items">
+                                <img class="categories-list-img" src="../../assets/img/icons/list-plus.png" alt="plusik">
+                                <a class="list-anchor" href="" @click.prevent="editCategory(item.id)">{{item.name}}</a>
+                            </li>
+                        </draggable>
                     </ul>
                 </div>
             </div>
             <div class="categories-details">
-                <form action="">
+                <form @submit.prevent="saveCategory">
                     <div class="form-row">
-                        <label class="categories-form-label" for="">Dodaj kategorie</label>
-                        <input class="form-input categories-form-field" type="text">
+                        <label class="form-label col-1" for="name">Dodaj kategorie</label>
+                        <div class="form-data col-2">
+                            <input  v-model="name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input " type="text" name="name">
+                            <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
+                        </div>
                     </div>
                     <div class="form-row">
-                        <label for="" class="categories-form-label">Przypisz do</label>
+                        <label for="" class="form-label col-1">Przypisz do</label>
                         <multiselect
                                 class="shop-select categories-form-field"
-                                v-model="value"
-                                :options="options"
+                                v-model="selectedCategory"
+                                :options="items"
                                 :allow-empty="false"
                                 :searchable="false"
                                 :selectedLabel="''"
                                 track-by="name"
                                 label="name"
-                                id="ms-1"
                                 :deselectLabel="''"
                                 :selectLabel="''"
                                 :hideSelected="true"
                                 placeholder="Wybierz"></multiselect>
                     </div>
                     <div class="form-row">
-                        <label class="categories-form-label" for="">Aktywność</label>
+                        <label class="form-label col-1" for="">Aktywność</label>
                         <div class="checkbox-square form-group">
                             <input class="visibility-hidden" type="checkbox" id="checkbox">
                             <label for="checkbox" class="square"></label>
                         </div>
                     </div>
                     <div class="form-row">
-                        <label class="categories-form-label" for="">Opis produktu</label>
-                        <textarea class="categories-form-field categories-form-textarea" name="" id="" cols="30" rows="20"></textarea>
+                        <label class="form-label col-1" for="">Opis produktu</label>
+                        <div class="form-data col-2">
+                            <textarea v-model="description" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('description') }" class="form-textarea" name="description" id=""></textarea>
+                            <span v-show="errors.has('description')" class="help is-danger">{{ errors.first('description') }}</span>
+                    </div>
+                        <div class="col-3"></div>
                     </div>
                     <div class="form-row">
-                        <label class="categories-form-label" for="">Tytuł strony</label>
-                        <input class="form-input categories-form-field" type="text">
-                        <div class="categories-help-container">
-                            <div class="categories-form-help"></div>
-                            <div class="categories-form-cloud"><p>Pomocny Krzysztof</p></div>
+                        <label class="form-label col-1" for="">Tytuł strony</label>
+                        <div class="form-data col-2">
+                            <input  v-model="title" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('title') }" class="form-input " type="text" name="title">
+                            <span v-show="errors.has('title')" class="help is-danger">{{ errors.first('title') }}</span>
+                        </div>
+                        <div class="form-help col-3">
+                            <div class="form-help-square"></div>
+                            <div class="form-help-cloud"><p>Pomocny Krzysztof</p></div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <label class="categories-form-label" for="">Meta description</label>
-                        <input class="form-input categories-form-field" type="text">
-                        <div class="categories-help-container">
-                            <div class="categories-form-help"></div>
-                            <div class="categories-form-cloud"><p>Pomocny Krzysztof</p></div>
+                        <label class="form-label col-1" for="">Meta description</label>
+                        <div class="form-data col-2">
+                            <input  v-model="metaDescription" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('metaDescription') }" class="form-input " type="text" name="metaDescription">
+                            <span v-show="errors.has('metaDescription')" class="help is-danger">{{ errors.first('metaDescription') }}</span>
+                        </div>
+                        <div class="form-help col-3">
+                            <div class="form-help-square"></div>
+                            <div class="form-help-cloud"><p>Pomocny Krzysztof</p></div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <label class="categories-form-label" for="">Meta Keywords</label>
-                        <input class="form-input categories-form-field" type="text">
-                        <div class="categories-help-container">
-                            <div class="categories-form-help"></div>
-                            <div class="categories-form-cloud"><p>Pomocny Krzysztof</p></div>
+                        <label class="form-label col-1" for="">Meta Keywords</label>
+                        <div class="form-data col-2">
+                            <input  v-model="metaKeywords" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('metaKeywords') }" class="form-input " type="text" name="metaKeywords">
+                            <span v-show="errors.has('metaKeywords')" class="help is-danger">{{ errors.first('metaKeywords') }}</span>
+                        </div>
+                        <div class="form-help col-3">
+                            <div class="form-help-square"></div>
+                            <div class="form-help-cloud"><p>Pomocny Krzysztof</p></div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <label class="categories-form-label" for="">Url</label>
-                        <input class="form-input categories-form-field" type="text">
-                        <div class="categories-help-container">
-                            <div class="categories-form-help"></div>
-                            <div class="categories-form-cloud"><p>Pomocny Krzysztof</p></div>
+                        <label class="form-label col-1" for="">Url</label>
+                        <div class="form-data col-2">
+                            <input  v-model="addressUrl" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('addressUrl') }" class="form-input " type="text" name="addressUrl">
+                            <span v-show="errors.has('addressUrl')" class="help is-danger">{{ errors.first('addressUrl') }}</span>
+                        </div>
+                        <div class="form-help col-3">
+                            <div class="form-help-square"></div>
+                            <div class="form-help-cloud"><p>Pomocny Krzysztof</p></div>
                         </div>
                     </div>
-                    <button type="submit" class="custom-button">Zapisz</button>
+                    <div class="form-row">
+                    <button type="submit" class="custom-button col-2">Zapisz</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -83,27 +108,49 @@
 </template>
 
 <script>
+  import draggable from 'vuedraggable'
+
   export default {
     name: "Categories",
+    components: {
+      draggable,
+    },
     data () {
       return {
+        name: '',
+        description: '',
+        title: '',
+        metaDescription: '',
+        metaKeywords: '',
+        addressUrl: '',
         items: [],
-        options: [
-          {id: 1, name: 'SHOP 1'},
-          {id: 2, name: 'SHOP 2'},
-          {id: 3, name: 'SHOP 3'},
-          {id: 4, name: 'SHOP 4'},
-        ],
-        value: ''
+        selectedCategory: '',
       }
     },
     methods: {
+      editCategory(id){
+        let category = this.items.find(item => item.id === id)
+        this.name = category.name
+      },
+      saveCategory () {
+        this.$validator.validateAll().then((result) => {
+          if (result) {
+            axios.post('/categories', {
+              name: this.name,
+              visibility: this.visibility,
+              parent_id: this.selectedCategory.id,
+            }).then(() => {
+              this.$router.replace('/categories')
+            })
+          }
+        });
+      },
 
     },
     created: function () {
       axios('categories')
       .then(result => this.items = result.data)
-    }
+    },
   }
 </script>
 
@@ -116,6 +163,13 @@
     .categories-list {
         grid-area: categories-list;
     }
+    .categories-list-item {
+        margin: 10px 0;
+    }
+    .categories-list-img {
+        padding-bottom: 3px;
+        margin-right: 5px;
+    }
     .categories-details {
         grid-area: categories-details;
         margin-top: 40px;
@@ -126,15 +180,27 @@
         border-radius: 10px;
         background-color: #ffffff;
         padding: 30px;
+        box-shadow: 5px 5px 5px 2px #eff1f4;
+    }
+    .list-anchor {
+        color: #000000;
     }
     .form-row {
         display: grid;
-        margin: 10px 0;
-        grid-template-areas: 'categories-form-label categories-form-field categories-help-container';
+        margin: 20px 0;
+        grid-template-areas: 'col-1 col-2 col-3';
         grid-template-columns: 130px 520px 1fr;
     }
-    .categories-form-label {
-        grid-area: categories-form-label;
+    .col-1 {
+        grid-area: col-1;
+    }
+    .col-2 {
+        grid-area: col-2;
+    }
+    .col-3 {
+        grid-area: col-3;
+    }
+    .form-label {
         font-weight: 700;
         margin-top: 10px;
         margin-right: 15px;
@@ -153,15 +219,10 @@
         font-size: 12px;
         font-weight: 700;
     }
-    .categories-form-field {
-        grid-area: categories-form-field;
-    }
-    .categories-help-container {
-        grid-area: categories-help-container
-    }
-    .categories-form-textarea {
+    .form-textarea {
         resize: none;
         height: 250px;
+        width: available;
         margin-left: 10px;
         padding: 10px 0 0 10px;
         border: none;
@@ -171,19 +232,20 @@
     }
     .shop-select {
         width: auto;
+        background-color: #ffffff;
         margin-left: 10px;
     }
-    .categories-help-container {
+    .form-help {
         display: flex;
     }
-    .categories-form-help {
+    .form-help-square {
         height: 25px;
         width: 30px;
         border-radius: 5px;
         margin: 5px 0 0 10px;
         background: #30c8c9 url('../../assets/img/icons/question-mark.png') no-repeat center center;
     }
-    .categories-form-cloud {
+    .form-help-cloud {
         display: none;
         background: #30c8c9;
         width: 120px;
@@ -196,7 +258,7 @@
         transition: 1s;
         position: relative;
     }
-    .categories-form-cloud:before {
+    .form-help-cloud:before {
         right: 100%;
         top: calc(50% - 6px);
         border: solid transparent;
@@ -208,11 +270,35 @@
         border-right-color: #30c8c9;
         border-width: 6px;
     }
-    .categories-form-help:hover ~ .categories-form-cloud {
+    .form-help-square:hover ~ .form-help-cloud {
         display: block;
         transition: 1s;
     }
-    .categories-form-help:hover ~ .categories-form-cloud::before {
+    .form-help-square:hover ~ .form-help-cloud::before {
         display: block;
+    }
+    .form-data {
+        display: flex;
+        flex-direction: column;
+    }
+    .input-border {
+        border: 2px solid red;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .form-data span {
+        background-color: red;
+        border-radius: 5px;
+        color: #fff;
+        padding: 10px 0 10px 10px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-left: 10px;
+        z-index: -2;
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+    }
+    .sortable-chosen {
+        border: 1px #000000 dashed;
     }
 </style>
