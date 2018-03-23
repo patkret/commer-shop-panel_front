@@ -6,6 +6,9 @@ import marketing from './img/icons/marketing.svg'
 import reports from './img/icons/reports.svg'
 import settings from './img/icons/settings.svg'
 import integrations from './img/icons/integrations.svg'
+import logo from './img/icons/logo.svg'
+
+
 export default {
   dashboard,
   clients,
@@ -14,5 +17,7 @@ export default {
   marketing,
   reports,
   settings,
-  integrations
+  integrations,
+  logo
+
 }

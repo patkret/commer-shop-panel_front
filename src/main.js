@@ -71,7 +71,6 @@ const validator = new Validator({
 
 validator.localize('pl');
 
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

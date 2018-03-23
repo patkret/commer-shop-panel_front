@@ -92,6 +92,7 @@
 </style>
 <script>
   import icons from './assets/icons'
+
   export default {
     name: 'admin',
     data () {
@@ -105,14 +106,14 @@
           {icon: icons.dashboard, text: 'Dashboard', path: '/dashboard'},
           {icon: icons.orders, text: 'Sprzedaż', path: '#2'},
           {icon: icons.products, text: 'Produkty', path: '', children:
-              [
-                {text: 'Lista produktów', path: ''},
-                {text: 'Kategorie', path: '/categories'},
-                {text: 'Atrybuty', path: '/attribute-sets'},
-                {text: 'Warianty', path: ''},
-                {text: 'Producenci', path: ''},
-                {text: 'Stawki VAT', path: ''},
-              ],
+            [
+              {text: 'Lista produktów', path: ''},
+              {text: 'Kategorie', path: '/categories'},
+              {text: 'Atrybuty', path: '/attribute-sets'},
+              {text: 'Warianty', path: ''},
+              {text: 'Producenci', path: ''},
+              {text: 'Stawki VAT', path: ''},
+            ],
           },
           {icon: icons.clients, text: 'Klienci', path: ''},
           {icon: icons.marketing, text: 'Marketing', path: ''},
@@ -126,14 +127,8 @@
           {id: 3, name: 'SHOP 3'},
           {id: 4, name: 'SHOP 4'},
         ],
-        // userOptions: [
-        //   {name: 'Ustawienia konta', path: '/dashboard'},
-        //   {name: 'Rozliczenia'},
-        //   {name: 'Pomoc'},
-        //   {name: 'Wyloguj'}
-        // ],
+
         value: '',
-        // value1: '',
       }
     },
 
