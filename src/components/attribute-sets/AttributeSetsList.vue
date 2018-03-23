@@ -1,13 +1,103 @@
 <template>
-    <p> tutaj będzie lista</p>
+    <div class="attr-container">
+        <h4 class="attr-p">Akcja</h4>
+        <ul class="attr-list">
+            <li v-for="(item, key) in items" class="attr-list-item">
+                {{item.id}} {{item.name}}
+                <div class="buttons-container">
+                    <button @click="showActions(key)" class="more-button">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </button>
+                    <div class="action-buttons visibility-hidden" :data-category="key">
+                        <button class="delete">Usuń</button>
+                        <button class="edit">Edytuj</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>
   export default {
     name: 'attribute-sets-list',
+    data () {
+      return {
+      items: [],
+        buttons: [],
+      }
+  },
+    methods: {
+        showActions (key) {
+          document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
+          console.log(this.buttons);
+        }
+    },
+    created: function () {
+      axios('attribute-sets').
+      then(result => {
+        this.items = result.data
+        console.log(result)
+      });
+    }
   }
 </script>
 
 <style scoped>
-
+    .attr-container {
+        width: 80%;
+        background-color: #ffffff;
+        margin-left: 20px;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 5px 5px 5px 2px #eff1f4;
+    }
+    .attr-p {
+        text-align: right;
+    }
+    .attr-list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        height: 40px;
+        line-height: 40px;
+        margin: 5px 0;
+    }
+    .buttons-container {
+        position: relative;
+    }
+    .more-button {
+        height: 40px;
+        border: none;
+        color: #dde0e5;
+        background-color: #ffffff;
+        padding-bottom: 15px;
+    }
+    .dot {
+        height: 6px;
+        width: 6px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .more-button:hover {
+        cursor: pointer;
+    }
+    .action-buttons {
+        position: absolute;
+        top: 0;
+        left: -120px;
+        display: flex;
+    }
+    .action-buttons button {
+        border: 1px solid #dde0e5;
+        background-color: #ffffff;
+        height: 40px;
+        border-radius: 5px;
+    }
+    .action-buttons button:hover {
+        cursor: pointer;
+    }
 </style>

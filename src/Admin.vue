@@ -43,7 +43,7 @@
                     <li class="user-menu-item"><a class="user-menu-a" href="">Ustawienia konta</a></li>
                     <li class="user-menu-item"><a class="user-menu-a" href="">Rozliczenia</a></li>
                     <li class="user-menu-item"><a class="user-menu-a" href="">Pomoc</a></li>
-                    <li class="user-menu-item"><a class="user-menu-a" href="">Wyloguj</a></li>
+                    <li class="user-menu-item"><a class="user-menu-a" @click="logout()">Wyloguj</a></li>
                 </ul>
             </div>
         </div>

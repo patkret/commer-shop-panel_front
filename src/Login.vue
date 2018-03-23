@@ -4,15 +4,17 @@
             <div class="logo-space">
                 <img :src="logo"/>
             </div>
-            <div class="cred-row">
-                <label>e-mail:</label>
-                <input type="text" v-model="user.email" class="form-control" placeholder="E-mail">
-            </div>
-            <div class="cred-row">
-                <label>password:</label>
-                <input type="password" v-model="user.password" placeholder="Password" class="form-control">
-            </div>
-            <button class="custom-button" @click="login">Login</button>
+            <form action="" @submit.prevent="login()">
+                <div class="cred-row">
+                    <label>e-mail:</label>
+                    <input type="text" v-model="user.email" class="form-control" placeholder="E-mail">
+                </div>
+                <div class="cred-row">
+                    <label>password:</label>
+                    <input type="password" v-model="user.password" placeholder="Password" class="form-control">
+                </div>
+            <button type="submit" class="custom-button">Login</button>
+            </form>
         </div>
 
     </div>
@@ -61,6 +63,7 @@
         box-shadow: 0 0 5px #2D2E2F;
         justify-content: space-around;
         align-items: center;
+        height: 450px;
     }
 
     .logo-space {
