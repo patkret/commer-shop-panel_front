@@ -23,6 +23,7 @@
       selectedMainCategories: [],
       selectedChildren: []
     }),
+
     created: function () {
       axios('categories').then(result => {
         this.categories = result.data
