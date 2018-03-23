@@ -93,7 +93,7 @@ input:checked + .square:after {
 /*MULTISELECT*/
 
 .multiselect .multiselect__tags {
-    background-color: #f5f7fa;
+    background-color: #FFFFFF;
     border: none;
     width: 170px;
     margin-top: 1px;
@@ -101,7 +101,7 @@ input:checked + .square:after {
     border-radius: 5px;
 }
 .multiselect .multiselect__single {
-    background-color: #f5f7fa;
+    background-color: #FFFFFF;
     font-size: 12px;
     font-weight: 700;
 }

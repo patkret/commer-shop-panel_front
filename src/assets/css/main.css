@@ -322,7 +322,7 @@ select {
     width: 243px;
     border: 1px solid #ccc;
     background-color: white;
-    box-shadow: 0 0 3px #ccc;
+    box-shadow: 0 0 10px #ccc;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -334,14 +334,14 @@ select {
     line-height: 30px;
     border-bottom: 1px solid #ccc;
 }
+.side-menu-item:last-child{
+    border-bottom: none;
+}
 
 .side-menu-item p {
     margin-left: 35px;
 }
 
-.side-menu-item:hover{
-    background-color: #F4F4F9;
-}
 .card-name{
     grid-area: card-name;
     margin-left: 45px;
@@ -364,6 +364,5 @@ select {
 
 .component-container{
     grid-area: component-container;
-    margin-left: 50px;
 }
 

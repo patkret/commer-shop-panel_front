@@ -80,7 +80,7 @@
 </template>
 
 <script>
-
+    import icons from './assets/icons'
   export default {
     name: 'admin',
     data () {
@@ -92,23 +92,23 @@
         item: '',
         items: [
 
-          {icon: '/assets/img/icons/dashboard.svg', text: 'Dashboard', path: '/dashboard'},
-          {icon: '/src/assets/img/icons/orders.svg', text: 'Sprzedaż', path: '#2'},
-          {
-            icon: './src/assets/img/icons/products.svg', text: 'Produkty', path: '', children: [
-              {icon: 'now-ui-icons files_paper', text: 'Lista produktów', path: ''},
-              {icon: 'now-ui-icons files_paper', text: 'Kategorie', path: '/categories'},
-              {icon: 'now-ui-icons location_bookmark', text: 'Atrybuty', path: '/attribute-sets'},
-              {icon: 'now-ui-icons files_box', text: 'Warianty', path: ''},
-              {icon: 'now-ui-icons shopping_box', text: 'Producenci', path: ''},
-              {icon: 'now-ui-icons business_chart-bar-32', text: 'Stawki VAT', path: ''},
+          {icon: icons.dashboard, text: 'Dashboard', path: '/dashboard'},
+          {icon: icons.orders, text: 'Sprzedaż', path: '#2'},
+          {icon: icons.products, text: 'Produkty', path: '', children:
+            [
+              {text: 'Lista produktów', path: ''},
+              {text: 'Kategorie', path: '/categories'},
+              {text: 'Atrybuty', path: '/attribute-sets'},
+              {text: 'Warianty', path: ''},
+              {text: 'Producenci', path: ''},
+              {text: 'Stawki VAT', path: ''},
             ],
           },
-          {icon: './src/assets/img/icons/clients.svg', text: 'Klienci', path: ''},
-          {icon: './src/assets/img/icons/marketing.svg', text: 'Marketing', path: ''},
-          {icon: './src/assets/img/icons/reports.svg', text: 'Raporty', path: '#5'},
-          {icon: './src/assets/img/icons/settings.svg', text: 'Ustawienia', path: '#6'},
-          {icon: './src/assets/img/icons/integrations.svg', text: 'Integracje', path: '/buttons'},
+          {icon: icons.clients, text: 'Klienci', path: ''},
+          {icon: icons.marketing, text: 'Marketing', path: ''},
+          {icon: icons.reports, text: 'Raporty', path: '#5'},
+          {icon: icons.settings, text: 'Ustawienia', path: '#6'},
+          {icon: icons.integrations, text: 'Integracje', path: '/buttons'},
 
         ],
         options: [

@@ -6,6 +6,7 @@ import router from './router'
 import env from './env'
 import normalize from 'normalize.css'
 import VeeValidate from 'vee-validate';
+import { Validator } from 'vee-validate';
 import Multiselect from 'vue-multiselect'
 import multiselectStyle from 'vue-multiselect/dist/vue-multiselect.min.css'
 
@@ -50,7 +51,25 @@ if(!token) {
 } else {
   router.push({path: '/dashboard'})
 }
+const dictionary = {
+  pl: {
+    messages:{
+      required: () => 'Pole obowiązkowe',
+      numeric: () => 'Pole może zawierać tylko cyfry ',
+      max_value: () => 'Podaj odpowiednią wartość'
+    }
+  },
+};
 
+Validator.localize(dictionary);
+
+const validator = new Validator({
+  required: 'required',
+  numeric: 'numeric',
+  max_value: 'max_value'
+});
+
+validator.localize('pl');
 
 /* eslint-disable no-new */
 new Vue({
