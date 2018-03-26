@@ -29,7 +29,7 @@
                         <label></label>
                     </div>
                     <div class="input-col">
-                        <button class="custom-button">ZAPISZ</button>
+                        <button class="custom-button" @click.prevent="saveAttributeSet">ZAPISZ</button>
                     </div>
                 </div>
             </div>
@@ -43,9 +43,9 @@
                 </ul>
             </div>
             <div class="menu-tab">
-                <categories-list v-if="type == 1"></categories-list>
-                <add-attribute v-if="type == 2"></add-attribute>
-
+                <categories-list v-if="type == 1" @mainCategories="getMainCategories" @children="getChildren"></categories-list>
+                <add-attribute v-if="type == 2" @attribute ="getAttribute"></add-attribute>
+                <attributes-list v-if="type == 3" :attributes="attributes"></attributes-list>
             </div>
         </div>
     </div>
@@ -54,22 +54,52 @@
 <script>
   import addAttribute from './addAttribute'
   import CategoriesList from './CategoriesList'
+  import attributesList from './attributesList'
   export default {
     name: 'attribute-set-form',
     components: {
       CategoriesList,
-      addAttribute
+      addAttribute,
+      attributesList
     },
     data: () => ({
       name: '',
       visibility: 1,
       type: 1,
-      defaultValue: ''
+      defaultValue: '',
+      attributes: [],
+      defaultCategories: '',
+      mainCategories: '',
+      children: ''
     }),
 
     methods:{
       changeType: function(type){
         this.type = type;
+      },
+      getAttribute(attribute){
+       this.attributes.push(attribute)
+      },
+      getMainCategories(mainCategories){
+        this.mainCategories = mainCategories
+      },
+      getChildren(children){
+        this.children = children
+      },
+      saveAttributeSet(){
+        this.$validator.validateAll().then((result) => {
+          if (result) {
+            axios.post('/attribute-sets', {
+              name: this.name,
+              visibility: this.visibility,
+              attributes: JSON.stringify(this.attributes),
+              defaultCategoriesIds: this.mainCategories.concat(this.children)
+            }).then(() => {
+              this.$parent.$data.type = 2
+            })
+          }
+        })
+
       }
     }
   }

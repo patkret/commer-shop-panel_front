@@ -21,8 +21,17 @@
     data: () => ({
       categories: [],
       selectedMainCategories: [],
-      selectedChildren: []
+      selectedChildren: [],
     }),
+
+    watch: {
+      selectedMainCategories: function () {
+        this.$emit('mainCategories', this.selectedMainCategories)
+      } ,
+      selectedChildren: function () {
+        this.$emit('children', this.selectedChildren)
+      }
+    },
 
     created: function () {
       axios('categories').then(result => {

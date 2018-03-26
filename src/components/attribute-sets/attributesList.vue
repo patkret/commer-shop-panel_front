@@ -2,7 +2,7 @@
     <div class="attr-container">
         <h4 class="attr-p">Akcja</h4>
         <ul class="attr-list">
-            <li v-for="(item, key) in items" class="attr-list-item">
+            <li v-for="(item, key) in attributes" class="attr-list-item">
                 {{item.id}} {{item.name}}
                 <div class="buttons-container">
                     <button @click="showActions(key)" class="more-button">
@@ -11,8 +11,8 @@
                         <span class="dot"></span>
                     </button>
                     <div class="action-buttons visibility-hidden" :data-category="key">
-                        <button class="delete" @click="deleteAttributeSet(item)">Usuń</button>
-                        <button class="edit" @click = "edit(item)">Edytuj</button>
+                        <button class="delete" @click="deleteAttribute(key)">Usuń</button>
+                        <button class="edit">Edytuj</button>
                     </div>
                 </div>
             </li>
@@ -22,39 +22,22 @@
 
 <script>
   export default {
-    name: 'attribute-sets-list',
+    props: ['attributes'],
+    name: 'attributes-list',
     data () {
       return {
-      items: [],
         buttons: [],
       }
-  },
+    },
     methods: {
-        showActions (key) {
-          document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
-        },
-      deleteAttributeSet(item){
-
-          axios.delete('attribute-sets/' + item.id).then(result => {
-
-            axios('attribute-sets').
-              then(result => {
-                this.items = result.data
-              });
-          })
-
-
+      showActions (key) {
+        document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
       },
-      edit(item){
-          console.log(item.id)
+      deleteAttribute(index){
+
+        this.attributes.splice(index, 1)
       }
     },
-    created: function () {
-      axios('attribute-sets').
-      then(result => {
-        this.items = result.data
-      });
-    }
   }
 </script>
 
