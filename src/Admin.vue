@@ -78,12 +78,14 @@
 
     </div>
 </template>
-<style  >
-   .shop-select {
-        background-color: #f5f7fa !important;
+
+<style scoped>
+   .multiselect .shop-select {
+        background-color: #F5F7FA!important;
     }
+
     .multiselect .multiselect__tags {
-        background-color: #f5f7fa;
+        background-color: #f5f7fa !important;
 
     }
   .multiselect .multiselect__single {
@@ -94,6 +96,7 @@
   import icons from './assets/icons'
 
   export default {
+
     name: 'admin',
     data () {
       return {

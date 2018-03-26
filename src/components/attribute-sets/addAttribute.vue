@@ -175,6 +175,9 @@
     .multiselect .multiselect__single{
         background-color: #FFFFFF;
     }
+    .multiselect .multiselect__tags{
+        background-color: white !important;
+    }
 
     .checkbox-square{
         margin-left: -13px;
