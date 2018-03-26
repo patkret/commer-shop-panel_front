@@ -1,11 +1,14 @@
 <template>
     <div class="single-attribute">
         <form class="single-attribute-form">
+            <div class="info" v-if="showInfo == true">
+                <p>Atrybut został dodany!</p>
+            </div>
             <div class="sing-attr-row">
                 <label class="attr-label">Nazwa</label>
                 <div class="input-container">
                     <div class="cust-inpt">
-                    <input type="text" name="name" placeholder="...">
+                        <input type="text" name="name" placeholder="..." v-model="attribute.name">
                     </div>
                 </div>
             </div>
@@ -14,7 +17,7 @@
                 <div class="input-container">
                     <multiselect
                             class="shop-select"
-                            v-model="value"
+                            v-model="attribute.type"
                             :options="options"
                             :allow-empty="false"
                             :searchable="false"
@@ -32,21 +35,22 @@
                 <label class="attr-label">Aktywność</label>
                 <div class="input-container">
                     <div class="checkbox-square form-group">
-                        <input type="checkbox" id="attr-visibility" class="visibility-hidden" v-model="visibility">
+                        <input type="checkbox" id="attr-visibility" class="visibility-hidden"
+                               v-model="attribute.visibility">
                         <label for="attr-visibility" class="square"></label>
                     </div>
                 </div>
             </div>
-            <div class="sing-attr-row" v-if="value.type == 1">
+            <div class="sing-attr-row" v-if="attribute.type.type == 1">
                 <label class="attr-label">Domyślnie zaznaczony</label>
                 <div class="input-container">
                     <div class="checkbox-square form-group">
-                        <input type="checkbox" id="def-checked" class="visibility-hidden" v-model="checked">
+                        <input type="checkbox" id="def-checked" class="visibility-hidden" v-model="attribute.checked">
                         <label for="def-checked" class="square"></label>
                     </div>
                 </div>
             </div>
-            <div class="sing-attr-row" v-if="value.type == 0">
+            <div class="sing-attr-row" v-if="attribute.type.type == 0">
                 <label class="attr-label">Wartość domyślna</label>
                 <div class="input-container">
                     <div class="cust-inpt">
@@ -54,12 +58,12 @@
                     </div>
                 </div>
             </div>
-            <div class="sing-attr-row" v-if="value.type == 2">
+            <div class="sing-attr-row" v-if="attribute.type.type == 2">
                 <label class="attr-label">Pole dla select</label>
                 <div class="input-container">
                     <div class="select-input-container">
                         <div class="select-input">
-                        <input type="text" name="name" placeholder="..." v-model="selectName">
+                            <input type="text" name="name" placeholder="..." v-model="selectName">
                         </div>
                         <button class="button-select-fields" @click.prevent="addOption()">+</button>
                     </div>
@@ -67,30 +71,30 @@
                 </div>
             </div>
 
-            <div class="sing-attr-row" v-for="(item, index) in selectOptions" v-if="value.type == 2">
+            <div class="sing-attr-row" v-for="(item, index) in attribute.selectOptions" v-if="attribute.type.type == 2">
                 <label class="attr-label"></label>
                 <div class="input-container">
-                <div class="select-input-container">
-                    <div class="select-input">
-                        <input type="text" name="name" placeholder="..." v-model="item.name">
-                    </div>
+                    <div class="select-input-container">
+                        <div class="select-input">
+                            <input type="text" name="name" placeholder="..." v-model="item.name">
+                        </div>
                         <button class="button-select-fields" @click.prevent="removeOption(index)">-</button>
 
-                </div>
+                    </div>
                 </div>
             </div>
-
 
             <div class="sing-attr-row">
                 <label class="attr-label">Opis</label>
                 <div class="input-container">
                     <div class="cust-textarea">
-                        <textarea class="textarea1" name="description" placeholder="..." v-model="description"></textarea>
+                        <textarea class="textarea1" name="description" placeholder="..."
+                                  v-model="attribute.description"></textarea>
                     </div>
                 </div>
             </div>
         </form>
-        <button class="custom-button">ZAPISZ</button>
+        <button class="custom-button" @click.prevent="addAttribute()">ZAPISZ</button>
     </div>
 </template>
 
@@ -103,86 +107,123 @@
         {type: 1, name: 'Checkbox'},
         {type: 2, name: 'Select'},
       ],
-      value: '',
-      visibility: 1,
-      description: '',
-      checked: 1,
-      selectOptions: [],
-      selectName: ''
+      selectName: '',
+      attribute: {
+        name: '',
+        type: '',
+        visibility: 1,
+        description: '',
+        checked: 1,
+        selectOptions: [],
+      },
+      showInfo: false,
     }),
-    methods:{
-      addOption(){
-        this.selectOptions.push({name: this.selectName})
+    watch:{
+      showInfo: function () {
+        setTimeout(() => {
+          this.showInfo = false;
+        }, 3000);
+      }
+    },
+    methods: {
+      addOption () {
+        this.attribute.selectOptions.push({name: this.selectName})
         this.selectName = ''
       },
-      removeOption(index){
+      removeOption (index) {
 
-        this.selectOptions.splice(index, 1)
+        this.attribute.selectOptions.splice(index, 1)
+      },
+      addAttribute () {
+        let tempAttr = {
+          name: this.attribute.name,
+          type:  this.attribute.type,
+          visibility: this.attribute.visibility,
+          description: this.attribute.description,
+          checked:  this.attribute.checked,
+          selectOptions: this.attribute.selectOptions
+        }
+        this.$emit('attribute', tempAttr)
+        this.showInfo = true
+
+        this.attribute.name = ''
+        this.attribute.type = ''
+        this.attribute.visibility = 1
+        this.attribute.description = ''
+        this.attribute.checked = 1
+        this.attribute.selectOptions = []
+
       }
-    }
 
+    },
   }
 </script>
 
 <style scoped>
-    .single-attribute{
+    .single-attribute {
         display: grid;
         grid-template-columns: 10% 70% 20%;
         grid-template-rows: auto 50px;
-        grid-template-areas:
-                ". sing-attr-form ."
-                ". cust-button .";
-
+        grid-template-areas: ". sing-attr-form ." ". cust-button .";
     }
-    .single-attribute-form{
+
+    .single-attribute-form {
         grid-area: sing-attr-form;
         display: grid;
     }
-    .sing-attr-row{
+
+    .sing-attr-row {
         display: grid;
         grid-template-columns: 20% 30px 80%;
         grid-template-areas: "label . input";
         margin-bottom: 25px;
-
     }
-    .attr-label{
+
+    .attr-label {
         grid-area: label;
         justify-self: end;
         align-self: center;
     }
-    .input-container{
+
+    .input-container {
         grid-area: input;
         align-self: center;
     }
-    .cust-inpt{
+
+    .cust-inpt {
         width: 80%;
         height: 35px;
         background-color: white;
         border-radius: 5px;
         align-content: center;
     }
-    .cust-inpt input{
+
+    .cust-inpt input {
         border: none;
         width: 95%;
         margin-left: 15px;
         margin-top: 7px;
     }
-    .shop-select{
+
+    .shop-select {
         width: 250px;
         border-radius: 5px;
         background-color: #FFFFFF;
     }
-    .multiselect .multiselect__single{
+
+    .multiselect .multiselect__single {
         background-color: #FFFFFF;
     }
-    .multiselect .multiselect__tags{
+
+    .multiselect .multiselect__tags {
         background-color: white !important;
     }
 
-    .checkbox-square{
+    .checkbox-square {
         margin-left: -13px;
 
     }
+
     .cust-textarea {
         width: 80%;
         height: 150px;
@@ -190,7 +231,8 @@
         border-radius: 5px;
         align-content: center;
     }
-    .textarea1{
+
+    .textarea1 {
         border: none;
         resize: none;
         width: 95%;
@@ -198,41 +240,55 @@
         margin-left: 15px;
         margin-top: 5px;
     }
-    .custom-button{
+
+    .custom-button {
         grid-area: cust-button;
         margin: 0 50px 0 200px;
-
     }
-    .cust-inpt-select{
+
+    .cust-inpt-select {
         width: 70%;
         background-color: #FFFFFF;
     }
+
     .cust-inpt-select input {
         border: none;
         width: 90%;
     }
-    .button-select-fields{
+
+    .button-select-fields {
         border: none;
         background-color: #F6F7FB;
     }
 
-    .select-input-container{
+    .select-input-container {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
     }
-    .select-input{
+
+    .select-input {
         width: 75%;
         height: 35px;
         border: none;
         background-color: #FFFFFF;
         border-radius: 5px;
     }
-    .select-input input{
+
+    .select-input input {
         width: 95%;
         margin-left: 15px;
         margin-top: 5px;
         border: none;
+    }
+
+    .info {
+        width: 100%;
+        height: 50px;
+        background-color: #94C01E;
+        margin-bottom: 50px;
+        color: #FFFFFF;
+        text-align: center;
     }
 
 </style>
