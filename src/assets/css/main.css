@@ -23,6 +23,10 @@ ul li {
 .visibility-hidden {
     visibility: hidden;
 }
+.side-button:hover {
+    cursor: pointer;
+    background-color: #dde0e5;
+}
 
 #main{
     display: grid;

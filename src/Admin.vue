@@ -82,6 +82,7 @@
 <style scoped>
    .multiselect .shop-select {
         background-color: #F5F7FA!important;
+
     }
 
     .multiselect .multiselect__tags {

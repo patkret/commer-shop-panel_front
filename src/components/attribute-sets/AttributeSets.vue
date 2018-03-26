@@ -3,10 +3,10 @@
         <h1 class="card-name">Atrybuty</h1>
         <div class="side-menu-container">
             <div id="side-menu">
-                <div :class="{'side-menu-item': true, 'side-menu-item active': type == 1}" @click.prevent="changeComponent(1)">
+                <div class="side-button" :class="{'side-menu-item': true, 'side-menu-item active': type == 1}" @click.prevent="changeComponent(1)">
                     <p>Dodaj atrybut</p>
                 </div>
-                <div :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}" @click.prevent="changeComponent(2)">
+                <div class="side-button" :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}" @click.prevent="changeComponent(2)">
                     <p>Wszystkie atrybuty</p>
                 </div>
             </div>
