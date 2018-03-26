@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form class="attribute-form">
+        <form class="attribute-form" >
             <div class="attributes-col">
                 <div class="attributes-row">
                     <div class="label-col">

@@ -94,7 +94,7 @@
                 </div>
             </div>
         </form>
-        <button class="custom-button" @click.prevent="addAttribute()">ZAPISZ</button>
+        <button class="custom-button" @click.prevent="addAttribute()">DODAJ</button>
     </div>
 </template>
 
@@ -203,20 +203,6 @@
         width: 95%;
         margin-left: 15px;
         margin-top: 7px;
-    }
-
-    .shop-select {
-        width: 250px;
-        border-radius: 5px;
-        background-color: #FFFFFF;
-    }
-
-    .multiselect .multiselect__single {
-        background-color: #FFFFFF;
-    }
-
-    .multiselect .multiselect__tags {
-        background-color: white !important;
     }
 
     .checkbox-square {
