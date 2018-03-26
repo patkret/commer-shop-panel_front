@@ -82,22 +82,33 @@
         border-radius: 50%;
         display: inline-block;
     }
-    .more-button:hover {
-        cursor: pointer;
-    }
     .action-buttons {
         position: absolute;
         top: 0;
         left: -120px;
         display: flex;
+        border: 1px solid #dde0e5;
+        border-radius: 5px;
     }
     .action-buttons button {
-        border: 1px solid #dde0e5;
+        /*border: 1px solid #dde0e5;*/
         background-color: #ffffff;
         height: 40px;
         border-radius: 5px;
+        border: none;
+    }
+    .action-buttons button:first-child {
+        border-right: 1px solid #dde0e5;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+    .action-buttons button:last-child {
+        border-right: 1px solid #dde0e5;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
     }
     .action-buttons button:hover {
         cursor: pointer;
+        background-color: #dde0e5;
     }
 </style>

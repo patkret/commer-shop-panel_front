@@ -78,15 +78,15 @@
 
     </div>
 </template>
-<style scoped>
+<style  >
    .shop-select {
-        background-color: #f5f7fa;
+        background-color: #f5f7fa !important;
     }
     .multiselect .multiselect__tags {
         background-color: #f5f7fa;
 
     }
-    .multiselect .multiselect__single {
+  .multiselect .multiselect__single {
         background-color: #f5f7fa;
     }
 </style>
@@ -107,12 +107,12 @@
           {icon: icons.orders, text: 'Sprzedaż', path: '#2'},
           {icon: icons.products, text: 'Produkty', path: '', children:
             [
-              {text: 'Lista produktów', path: ''},
+              {text: 'Lista produktów', path: '/products'},
               {text: 'Kategorie', path: '/categories'},
               {text: 'Atrybuty', path: '/attribute-sets'},
               {text: 'Warianty', path: ''},
               {text: 'Producenci', path: ''},
-              {text: 'Stawki VAT', path: ''},
+              {text: 'Stawki VAT', path: '/vat-rates'},
             ],
           },
           {icon: icons.clients, text: 'Klienci', path: ''},

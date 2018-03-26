@@ -6,6 +6,8 @@ import Dashboard from '../components/dashboard/Dashboard'
 import buttons from '../components/buttons'
 import AttributeSets from '../components/attribute-sets/AttributeSets'
 import Categories from '../components/categories/Categories'
+import Products from '../components/products/Products'
+import VatRates from '../components/vat-rates/VatRates'
 
 Vue.use(Router)
 
@@ -41,6 +43,16 @@ export default new Router({
           path: '/categories',
           name: 'Categories',
           component: Categories,
+        },
+        {
+          path: '/products',
+          name: 'Products',
+          component: Products
+        },
+        {
+          path: '/vat-rates',
+          name: 'VatRates',
+          component: VatRates,
         },
       ],
     },
