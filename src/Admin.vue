@@ -79,19 +79,51 @@
     </div>
 </template>
 
-<style scoped>
-   .multiselect .shop-select {
-        background-color: #F5F7FA!important;
-
-    }
-
-    .multiselect .multiselect__tags {
-        background-color: #f5f7fa !important;
-
-    }
-  .multiselect .multiselect__single {
+<style>
+    .shop-select {
         background-color: #f5f7fa;
     }
+    .multiselect .multiselect__tags {
+        background-color: #f5f7fa;
+        border: none;
+        width: 170px;
+        margin-top: 1px;
+        color: #000;
+        border-radius: 5px;
+    }
+    .multiselect .multiselect__single {
+        background-color: #f5f7fa;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    .multiselect .multiselect__content-wrapper {
+        border: 1px solid #dde0e5;
+        border-top: none;
+        border-radius: 5px;
+        width: 100%;
+    }
+    .multiselect .multiselect--active {
+        background-color: #f5f7fa;
+    }
+    .multiselect .multiselect__option {
+        border-top: 1px solid #dde0e5;
+    }
+    .multiselect .multiselect__option--highlight {
+        background-color: #f5f7fa;
+        color: #000000;
+        border-top: 1px solid #dde0e5;
+    }
+    .mulitselect .multiselect__content:first-child {
+        border-top: none;
+    }
+    .multiselect .multiselect__select::before {
+        /*border: none;*/
+        height: 20px;
+        border-color: #000 transparent transparent;
+        border-width: 4px 4px 0;
+        width: 20px;
+    }
+
 </style>
 <script>
   import icons from './assets/icons'

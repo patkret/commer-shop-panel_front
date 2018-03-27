@@ -47,17 +47,16 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <label class="form-label col-1" for="">Opis produktu</label>
+                        <label class="form-label col-1" for="">Opis kategorii</label>
                         <div class="form-data col-2">
-                            <textarea v-model="description" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('description') }" class="form-textarea" name="description" id=""></textarea>
-                            <span v-show="errors.has('description')" class="help is-danger">{{ errors.first('description') }}</span>
+                            <textarea v-model="description" class="form-textarea" name="description" id=""></textarea>
                     </div>
                         <div class="col-3"></div>
                     </div>
                     <div class="form-row">
                         <label class="form-label col-1" for="">Tytuł strony</label>
                         <div class="form-data col-2">
-                            <input  v-model="title" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('title') }" class="form-input " type="text" name="title">
+                            <input  v-model="title" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('title') }" class="form-input " type="text" name="title">
                             <span v-show="errors.has('title')" class="help is-danger">{{ errors.first('title') }}</span>
                         </div>
                         <div class="form-help col-3">
@@ -68,8 +67,7 @@
                     <div class="form-row">
                         <label class="form-label col-1" for="">Meta description</label>
                         <div class="form-data col-2">
-                            <input  v-model="metaDescription" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('metaDescription') }" class="form-input " type="text" name="metaDescription">
-                            <span v-show="errors.has('metaDescription')" class="help is-danger">{{ errors.first('metaDescription') }}</span>
+                            <input  v-model="metaDescription" class="form-input " type="text" name="metaDescription">
                         </div>
                         <div class="form-help col-3">
                             <div class="form-help-square"></div>
@@ -79,8 +77,7 @@
                     <div class="form-row">
                         <label class="form-label col-1" for="">Meta Keywords</label>
                         <div class="form-data col-2">
-                            <input  v-model="metaKeywords" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('metaKeywords') }" class="form-input " type="text" name="metaKeywords">
-                            <span v-show="errors.has('metaKeywords')" class="help is-danger">{{ errors.first('metaKeywords') }}</span>
+                            <input  v-model="metaKeywords" class="form-input" type="text" name="metaKeywords">
                         </div>
                         <div class="form-help col-3">
                             <div class="form-help-square"></div>
@@ -90,8 +87,8 @@
                     <div class="form-row">
                         <label class="form-label col-1" for="">Url</label>
                         <div class="form-data col-2">
-                            <input  v-model="addressUrl" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('addressUrl') }" class="form-input " type="text" name="addressUrl">
-                            <span v-show="errors.has('addressUrl')" class="help is-danger">{{ errors.first('addressUrl') }}</span>
+                            <input  v-model="addressUrl" class="form-input " type="text" name="addressUrl">
+
                         </div>
                         <div class="form-help col-3">
                             <div class="form-help-square"></div>
@@ -301,4 +298,49 @@
     .sortable-chosen {
         border: 1px #000000 dashed;
     }
+
+    .shop-select {
+        background-color: #ffffff;
+    }
+    .shop-select .multiselect__tags {
+        background-color: #f5f7fa;
+        border: none;
+        width: 170px;
+        margin-top: 1px;
+        color: #000;
+        border-radius: 5px;
+    }
+    .shop-select .multiselect__single {
+        background-color: #ffffff;
+        font-size: 12px;
+        font-weight: 700;
+    }
+    .shop-select .multiselect__content-wrapper {
+        border: 1px solid #ffffff;
+        border-top: none;
+        border-radius: 5px;
+        width: 100%;
+    }
+    .multiselect .multiselect--active {
+        background-color: #ffffff;
+    }
+    .multiselect .multiselect__option {
+        border-top: 1px solid #dde0e5;
+    }
+    .multiselect .multiselect__option--highlight {
+        background-color: #f5f7fa;
+        color: #000000;
+        border-top: 1px solid #dde0e5;
+    }
+    .mulitselect .multiselect__content:first-child {
+        border-top: none;
+    }
+    .multiselect .multiselect__select::before {
+        /*border: none;*/
+        height: 20px;
+        border-color: #000 transparent transparent;
+        border-width: 4px 4px 0;
+        width: 20px;
+    }
+
 </style>

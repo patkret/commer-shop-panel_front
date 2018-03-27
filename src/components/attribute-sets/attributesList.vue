@@ -1,3 +1,4 @@
+
 <template>
     <div class="attr-container">
         <h4 class="attr-p">Akcja</h4>
