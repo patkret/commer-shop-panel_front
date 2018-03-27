@@ -1,15 +1,25 @@
 <template>
     <div id="side-menu">
-        <ul>
+        <ul class="all-categories">
             <li v-for="category in categories" class="cat-item">
-                <input type="checkbox" v-model="selectedMainCategories" :value="category.id">
-                <label :class="{'label': true, 'label inactive': category.visibility == 0} ">{{category.name}}</label>
+
+                <label class="check-container">
+                    <p :class="{'label': true, 'label inactive': category.visibility == 0} ">
+                        {{category.name}}
+                    </p>
+                    <input type="checkbox" v-model="selectedMainCategories" :value="category.id">
+                    <span class="checkmark"></span>
+                </label>
+
                 <ul class="children">
-                <li v-for="child in category.children">
-                    <input type="checkbox" v-model="selectedChildren" :value="child.id">
-                    <label :class="{'label': true, 'label inactive': child.visibility == 0}">{{child.name}}</label>
-                </li>
-            </ul>
+                    <li v-for="child in category.children">
+                        <label class="check-container">
+                            <p :class="{'label': true, 'label inactive': child.visibility == 0}">{{child.name}}</p>
+                            <input type="checkbox" v-model="selectedChildren" :value="child.id">
+                            <span class="checkmark"></span>
+                        </label>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
@@ -27,76 +37,106 @@
     watch: {
       selectedMainCategories: function () {
         this.$emit('mainCategories', this.selectedMainCategories)
-      } ,
+      },
       selectedChildren: function () {
         this.$emit('children', this.selectedChildren)
-      }
+      },
     },
 
     created: function () {
       axios('categories').then(result => {
         this.categories = result.data
       })
-    }
+    },
   }
 
 </script>
 
 <style scoped>
-    #side-menu{
+    #side-menu {
         width: 350px;
         margin-left: -5px;
     }
-   .cat-item li{
-       margin-bottom: 15px;
-       margin-left: -10px;
-   }
-   #side-menu li{
-       margin-bottom: 15px;
-   }
 
-   .children{
-       padding-top: 10px;
-   }
-   .inactive{
-       color: #B9B7B9;
-   }
-   /*.cat-item input{*/
-       /*visibility: hidden;*/
-   /*}*/
+    .cat-item li {
+        margin-left: 5px;
+    }
 
+    .all-categories {
+        margin-top: 20px;
+    }
 
-    /*.cust-check{*/
-        /*cursor: pointer;*/
-        /*position: relative;*/
-        /*width: 35px;*/
-        /*height: 35px;*/
-        /*top: 0;*/
-        /*left: 0;*/
-        /*background: #FFFFFF;*/
-        /*border:1px solid #ddd;*/
-        /*padding-right: 17px;*/
-        /*border-radius: 3px;*/
-    /*}*/
+    .inactive {
+        color: #B9B7B9;
+    }
 
-     /*.cust-check::after {*/
-        /*opacity: 1;*/
-        /*content: '';*/
-        /*position: absolute;*/
-        /*width: 9px;*/
-        /*height: 5px;*/
-        /*background: transparent;*/
-        /*top: 3px;*/
-        /*left: 3px;*/
-        /*border: 3px solid #333;*/
-        /*border-top: none;*/
-        /*border-right: none;*/
+    .check-container {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 18px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
 
-        /*transform: rotate(-45deg);*/
-    /*}*/
-    /*.cat-item input[type=checkbox]:checked + .cust-check:after {*/
-        /*opacity: 1;*/
-    /*}*/
+    .check-container p {
+        padding-top: 3px;
+    }
+
+    /* Hide the browser's default checkbox */
+    .check-container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        margin-top: -35px;
+        margin-left: -25px;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 23px;
+        width: 23px;
+        background-color: #FFFFFF;
+        border: 1px solid #DAD8DA;
+        border-radius: 5px;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .check-container:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .check-container input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .check-container .checkmark:after {
+        left: 8px;
+        top: 3px;
+        width: 5px;
+        height: 10px;
+        border: solid black;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
 
 
 </style>
