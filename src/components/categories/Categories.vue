@@ -4,14 +4,19 @@
         <div class="categories-container">
             <div class="categories-list">
                 <div class="list-container">
-                    <ul :list="items" >
-                        <draggable>
-                            <li class="categories-list-item" v-for="item in items">
-                                <img class="categories-list-img" src="../../assets/img/icons/list-plus.png" alt="plusik">
+                        <draggable :element="'ul'"
+                            :list="items"
+                            class="dragArea list-group"
+                            :options="{group:{name: 'g1'}}">
+                            <li class="categories-list-item" v-for="(item, key) in items">
+                                <img @click="collapseCategories(key)" class="categories-list-img gorka" src="../../assets/img/icons/list-plus.png" alt="plusik">
                                 <a class="list-anchor" href="" @click.prevent="editCategory(item.id)">{{item.name}}</a>
+                                <div v-if="underCategories[key]">
+                                    <drag class="list-item" v-if="item.children" :children="item.children" :item="item"></drag>
+                                </div>
                             </li>
                         </draggable>
-                    </ul>
+
                 </div>
             </div>
             <div class="categories-details">
@@ -106,11 +111,13 @@
 
 <script>
   import draggable from 'vuedraggable'
+  import drag from './Drag.vue'
 
   export default {
     name: "Categories",
     components: {
       draggable,
+      drag,
     },
     data () {
       return {
@@ -122,9 +129,37 @@
         addressUrl: '',
         items: [],
         selectedCategory: '',
+        justCreated: false,
+        underCategories: {},
       }
     },
+    watch: {
+      items: {
+        handler () {
+          if (this.justCreated) {
+            axios.patch('categories/save-orders', {
+              categories: this.items,
+            }).then(result => {
+
+              console.log(result.data)
+
+            })
+          } else {
+            this.justCreated = true
+          }
+        },
+        deep: true,
+      },
+    },
     methods: {
+        // underCategories(key) {
+        //
+        // },
+      collapseCategories(key) {
+        this.underCategories[key] = !this.underCategories[key]
+        this.$forceUpdate()
+      },
+
       editCategory(id){
         let category = this.items.find(item => item.id === id)
         this.name = category.name
@@ -147,11 +182,17 @@
     created: function () {
       axios('categories')
       .then(result => this.items = result.data)
+      this.items.forEach((v,k) => {
+        this.underCategories[k] = false
+      })
     },
   }
 </script>
 
 <style scoped>
+    .gorka {
+        z-index: 10;
+    }
     .categories-container {
         display: grid;
         grid-template-columns: 390px 520px 1fr;
