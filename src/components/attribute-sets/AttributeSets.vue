@@ -13,7 +13,8 @@
         </div>
         <div class="component-container">
             <attribute-set-form v-if="type == 1"></attribute-set-form>
-            <attribute-sets-list v-if="type == 2"></attribute-sets-list>
+            <attribute-sets-list v-if="type == 2" @attributeSet="getAttributeSet"></attribute-sets-list>
+            <attribute-sets-edit v-if="type == 3" :attributeSet="attributeSet"></attribute-sets-edit>
         </div>
     </div>
 </template>
@@ -21,18 +22,26 @@
 <script>
   import AttributeSetForm from './AttributeSetForm'
   import AttributeSetsList from './AttributeSetsList'
+  import AttributeSetsEdit from './AttributeSetsEdit'
   export default {
+
     components: {
+      AttributeSetsEdit,
       AttributeSetsList,
       AttributeSetForm
     },
     name: 'attribute-sets',
     data: () => ({
-      type: 2
+      type: 2,
+      attributeSet: '',
     }),
     methods:{
       changeComponent(type){
         this.type = type
+      },
+      getAttributeSet(attributeSet){
+        this.attributeSet = attributeSet
+        this.type = 3
       }
     }
   }

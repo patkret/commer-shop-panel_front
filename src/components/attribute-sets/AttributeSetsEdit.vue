@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form class="attribute-form" >
+        <form class="attribute-form">
             <div class="attributes-col">
                 <div class="attributes-row">
                     <div class="label-col">
@@ -8,7 +8,8 @@
                     </div>
                     <div class="input-col">
                         <div :class="{'attr-input': true,  'attr-input inpt-border': errors.has('name')}">
-                            <input type="text" v-validate="'required'" :class="{'single-input': true, }" placeholder="Nazwa..." name="name" v-model="name">
+                            <input type="text" v-validate="'required'" :class="{'single-input': true, }"
+                                   placeholder="Nazwa..." name="name" v-model="attributeSet.name">
                         </div>
                         <span v-show="errors.has('name')" class="validator-help">{{ errors.first('name') }}</span>
                     </div>
@@ -19,7 +20,8 @@
                     </div>
                     <div class="input-col">
                         <div class="checkbox-square">
-                            <input class="visibility-hidden" type="checkbox" id="checkbox" v-model="visibility">
+                            <input class="visibility-hidden" type="checkbox" id="checkbox"
+                                   v-model="attributeSet.visibility">
                             <label for="checkbox" class="square"></label>
                         </div>
                     </div>
@@ -29,7 +31,7 @@
                         <label></label>
                     </div>
                     <div class="input-col">
-                        <button class="custom-button" @click.prevent="saveAttributeSet">ZAPISZ</button>
+                        <button class="custom-button" @click="updateAttributeSet">ZAPISZ</button>
                     </div>
                 </div>
             </div>
@@ -37,15 +39,23 @@
         <div class="top-menu-container">
             <div class="top-menu">
                 <ul class="top-menu-items">
-                   <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">Kategorie dla atrybutu</li>
-                   <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dodaj atrybut</li>
-                   <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">Wybrane atrybuty</li>
+                    <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">
+                        Kategorie dla atrybutu
+                    </li>
+                    <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dodaj
+                        atrybut
+                    </li>
+                    <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
+                        Wybrane atrybuty
+                    </li>
                 </ul>
             </div>
             <div class="menu-tab">
-                <categories-list v-if="type == 1" @mainCategories="getMainCategories" @children="getChildren" id="1"></categories-list>
-                <add-attribute v-if="type == 2" @attribute ="getAttribute" id="2"></add-attribute>
-                <attributes-list v-if="type == 3" :attributes="attributes" id="3"></attributes-list>
+                <categories-list v-if="type == 1" @mainCategories="getMainCategories" @children="getChildren"
+                                 :attributeMainCategories="mainCategories"
+                                 :attributeChildren="children"></categories-list>
+                <add-attribute v-if="type == 2" @attribute ="getAttribute"></add-attribute>
+                <!--<attributes-list v-if="type == 3" :attributes="attributes"></attributes-list>-->
             </div>
         </div>
     </div>
@@ -55,54 +65,60 @@
   import addAttribute from './addAttribute'
   import CategoriesList from './CategoriesList'
   import attributesList from './attributesList'
+
   export default {
-    name: 'attribute-set-form',
+    name: 'attribute-sets-edit',
+    props: ['attributeSet'],
     components: {
       CategoriesList,
       addAttribute,
-      attributesList
+      attributesList,
     },
     data: () => ({
-      name: '',
-      visibility: 1,
       type: 1,
-      defaultValue: '',
-      attributes: [],
-      defaultCategories: '',
-      mainCategories: '',
-      children: ''
+      allCategories: [],
+      mainCategories: [],
+      children: [],
     }),
 
-    methods:{
+    methods: {
+      changeType: function (type) {
+        this.type = type
+      },
+      getMainCategories (temp) {
+        this.mainCategories = temp
+      },
+      getChildren (temp) {
+        if(this.children != temp) {
+          this.children = temp
+        } //array z id's
+      },
+      updateAttributeSet () {
 
-      changeType: function(type){
-        this.type = type;
       },
-      getAttribute(attribute){
-       this.attributes.push(attribute)
-      },
-      getMainCategories(mainCategories){
-        this.mainCategories = mainCategories
-      },
-      getChildren(children){
-        this.children = children
-      },
-      saveAttributeSet(){
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            axios.post('/attribute-sets', {
-              name: this.name,
-              visibility: this.visibility,
-              attributes: JSON.stringify(this.attributes),
-              defaultCategoriesIds: this.mainCategories.concat(this.children)
-            }).then(() => {
-              this.$parent.$data.type = 2
-            })
+    },
+
+    created: function () {
+      axios('categories').then(result => {
+        let temp = result.data
+        for (let category of this.attributeSet.categories) {
+          if (category.parent_id !== 0) {
+            for (let mainCat of temp) {
+              let subcats
+              if (mainCat.children) {
+                subcats = mainCat.children.filter(item => item.id === category.id).map(item => item.id)
+                this.children = this.children.concat(subcats)
+
+              }
+            }
           }
-        })
-
-      }
-    }
+          else {
+            let cat = temp.find(el => el.id === category.id)
+            this.mainCategories.push(cat.id)
+          }
+        }
+      })
+    },
   }
 </script>
 
@@ -156,46 +172,44 @@
         margin-left: -12px;
     }
 
-    .custom-button{
+    .custom-button {
         margin: 0;
     }
 
-    .top-menu-container{
+    .top-menu-container {
         display: grid;
         grid-template-columns: 90% 10%;
         grid-template-rows: 20% 60px 80%;
-        grid-template-areas: "top-menu ."
-        ". .  "
-        "menu-tab . ";
+        grid-template-areas: "top-menu ." ". .  " "menu-tab . ";
         margin-top: 20px;
 
     }
-    .top-menu{
+
+    .top-menu {
         grid-area: top-menu;
         border-bottom: 1px solid #E5E7ED;
         height: 60px;
         justify-items: start;
-
     }
 
-    .top-menu-items{
+    .top-menu-items {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         padding: 0;
-
     }
 
-    .top-menu-item{
+    .top-menu-item {
         text-wrap: none;
         margin-right: 60px;
         cursor: pointer;
     }
 
-    .menu-tab{
+    .menu-tab {
         grid-area: menu-tab;
 
     }
+
     .validator-help {
         background-color: red;
         border-radius: 5px;
@@ -206,21 +220,20 @@
         border-top-right-radius: 0;
         border-top-left-radius: 0;
     }
+
     .input-col {
         display: flex;
         flex-direction: column;
     }
+
     .inpt-border {
         border: 1px solid red;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
 
-    .top-menu-item-active{
+    .top-menu-item-active {
         border-bottom: 2px solid #2595ec;
         padding-bottom: 25px;
     }
-
-
-
 </style>

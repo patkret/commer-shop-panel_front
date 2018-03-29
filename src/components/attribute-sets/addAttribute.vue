@@ -229,7 +229,7 @@
 
     .custom-button {
         grid-area: cust-button;
-        margin: 0 50px 0 200px;
+        margin: 0 50px 0 180px;
     }
 
     .cust-inpt-select {
