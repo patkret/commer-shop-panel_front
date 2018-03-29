@@ -8,6 +8,7 @@ import AttributeSets from '../components/attribute-sets/AttributeSets'
 import Categories from '../components/categories/Categories'
 import Products from '../components/products/Products'
 import VatRates from '../components/vat-rates/VatRates'
+import Variants from '../components/variants/Variants'
 
 Vue.use(Router)
 
@@ -54,6 +55,11 @@ export default new Router({
           name: 'VatRates',
           component: VatRates,
         },
+        {
+          path: '/variants',
+          name: 'Variants',
+          component: Variants,
+        }
       ],
     },
   ],

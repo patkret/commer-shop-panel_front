@@ -19,10 +19,6 @@
                             :hideSelected="true"
                             placeholder="Wybierz"></multiselect>
                 </div>
-                <div class="filter-keyword">
-                    <label for="">Filtruj po słowie kluczowym</label>
-                    <input class="products-input" type="text">
-                </div>
             </div>
             <div class="search-container"></div>
         </div>
@@ -43,6 +39,25 @@
 
           </tr>
           </tbody>
+          <div class="action-select-container">
+              <p class="action-select-p">Wybierz akcję</p>
+              <div class="action-select">
+                  <multiselect
+                          class=" admin-select products-select"
+                          v-model="selectedCategory"
+                          :allow-empty="false"
+                          :searchable="false"
+                          :selectedLabel="''"
+                          track-by="name"
+                          :options="filters"
+                          label="name"
+                          :deselectLabel="''"
+                          :selectLabel="''"
+                          :hideSelected="true"
+                          placeholder="Wybierz"></multiselect>
+                  <button class="use-button">Wykonaj</button>
+              </div>
+          </div>
       </table>
     </div>
 
@@ -72,7 +87,6 @@
     // },
   }
 </script>
-
 <style scoped>
     .products-container {
         background-color: #ffffff;
@@ -81,6 +95,36 @@
         margin-top: 40px;
         font-size: 12px;
         font-weight: 700;
+    }
+    .products-select {
+        width: 200px;
+        align-self: center;
+        height: 20px;
+    }
+    .action-select-container {
+        display: flex;
+        flex-direction: column;
+        margin: 40px 0;
+    }
+    .action-select {
+        display: flex;
+        height: 40px;
+    }
+    .action-select-p {
+        font-size: 12px;
+        padding-left: 5px;
+    }
+    .use-button {
+        margin: 10px 0 0 10px;
+        align-self: center;
+        background: linear-gradient(to right,#21c8cc,#2595ec);
+        border: none;
+        font-weight: 700;
+        height: 40px;
+        width: 130px;
+        border-radius: 5px;
+        color: #ffffff;
+        font-size: 14px;
     }
     .table-row {
         display: grid;
