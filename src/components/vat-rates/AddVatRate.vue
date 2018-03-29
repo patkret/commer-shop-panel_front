@@ -12,7 +12,7 @@
             <div class="form-row">
                 <label class="form-label col-1">Stawka</label>
                 <div class="form-data col-2">
-                    <input  v-model="rate" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('rate') }" class="form-input " type="text" name="rate">
+                    <input  v-model="rate" v-validate="'required|numeric'" :class="{'input': true, 'is-danger input-border': errors.has('rate') }" class="form-input " type="text" name="rate">
                     <span v-show="errors.has('rate')" class="help is-danger">{{ errors.first('rate') }}</span>
                 </div>
             </div>
@@ -20,8 +20,7 @@
             <div class="form-row">
                 <label class="form-label col-1" for="">Opis</label>
                 <div class="form-data col-2">
-                    <textarea v-model="rateDescription" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('rateDescription') }" class="form-textarea" name="rateDescription" id=""></textarea>
-                    <span v-show="errors.has('rateDescription')" class="help is-danger">{{ errors.first('rateDescription') }}</span>
+                    <textarea v-model="rateDescription" class="form-textarea" name="rateDescription" id=""></textarea>
                 </div>
             </div>
             <div class="form-row col-2">
@@ -49,7 +48,7 @@
             axios.post('/vat-rates', {
               name: this.name,
             }).then(() => {
-              this.$router.replace('/vat-rates')
+              this.$parent.$data.type = 2
             })
           }
         });
@@ -90,6 +89,7 @@
     .form-input {
         background-color: #ffffff;
         margin-left: 10px;
+        margin-right: 10px;
         border-radius: 10px;
         height: 35px;
         line-height: 35px;
@@ -97,7 +97,7 @@
         border:none;
         font-size: 12px;
         font-weight: 700;
-        width: auto;
+        width: 100%;
     }
     .form-textarea {
         resize: none;
@@ -109,6 +109,8 @@
         border-radius: 10px;
         font-size: 12px;
         font-weight: 700;
+        width: 100%;
+        margin-right: 10px;
     }
     .form-data {
         display: flex;
@@ -124,12 +126,13 @@
         background-color: red;
         border-radius: 5px;
         color: #fff;
-        padding: 10px 0 10px 10px;
+        padding: 10px 0 10px 14px;
         font-size: 12px;
         font-weight: 700;
         margin-left: 10px;
         border-top-right-radius: 0;
         border-top-left-radius: 0;
+        width: 100%;
     }
     .custom-button {
         margin: 40px;
@@ -159,12 +162,10 @@
         z-index: -1;
         border-radius: 5px;
     }
-    .custom-button:hover{
+    .custom-button:hover {
         color: #ffffff;
         background: linear-gradient(to right, #21c8cc, #2595ec);
         background-size: 104%;
         background-position: -2px;
     }
-
-
 </style>

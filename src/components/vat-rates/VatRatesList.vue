@@ -10,7 +10,7 @@
                     <span class="dot"></span>
                 </button>
                 <div class="action-buttons visibility-hidden" :data-category="key">
-                    <button class="delete">Usuń</button>
+                    <button @click="deleteRate(item)" class="delete">Usuń</button>
                     <button class="edit">Edytuj</button>
                 </div>
             </div>
@@ -30,7 +30,19 @@
       showActions (key) {
         document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
         console.log(this.buttons);
-      }
+      },
+      deleteRate (item) {
+
+        axios.delete('vat-rates/' + item.id).then(result => {
+
+          axios('vat-rates').
+          then(result => {
+            this.items = result.data
+          });
+        })
+
+      },
+
     },
     created: function () {
       axios('vat-rates').
