@@ -1,4 +1,3 @@
-
 /*BUTTONS */
 .custom-button {
     margin: 40px;
@@ -17,6 +16,7 @@
     cursor: pointer;
     text-decoration: none;
 }
+
 .custom-button::after {
     position: absolute;
     top: -2px;
@@ -28,7 +28,8 @@
     z-index: -1;
     border-radius: 5px;
 }
-.custom-button:hover{
+
+.custom-button:hover {
     color: #ffffff;
     background: linear-gradient(to right, #21c8cc, #2595ec);
     background-size: 104%;
@@ -46,6 +47,7 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
 .square::before {
     position: absolute;
     content: "";
@@ -54,18 +56,19 @@
     left: 50%;
     top: 50%;
     border: 1px solid #fff;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     background: #d9d9d9;
     border-radius: 50%;
 }
-input:checked+.square {
+input:checked + .square {
     background: linear-gradient(to right, #21c8cc, #2595ec);
 }
 
-input:checked+.square:before {
+input:checked + .square:before {
     background: linear-gradient(to right, #21c8cc, #2595ec);
     border: 1px solid #fff;
 }
+
 input:checked + .square:after {
     border: 1px solid #ffffff;
     border-top: none;
@@ -76,7 +79,7 @@ input:checked + .square:after {
     opacity: 1;
     position: absolute;
     top: 44%;
-    transform: translate(-50%,-50%) rotate(-45deg);
+    transform: translate(-50%, -50%) rotate(-45deg);
     width: 10px;
     z-index: 1;
 }
@@ -87,12 +90,12 @@ input:checked + .square:after {
     top: 4px;
 }
 
-
 /*MULTISELECT*/
 
 .shop-select {
     background-color: #FFFFFF;
 }
+
 .shop-select .multiselect__tags {
     background-color: #FFFFFF;
     border: none;
@@ -101,31 +104,38 @@ input:checked + .square:after {
     color: #000;
     border-radius: 5px;
 }
+
 .shop-select .multiselect__single {
     background-color: #FFFFFF;
     font-size: 12px;
     font-weight: 700;
 }
+
 .shop-select .multiselect__content-wrapper {
     border: 1px solid #dde0e5;
     border-top: none;
     border-radius: 5px;
     width: 100%;
 }
+
 .shop-select .multiselect--active {
     background-color: #FFFFFF;
 }
+
 .shop-select .multiselect__option {
     border-top: 1px solid #dde0e5;
 }
+
 .shop-select .multiselect__option--highlight {
     background-color: #f5f7fa;
     color: #000000;
     border-top: 1px solid #dde0e5;
 }
+
 .shop-select .multiselect__content:first-child {
     border-top: none;
 }
+
 .shop-select .multiselect__select::before {
     /*border: none;*/
     height: 20px;
@@ -134,9 +144,10 @@ input:checked + .square:after {
     width: 20px;
 }
 
-.admin-select{
+.admin-select {
     background-color: #F5F7FA !important;
 }
+
 .admin-select .multiselect__tags {
     background-color: #f5f7fa;
     border: none;
@@ -145,6 +156,7 @@ input:checked + .square:after {
     color: #000;
     border-radius: 5px;
 }
+
 .admin-select .multiselect__single {
     background-color: #f5f7fa;
     font-size: 12px;
@@ -152,29 +164,35 @@ input:checked + .square:after {
 }
 
 .admin-select .multiselect__content-wrapper {
-border: 1px solid #dde0e5;
-border-top: none;
-border-radius: 5px;
-width: 100%;
+    border: 1px solid #dde0e5;
+    border-top: none;
+    border-radius: 5px;
+    width: 100%;
 }
+
 .admin-select .multiselect--active {
-background-color: #f5f7fa;
+    background-color: #f5f7fa;
 }
+
 .admin-select .multiselect__option {
-border-top: 1px solid #dde0e5;
+    border-top: 1px solid #dde0e5;
 }
+
 .admin-select .multiselect__option--highlight {
-background-color: #f5f7fa;
-color: #000000;
-border-top: 1px solid #dde0e5;
+    background-color: #f5f7fa;
+    color: #000000;
+    border-top: 1px solid #dde0e5;
 }
+
 .admin-select .multiselect__content:first-child {
-border-top: none;
+    border-top: none;
 }
+
 .admin-select .multiselect__select::before {
 
-height: 20px;
-border-color: #000 transparent transparent;
-border-width: 4px 4px 0;
-width: 20px;
+    height: 20px;
+    border-color: #000 transparent transparent;
+    border-width: 4px 4px 0;
+    width: 20px;
 }
+

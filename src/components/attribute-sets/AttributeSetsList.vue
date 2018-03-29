@@ -12,7 +12,7 @@
                     </button>
                     <div class="action-buttons visibility-hidden" :data-category="key">
                         <button class="delete" @click="deleteAttributeSet(item)">Usuń</button>
-                        <button class="edit" @click = "edit(item)">Edytuj</button>
+                        <button class="edit" @click = "editAttributeSet(item)">Edytuj</button>
                     </div>
                 </div>
             </li>
@@ -42,11 +42,12 @@
                 this.items = result.data
               });
           })
-
-
       },
-      edit(item){
-          console.log(item.id)
+      editAttributeSet(item){
+        axios('attribute-sets/' + item.id).
+          then(result => {
+            this.$emit('attributeSet', result.data)
+          });
       }
     },
     created: function () {

@@ -2,7 +2,6 @@
     <div id="side-menu">
         <ul class="all-categories">
             <li v-for="category in categories" class="cat-item">
-
                 <label class="check-container">
                     <p :class="{'label': true, 'label inactive': category.visibility == 0} ">
                         {{category.name}}
@@ -28,6 +27,7 @@
 <script>
   export default {
     name: 'categories-list',
+    props: ['attributeMainCategories', 'attributeChildren'],
     data: () => ({
       categories: [],
       selectedMainCategories: [],
@@ -41,12 +41,18 @@
       selectedChildren: function () {
         this.$emit('children', this.selectedChildren)
       },
+      attributeChildren: function (e) {
+        this.selectedChildren = e
+      }
     },
 
     created: function () {
       axios('categories').then(result => {
         this.categories = result.data
       })
+      if(this.attributeMainCategories != null){
+        this.selectedMainCategories = this.attributeMainCategories
+      }
     },
   }
 
@@ -87,7 +93,6 @@
         padding-top: 3px;
     }
 
-    /* Hide the browser's default checkbox */
     .check-container input {
         position: absolute;
         opacity: 0;
@@ -96,7 +101,6 @@
         margin-left: -25px;
     }
 
-    /* Create a custom checkbox */
     .checkmark {
         position: absolute;
         top: 0;
@@ -107,8 +111,6 @@
         border: 1px solid #DAD8DA;
         border-radius: 5px;
     }
-
-    /* On mouse-over, add a grey background color */
     .check-container:hover input ~ .checkmark {
         background-color: #ccc;
     }
@@ -119,12 +121,11 @@
         display: none;
     }
 
-    /* Show the checkmark when checked */
+
     .check-container input:checked ~ .checkmark:after {
         display: block;
     }
 
-    /* Style the checkmark/indicator */
     .check-container .checkmark:after {
         left: 8px;
         top: 3px;
