@@ -9,6 +9,9 @@
                 <div class="side-button" :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}" @click.prevent="changeComponent(2)">
                     <p>Wszystkie zestawy</p>
                 </div>
+                <div class="side-button side-menu-item active"  v-if="type === 3">
+                    <p>Edycja zestawu</p>
+                </div>
             </div>
         </div>
         <div class="component-container">
