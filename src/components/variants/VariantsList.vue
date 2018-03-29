@@ -1,7 +1,7 @@
 <template>
-    <ul class="vat-container">
+    <ul class="variants-container">
         <li v-for="(item, key) in items" class="attr-list-item">
-           {{item.name}}
+            {{item.name}}
             {{item.rate}}
             <div class="buttons-container">
                 <button @click="showActions(key)" class="more-button">
@@ -20,54 +20,38 @@
 
 <script>
   export default {
-    name: "vat-rates-list",
-    data () {
+    name: "variants-list",
+    data() {
       return {
         items: [],
         showButtons: {},
       }
     },
     methods: {
-      showActions (key) {
-        this.showButtons[key] = !this.showButtons[key]
-        this.$forceUpdate()
-      },
-      deleteRate (item) {
-
-        axios.delete('vat-rates/' + item.id).then(result => {
-
-          axios('vat-rates').
-          then(result => {
-            this.items = result.data
-          });
-        })
-
-      },
-
+      showActions (key){
+      this.showButtons[key] = !this.showButtons[key]
+      this.$forceUpdate()
+      }
     },
     created: function () {
-      axios('vat-rates').
-      then(result => {
+      axios('variant-groups').then(result => {
         this.items = result.data
         this.items.forEach((v,k) => {
           this.showButtons[k] = false
         })
       });
-    }
+    },
   }
 </script>
 
 <style scoped>
-    .vat-container {
+    .variants-container {
         width: 80%;
         background-color: #ffffff;
         margin-left: 20px;
         padding: 20px;
         border-radius: 5px;
         box-shadow: 5px 5px 5px 2px #eff1f4;
-    }
-    .attr-p {
-        text-align: right;
     }
     .attr-list-item {
         display: flex;

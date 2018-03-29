@@ -100,7 +100,7 @@
               {text: 'Lista produktów', path: '/products'},
               {text: 'Kategorie', path: '/categories'},
               {text: 'Atrybuty', path: '/attribute-sets'},
-              {text: 'Warianty', path: ''},
+              {text: 'Warianty', path: '/variants'},
               {text: 'Producenci', path: ''},
               {text: 'Stawki VAT', path: '/vat-rates'},
             ],
