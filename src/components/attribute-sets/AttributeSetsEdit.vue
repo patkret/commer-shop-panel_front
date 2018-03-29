@@ -31,7 +31,7 @@
                         <label></label>
                     </div>
                     <div class="input-col">
-                        <button class="custom-button" @click="updateAttributeSet">ZAPISZ</button>
+                        <button class="custom-button" @click.prevent="updateAttributeSet">ZAPISZ</button>
                     </div>
                 </div>
             </div>
@@ -39,14 +39,17 @@
         <div class="top-menu-container">
             <div class="top-menu">
                 <ul class="top-menu-items">
-                    <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">
-                        Kategorie dla atrybutu
+                    <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 1}">
+                        Kategorie dla zestawu
                     </li>
-                    <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dodaj
+                    <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 2}">Dodaj
                         atrybut
                     </li>
-                    <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
+                    <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 3}">
                         Wybrane atrybuty
+                    </li>
+                    <li v-if="type === 4" :class="{'top-menu-item': true, 'top-menu-item-active': type === 4}">
+                        Edycja atrybutu
                     </li>
                 </ul>
             </div>
@@ -54,8 +57,9 @@
                 <categories-list v-if="type == 1" @mainCategories="getMainCategories" @children="getChildren"
                                  :attributeMainCategories="mainCategories"
                                  :attributeChildren="children"></categories-list>
-                <add-attribute v-if="type == 2" @attribute ="getAttribute"></add-attribute>
-                <!--<attributes-list v-if="type == 3" :attributes="attributes"></attributes-list>-->
+                <add-attribute v-if="type == 2" @attribute="getAttribute"></add-attribute>
+                <attributes-list v-if="type == 3" :attributes="attributes" @singleAttribute="editAttribute"></attributes-list>
+                <edit-attribute v-if="type == 4" :singleAttribute="attribute" @attribute="updateAttribute"></edit-attribute>
             </div>
         </div>
     </div>
@@ -65,6 +69,7 @@
   import addAttribute from './addAttribute'
   import CategoriesList from './CategoriesList'
   import attributesList from './attributesList'
+  import editAttribute from './editAttribute'
 
   export default {
     name: 'attribute-sets-edit',
@@ -73,12 +78,15 @@
       CategoriesList,
       addAttribute,
       attributesList,
+      editAttribute
     },
     data: () => ({
       type: 1,
       allCategories: [],
       mainCategories: [],
       children: [],
+      attributes: [],
+      attribute: ''
     }),
 
     methods: {
@@ -93,8 +101,32 @@
           this.children = temp
         } //array z id's
       },
+      getAttribute(attr){
+        this.attributes.push(attr)
+        setTimeout(() => {
+          this.type = 3
+        }, 2000)
+      },
+      editAttribute(attribute){
+        this.attribute = attribute
+        this.type = 4
+      },
+      updateAttribute(attribute, index){
+        this.attributes[index] = attribute
+      },
       updateAttributeSet () {
-
+        this.$validator.validateAll().then((result) => {
+          if (result) {
+            axios.put('/attribute-sets/'+ this.attributeSet.id, {
+              name: this.attributeSet.name,
+              visibility: this.attributeSet.visibility,
+              attributes: JSON.stringify(this.attributes),
+              defaultCategoriesIds: this.mainCategories.concat(this.children)
+            }).then(() => {
+              this.$parent.$data.type = 2
+            })
+          }
+        })
       },
     },
 
@@ -118,6 +150,8 @@
           }
         }
       })
+
+      this.attributes = JSON.parse(this.attributeSet.attributes)
     },
   }
 </script>

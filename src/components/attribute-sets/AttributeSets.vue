@@ -1,13 +1,13 @@
 <template>
     <div id="main-content-with-side-menu">
-        <h1 class="card-name">Atrybuty</h1>
+        <h1 class="card-name">Zestawy atrybutów</h1>
         <div class="side-menu-container">
             <div id="side-menu">
                 <div class="side-button" :class="{'side-menu-item': true, 'side-menu-item active': type == 1}" @click.prevent="changeComponent(1)">
-                    <p>Dodaj atrybut</p>
+                    <p>Dodaj zestaw</p>
                 </div>
                 <div class="side-button" :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}" @click.prevent="changeComponent(2)">
-                    <p>Wszystkie atrybuty</p>
+                    <p>Wszystkie zestawy</p>
                 </div>
             </div>
         </div>

@@ -13,7 +13,7 @@
                     </button>
                     <div class="action-buttons visibility-hidden" :data-category="key">
                         <button class="delete" @click="deleteAttribute(key)">Usuń</button>
-                        <button class="edit" >Edytuj</button>
+                        <button class="edit" @click="editAttribute(item, key)">Edytuj</button>
                     </div>
                 </div>
             </li>
@@ -38,6 +38,9 @@
 
         this.attributes.splice(index, 1)
       },
+      editAttribute(item, key){
+        this.$emit('singleAttribute', item, key)
+      }
     },
   }
 </script>

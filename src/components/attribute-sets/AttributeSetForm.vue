@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form class="attribute-form" >
+        <form class="attribute-form">
             <div class="attributes-col">
                 <div class="attributes-row">
                     <div class="label-col">
@@ -8,7 +8,8 @@
                     </div>
                     <div class="input-col">
                         <div :class="{'attr-input': true,  'attr-input inpt-border': errors.has('name')}">
-                            <input type="text" v-validate="'required'" :class="{'single-input': true, }" placeholder="Nazwa..." name="name" v-model="name">
+                            <input type="text" v-validate="'required'" :class="{'single-input': true, }"
+                                   placeholder="Nazwa..." name="name" v-model="name">
                         </div>
                         <span v-show="errors.has('name')" class="validator-help">{{ errors.first('name') }}</span>
                     </div>
@@ -37,15 +38,27 @@
         <div class="top-menu-container">
             <div class="top-menu">
                 <ul class="top-menu-items">
-                   <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">Kategorie dla atrybutu</li>
-                   <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dodaj atrybut</li>
-                   <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">Wybrane atrybuty</li>
+                    <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">
+                        Kategorie dla zestawu
+                    </li>
+                    <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dodaj
+                        atrybut
+                    </li>
+                    <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
+                        Wybrane atrybuty
+                    </li>
+                    <li v-if="type == 4" :class="{'top-menu-item': true, 'top-menu-item-active': type == 4}">
+                        Edycja atrybutu
+                    </li>
                 </ul>
             </div>
             <div class="menu-tab">
-                <categories-list v-if="type == 1" @mainCategories="getMainCategories" @children="getChildren" id="1"></categories-list>
-                <add-attribute v-if="type == 2" @attribute ="getAttribute" id="2"></add-attribute>
-                <attributes-list v-if="type == 3" :attributes="attributes" id="3"></attributes-list>
+                <categories-list v-if="type == 1" @mainCategories="getMainCategories"
+                                 @children="getChildren"></categories-list>
+                <add-attribute v-if="type == 2" @attribute="getAttribute"></add-attribute>
+                <attributes-list v-if="type == 3" :attributes="attributes"
+                                 @singleAttribute="editAttribute"></attributes-list>
+                <edit-attribute v-if="type == 4" :singleAttribute="attribute" @attribute="updateAttribute"></edit-attribute>
             </div>
         </div>
     </div>
@@ -55,12 +68,15 @@
   import addAttribute from './addAttribute'
   import CategoriesList from './CategoriesList'
   import attributesList from './attributesList'
+  import editAttribute from './editAttribute'
+
   export default {
     name: 'attribute-set-form',
     components: {
       CategoriesList,
       addAttribute,
-      attributesList
+      attributesList,
+      editAttribute,
     },
     data: () => ({
       name: '',
@@ -70,39 +86,61 @@
       attributes: [],
       defaultCategories: '',
       mainCategories: '',
-      children: ''
+      children: '',
+      attribute: '',
+      indexOfAttribute: ''
+
     }),
 
-    methods:{
+    watch: {
+      indexOfAttribute(){
+        this.type = 4
+      }
+    },
 
-      changeType: function(type){
-        this.type = type;
+    methods: {
+
+      changeType: function (type) {
+        this.type = type
       },
-      getAttribute(attribute){
-       this.attributes.push(attribute)
+      getAttribute (attribute) {
+        this.attributes.push(attribute)
+
+        setTimeout(() => {
+          this.type = 3
+        }, 2000)
       },
-      getMainCategories(mainCategories){
+      getMainCategories (mainCategories) {
         this.mainCategories = mainCategories
       },
-      getChildren(children){
+      getChildren (children) {
         this.children = children
       },
-      saveAttributeSet(){
+      editAttribute(attribute, key){
+        this.attribute = attribute
+        this.indexOfAttribute = key
+        this.type = 4
+      },
+      updateAttribute(attribute, key){
+        this.attributes[key] = attribute
+        this.indexOfAttribute = ''
+      },
+      saveAttributeSet () {
         this.$validator.validateAll().then((result) => {
           if (result) {
             axios.post('/attribute-sets', {
               name: this.name,
               visibility: this.visibility,
               attributes: JSON.stringify(this.attributes),
-              defaultCategoriesIds: this.mainCategories.concat(this.children)
+              defaultCategoriesIds: this.mainCategories.concat(this.children),
             }).then(() => {
               this.$parent.$data.type = 2
             })
           }
         })
 
-      }
-    }
+      },
+    },
   }
 </script>
 
@@ -156,21 +194,20 @@
         margin-left: -12px;
     }
 
-    .custom-button{
+    .custom-button {
         margin: 0;
     }
 
-    .top-menu-container{
+    .top-menu-container {
         display: grid;
         grid-template-columns: 90% 10%;
         grid-template-rows: 20% 60px 80%;
-        grid-template-areas: "top-menu ."
-        ". .  "
-        "menu-tab . ";
+        grid-template-areas: "top-menu ." ". .  " "menu-tab . ";
         margin-top: 20px;
 
     }
-    .top-menu{
+
+    .top-menu {
         grid-area: top-menu;
         border-bottom: 1px solid #E5E7ED;
         height: 60px;
@@ -178,7 +215,7 @@
 
     }
 
-    .top-menu-items{
+    .top-menu-items {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
@@ -186,16 +223,17 @@
 
     }
 
-    .top-menu-item{
+    .top-menu-item {
         text-wrap: none;
         margin-right: 60px;
         cursor: pointer;
     }
 
-    .menu-tab{
+    .menu-tab {
         grid-area: menu-tab;
 
     }
+
     .validator-help {
         background-color: red;
         border-radius: 5px;
@@ -206,21 +244,22 @@
         border-top-right-radius: 0;
         border-top-left-radius: 0;
     }
+
     .input-col {
         display: flex;
         flex-direction: column;
     }
+
     .inpt-border {
         border: 1px solid red;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
 
-    .top-menu-item-active{
+    .top-menu-item-active {
         border-bottom: 2px solid #2595ec;
         padding-bottom: 25px;
     }
-
 
 
 </style>

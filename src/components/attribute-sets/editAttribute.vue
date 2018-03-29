@@ -1,8 +1,8 @@
 <template>
     <div class="single-attribute">
         <form class="single-attribute-form">
-            <div class="info" v-if="showInfoAdd == true">
-                <p>Atrybut został dodany!</p>
+            <div class="info" v-if="showInfoEdit == true">
+                <p>Atrybut został edytowany!</p>
             </div>
             <div class="sing-attr-row">
                 <label class="attr-label">Nazwa</label>
@@ -16,7 +16,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="sing-attr-row">
                 <label class="attr-label">Typ atrybutu</label>
                 <div class="input-container">
@@ -99,13 +98,14 @@
                 </div>
             </div>
         </form>
-        <button class="custom-button" @click.prevent="addAttribute()">DODAJ</button>
+        <button class="custom-button" @click.prevent="updateAttribute()">ZAPISZ</button>
     </div>
 </template>
 
 <script>
   export default {
-    name: 'add-attribute',
+    name: 'edit-attribute',
+    props: ['singleAttribute'],
     data: () => ({
       options: [
         {type: 0, name: 'Pole tekstowe'},
@@ -115,22 +115,24 @@
       selectName: '',
       attribute: {
         name: '',
-        type: {type: 0, name: 'Pole tekstowe'},
+        type: '',
         visibility: 1,
         description: '',
         checked: 1,
         selectOptions: [],
-        defaultValue: ''
+        defaultValue: '',
       },
-      showInfoAdd: false,
-      showInfoEdit: false
+
+      showInfoEdit: false,
     }),
-    watch:{
-      showInfoAdd: function () {
+    watch: {
+
+      showInfoEdit: function () {
         setTimeout(() => {
-          this.showInfoAdd = false;
-        }, 3000);
-      } ,
+          this.showInfoEdit = false
+          this.$parent.$data.type = 3
+        }, 3000)
+      },
     },
     methods: {
       addOption () {
@@ -141,34 +143,22 @@
 
         this.attribute.selectOptions.splice(index, 1)
       },
-      addAttribute () {
+      updateAttribute () {
+
         this.$validator.validateAll().then((result) => {
           if (result) {
-            let tempAttr = {
-              name: this.attribute.name,
-              type: this.attribute.type,
-              visibility: this.attribute.visibility,
-              description: this.attribute.description,
-              checked: this.attribute.checked,
-              defaultValue: this.attribute.defaultValue,
-              selectOptions: this.attribute.selectOptions
-            }
-
-            this.$emit('attribute', tempAttr)
-
-            this.showInfoAdd = true
-
-            this.attribute.name = ''
-            this.attribute.type = ''
-            this.attribute.visibility = 1
-            this.attribute.description = ''
-            this.attribute.checked = 1
-            this.attribute.selectOptions = []
-            this.attribute.defaultValue = ''
+            this.$emit('attribute', this.attribute, this.indexOfAttribute)
+            this.showInfoEdit = true
           }
         })
       },
-    }
+    },
+
+    created: function () {
+      if (this.singleAttribute) {
+        this.attribute = this.singleAttribute
+      }
+    },
   }
 </script>
 
@@ -201,7 +191,6 @@
     .input-container {
         grid-area: input;
         align-self: center;
-
     }
 
     .cust-inpt {
@@ -290,6 +279,7 @@
         color: #FFFFFF;
         text-align: center;
     }
+
     .validator-help {
         width: 78.5%;
         background-color: red;
@@ -301,11 +291,13 @@
         border-top-right-radius: 0;
         border-top-left-radius: 0;
     }
+
     .inpt-border {
         border: 1px solid red;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
+
     .input-col {
         display: flex;
         flex-direction: column;
