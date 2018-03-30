@@ -1,66 +1,66 @@
 <template>
-    <div class="attr-container">
-        <h4 class="attr-p">Akcja</h4>
-        <ul class="attr-list">
-            <li v-for="(item, key) in items" class="attr-list-item">
-                {{item.id}} {{item.name}}
-                <div class="buttons-container">
-                    <button @click="showActions(key)" class="more-button">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                    </button>
-                    <div class="action-buttons visibility-hidden" :data-category="key">
-                        <button class="delete" @click="deleteAttributeSet(item)">Usuń</button>
-                        <button class="edit" @click = "editAttributeSet(item)">Edytuj</button>
-                    </div>
+    <ul class="vat-container">
+        <li v-for="(item, key) in items" class="attr-list-item">
+           {{item.id}}. {{item.name}}
+            <div class="buttons-container">
+                <button @click="showActions(key)" class="more-button">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </button>
+                <div v-if="showButtons[key]" class="action-buttons">
+                    <button @click="deleteVendor(item)" class="delete">Usuń</button>
+                    <button class="edit" @click="editVendor(item)">Edytuj</button>
                 </div>
-            </li>
-        </ul>
-    </div>
+            </div>
+        </li>
+    </ul>
 </template>
 
 <script>
   export default {
-    name: 'attribute-sets-list',
+    name: "vendors-list",
     data () {
       return {
-      items: [],
-        buttons: [],
-      }
-  },
-    methods: {
-        showActions (key) {
-          document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
-        },
-      deleteAttributeSet(item){
-
-          axios.delete('attribute-sets/' + item.id).then(result => {
-
-            axios('attribute-sets').
-              then(result => {
-                this.items = result.data
-              });
-          })
-      },
-      editAttributeSet(item){
-        axios('attribute-sets/' + item.id).
-          then(result => {
-            this.$emit('attributeSet', result.data)
-          });
+        items: [],
+        showButtons: {},
       }
     },
+    methods: {
+      showActions (key) {
+        this.showButtons[key] = !this.showButtons[key]
+        this.$forceUpdate()
+      },
+      editVendor(item){
+        this.$emit('vendor', item)
+      },
+
+      deleteVendor (item) {
+
+        axios.delete('vendors/' + item.id).then(result => {
+          axios('vendors').
+          then(result => {
+            this.items = result.data
+          });
+        })
+
+      },
+
+    },
     created: function () {
-      axios('attribute-sets').
+      axios('vendors').
       then(result => {
         this.items = result.data
+        this.items.forEach((v,k) => {
+          this.showButtons[k] = false
+        })
       });
     }
   }
 </script>
 
 <style scoped>
-    .attr-container {
+    .vat-container {
         width: 80%;
         background-color: #ffffff;
         margin-left: 20px;

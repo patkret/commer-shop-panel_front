@@ -6,6 +6,12 @@ a{
     color:white;
     text-decoration: none;
 }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
 
 a:focus,
 button:focus,
@@ -14,12 +20,18 @@ select:focus,
 textarea:focus {
     outline: none;
 }
-
+button:hover {
+    cursor: pointer;
+}
 ul li {
     list-style-type: none;
 }
 .visibility-hidden {
     visibility: hidden;
+}
+.side-button:hover {
+    cursor: pointer;
+    background-color: #dde0e5;
 }
 
 #main{
@@ -327,6 +339,7 @@ select {
     height: 60px;
     line-height: 30px;
     border-bottom: 1px solid #ccc;
+    cursor: pointer;
 }
 .side-menu-item:last-child{
     border-bottom: none;
@@ -356,7 +369,17 @@ select {
             ". .";
 }
 
-.component-container{
+.component-container {
     grid-area: component-container;
 }
 
+/*!!! PRODUKTY !!!*/
+.products-container {
+    margin: 40px;
+    padding-left: 50px;
+    box-shadow: 0 0 10px #ccc;
+    border-radius: 5px;
+}
+.products-container-heading {
+    padding: 20px 0 50px 0px;
+}

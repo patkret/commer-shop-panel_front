@@ -13,7 +13,7 @@
                     <div class="shop-select-container">
                         <p class="shop-p">Shop ID: </p>
                         <multiselect
-                                class="shop-select"
+                                class="admin-select"
                                 v-model="value"
                                 :options="options"
                                 :allow-empty="false"
@@ -21,7 +21,6 @@
                                 :selectedLabel="''"
                                 track-by="name"
                                 label="name"
-                                id="ms-1"
                                 :deselectLabel="''"
                                 :selectLabel="''"
                                 :hideSelected="true"
@@ -79,19 +78,7 @@
     </div>
 </template>
 
-<style scoped>
-   .multiselect .shop-select {
-        background-color: #F5F7FA!important;
-    }
 
-    .multiselect .multiselect__tags {
-        background-color: #f5f7fa !important;
-
-    }
-    .multiselect .multiselect__single {
-        background-color: #f5f7fa;
-    }
-</style>
 <script>
   import icons from './assets/icons'
 
@@ -110,12 +97,12 @@
           {icon: icons.orders, text: 'Sprzedaż', path: '#2'},
           {icon: icons.products, text: 'Produkty', path: '', children:
             [
-              {text: 'Lista produktów', path: ''},
+              {text: 'Lista produktów', path: '/products'},
               {text: 'Kategorie', path: '/categories'},
-              {text: 'Atrybuty', path: '/attribute-sets'},
-              {text: 'Warianty', path: ''},
-              {text: 'Producenci', path: ''},
-              {text: 'Stawki VAT', path: ''},
+              {text: 'Zestawy atrybutów', path: '/attribute-sets'},
+              {text: 'Warianty', path: '/variants'},
+              {text: 'Producenci', path: '/vendors'},
+              {text: 'Stawki VAT', path: '/vat-rates'},
             ],
           },
           {icon: icons.clients, text: 'Klienci', path: ''},

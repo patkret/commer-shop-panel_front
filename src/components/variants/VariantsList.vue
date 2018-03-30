@@ -1,75 +1,57 @@
 <template>
-    <div class="attr-container">
-        <h4 class="attr-p">Akcja</h4>
-        <ul class="attr-list">
-            <li v-for="(item, key) in items" class="attr-list-item">
-                {{item.id}} {{item.name}}
-                <div class="buttons-container">
-                    <button @click="showActions(key)" class="more-button">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                    </button>
-                    <div class="action-buttons visibility-hidden" :data-category="key">
-                        <button class="delete" @click="deleteAttributeSet(item)">Usuń</button>
-                        <button class="edit" @click = "editAttributeSet(item)">Edytuj</button>
-                    </div>
+    <ul class="variants-container">
+        <li v-for="(item, key) in items" class="attr-list-item">
+            {{item.name}}
+            {{item.rate}}
+            <div class="buttons-container">
+                <button @click="showActions(key)" class="more-button">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </button>
+                <div v-if="showButtons[key]" class="action-buttons">
+                    <button @click="deleteRate(item)" class="delete">Usuń</button>
+                    <button class="edit">Edytuj</button>
                 </div>
-            </li>
-        </ul>
-    </div>
+            </div>
+        </li>
+    </ul>
 </template>
 
 <script>
   export default {
-    name: 'attribute-sets-list',
-    data () {
+    name: "variants-list",
+    data() {
       return {
-      items: [],
-        buttons: [],
+        items: [],
+        showButtons: {},
       }
-  },
+    },
     methods: {
-        showActions (key) {
-          document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
-        },
-      deleteAttributeSet(item){
-
-          axios.delete('attribute-sets/' + item.id).then(result => {
-
-            axios('attribute-sets').
-              then(result => {
-                this.items = result.data
-              });
-          })
-      },
-      editAttributeSet(item){
-        axios('attribute-sets/' + item.id).
-          then(result => {
-            this.$emit('attributeSet', result.data)
-          });
+      showActions (key){
+      this.showButtons[key] = !this.showButtons[key]
+      this.$forceUpdate()
       }
     },
     created: function () {
-      axios('attribute-sets').
-      then(result => {
+      axios('variant-groups').then(result => {
         this.items = result.data
+        this.items.forEach((v,k) => {
+          this.showButtons[k] = false
+        })
       });
-    }
+    },
   }
 </script>
 
 <style scoped>
-    .attr-container {
+    .variants-container {
         width: 80%;
         background-color: #ffffff;
         margin-left: 20px;
         padding: 20px;
         border-radius: 5px;
         box-shadow: 5px 5px 5px 2px #eff1f4;
-    }
-    .attr-p {
-        text-align: right;
     }
     .attr-list-item {
         display: flex;
