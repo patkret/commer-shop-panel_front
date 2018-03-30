@@ -1,0 +1,128 @@
+<template>
+    <ul class="vat-container">
+        <li v-for="(item, key) in items" class="attr-list-item">
+           {{item.id}}. {{item.name}}
+            <div class="buttons-container">
+                <button @click="showActions(key)" class="more-button">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </button>
+                <div v-if="showButtons[key]" class="action-buttons">
+                    <button @click="deleteVendor(item)" class="delete">Usuń</button>
+                    <button class="edit" @click="editVendor(item)">Edytuj</button>
+                </div>
+            </div>
+        </li>
+    </ul>
+</template>
+
+<script>
+  export default {
+    name: "vendors-list",
+    data () {
+      return {
+        items: [],
+        showButtons: {},
+      }
+    },
+    methods: {
+      showActions (key) {
+        this.showButtons[key] = !this.showButtons[key]
+        this.$forceUpdate()
+      },
+      editVendor(item){
+        this.$emit('vendor', item)
+      },
+
+      deleteVendor (item) {
+
+        axios.delete('vendors/' + item.id).then(result => {
+          axios('vendors').
+          then(result => {
+            this.items = result.data
+          });
+        })
+
+      },
+
+    },
+    created: function () {
+      axios('vendors').
+      then(result => {
+        this.items = result.data
+        this.items.forEach((v,k) => {
+          this.showButtons[k] = false
+        })
+      });
+    }
+  }
+</script>
+
+<style scoped>
+    .vat-container {
+        width: 80%;
+        background-color: #ffffff;
+        margin-left: 20px;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 5px 5px 5px 2px #eff1f4;
+    }
+    .attr-p {
+        text-align: right;
+    }
+    .attr-list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        height: 40px;
+        line-height: 40px;
+        margin: 5px 0;
+    }
+    .buttons-container {
+        position: relative;
+    }
+    .more-button {
+        height: 40px;
+        border: none;
+        color: #dde0e5;
+        background-color: #ffffff;
+        padding-bottom: 15px;
+    }
+    .dot {
+        height: 6px;
+        width: 6px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .action-buttons {
+        position: absolute;
+        top: 0;
+        left: -120px;
+        display: flex;
+        border: 1px solid #dde0e5;
+        border-radius: 5px;
+    }
+    .action-buttons button {
+        /*border: 1px solid #dde0e5;*/
+        background-color: #ffffff;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+    }
+    .action-buttons button:first-child {
+        border-right: 1px solid #dde0e5;
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+    .action-buttons button:last-child {
+        border-right: 1px solid #dde0e5;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+    .action-buttons button:hover {
+        cursor: pointer;
+        background-color: #dde0e5;
+    }
+</style>

@@ -101,7 +101,7 @@
               {text: 'Kategorie', path: '/categories'},
               {text: 'Zestawy atrybutów', path: '/attribute-sets'},
               {text: 'Warianty', path: '/variants'},
-              {text: 'Producenci', path: ''},
+              {text: 'Producenci', path: '/vendors'},
               {text: 'Stawki VAT', path: '/vat-rates'},
             ],
           },

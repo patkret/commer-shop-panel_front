@@ -161,13 +161,11 @@
       name: function (val) {
         this.title = '{shop_name} - ' + val
         this.metaKeywords = val
-        // this.
+
       },
     },
     methods: {
-      // underCategories(key) {
-      //
-      // },
+
       collapseCategories (key) {
         this.underCategories[key] = !this.underCategories[key]
         this.$forceUpdate()
@@ -182,8 +180,10 @@
           if (result) {
             axios.post('/categories', {
               name: this.name,
+              description: this.description,
               visibility: this.visibility,
               parent_id: this.selectedCategory.id,
+              page_title: this.page_title
             }).then(() => {
               this.$router.replace('/categories')
             })
