@@ -10,7 +10,7 @@
                         <span class="dot"></span>
                         <span class="dot"></span>
                     </button>
-                    <div class="action-buttons visibility-hidden" :data-category="key">
+                    <div class="action-buttons">
                         <button class="delete" @click="deleteAttributeSet(item)">Usuń</button>
                         <button class="edit" @click = "editAttributeSet(item)">Edytuj</button>
                     </div>
