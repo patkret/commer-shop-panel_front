@@ -196,3 +196,10 @@ input:checked + .square:after {
     width: 20px;
 }
 
+ .curr-select .multiselect__tags{
+    width: 70px !important;
+}
+.price-select .multiselect__tags{
+    width: 120px;
+}
+

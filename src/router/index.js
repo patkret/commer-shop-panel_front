@@ -9,6 +9,7 @@ import Categories from '../components/categories/Categories'
 import Products from '../components/products/Products'
 import VatRates from '../components/vat-rates/VatRates'
 import Variants from '../components/variants/Variants'
+import Vendors from '../components/vendors/Vendors'
 
 Vue.use(Router)
 
@@ -59,6 +60,11 @@ export default new Router({
           path: '/variants',
           name: 'Variants',
           component: Variants,
+        },
+        {
+          path: '/vendors',
+          name: 'Vendors',
+          component: Vendors,
         }
       ],
     },

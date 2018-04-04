@@ -4,8 +4,10 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-src/env.js
+/src/env.js
 
+
+>>>>>>> 6dd215e75946f853e4319e59c57e35919ea6161b
 
 # Editor directories and files
 .idea
