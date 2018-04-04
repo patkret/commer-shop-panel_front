@@ -35,7 +35,6 @@
         document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
       },
       deleteAttribute(index){
-
         this.attributes.splice(index, 1)
       },
       editAttribute(item, key){

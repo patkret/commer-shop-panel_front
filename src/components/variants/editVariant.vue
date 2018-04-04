@@ -1,8 +1,8 @@
 <template>
     <div class="single-attribute">
         <form class="single-attribute-form">
-            <div class="info" v-if="showInfoAdd == true">
-                <p>Cecha została dodana!</p>
+            <div class="info" v-if="showInfoEdit == true">
+                <p>Cecha została edytowana!</p>
             </div>
             <div class="sing-attr-row">
                 <label class="attr-label">Nazwa</label>
@@ -112,7 +112,7 @@
                                 :selectLabel="''"
                                 :hideSelected="true"
                                 placeholder="Wybierz"
-                                style="width: 25%;"></multiselect>
+                                style="width: 25%"></multiselect>
 
                         <div class="input-col" v-if="variant.priceOption.type !== 0">
                             <div class="cust-inpt"
@@ -194,13 +194,14 @@
                 </div>
             </div>
         </form>
-        <button class="custom-button" @click.prevent="addVariant()">DODAJ</button>
+        <button class="custom-button" @click.prevent="updateVariant()">Edytuj</button>
     </div>
 </template>
 
 <script>
   export default {
-    name: 'add-variant',
+    name: 'edit-variant',
+    props: ['singleVariant'],
     data: () => ({
       options: [
         {type: 0, name: 'Pole tekstowe'},
@@ -217,25 +218,16 @@
         {type: 0, name: 'zł'},
         {type: 1, name: '%'},
       ],
-
       selectName: '',
-      variant: {
-        name: '',
-        type: {type: 0, name: 'Pole tekstowe'},
-        priceOption: {type: 0, name: 'nie zmieniaj'},
-        priceValue: '',
-        curr: {type: 0, name: 'zł'},
-        required: 1,
-        selectOptions: [],
-
-      },
-      showInfoAdd: false,
+      variant: {},
       showInfoEdit: false,
     }),
     watch: {
-      showInfoAdd: function () {
+
+      showInfoEdit: function () {
         setTimeout(() => {
-          this.showInfoAdd = false
+          this.showInfoEdit = false
+          this.$parent.$data.type = 2
         }, 3000)
       },
     },
@@ -251,40 +243,26 @@
         this.variant.priceOption = {type: 0, name: 'nie zmieniaj'}
         this.variant.priceValue = ''
       },
+
       removeOption (index) {
 
         this.variant.selectOptions.splice(index, 1)
       },
-      addVariant () {
+      updateVariant () {
+
         this.$validator.validateAll().then((result) => {
           if (result) {
-            let tempVariant = {
-              name: this.variant.name,
-              type: this.variant.type,
-              required: this.variant.required,
-              selectOptions: this.variant.selectOptions,
-              curr: this.variant.curr,
-              priceOption: this.variant.priceOption,
-              priceValue: this.variant.priceValue,
-            }
-
-            this.$emit('variant', tempVariant)
-
-            this.showInfoAdd = true
-
-            this.variant.name = ''
-            this.variant.type = {type: 0, name: 'Pole tekstowe'}
-            this.variant.required = 1
-            this.variant.selectOptions = []
-            this.variant.curr = {type: 0, name: 'zł'}
-            this.variant.priceValue = ''
-            this.variant.priceOption = {type: 0, name: 'nie zmieniaj'}
-            setTimeout(() => {
-              this.errors.clear()
-            }, 2)
+            this.$emit('variant', this.variant)
+            this.showInfoEdit = true
           }
         })
       },
+    },
+
+    created: function () {
+      if (this.singleVariant) {
+        this.variant = this.singleVariant
+      }
     },
   }
 </script>
@@ -408,7 +386,7 @@
     }
 
     .validator-help {
-        width: 78%;
+        width: 78.5%;
         background-color: red;
         border-radius: 5px;
         color: #fff;

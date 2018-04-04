@@ -55,6 +55,7 @@
                 vendor: this.vendor,
               }).then(() => {
                 this.$parent.$data.type = 2
+                this.$parent.$data.vendor = ''
               })
             }
           }

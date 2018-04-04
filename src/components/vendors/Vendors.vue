@@ -9,7 +9,7 @@
                 <div class="side-button" :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}" @click.prevent="changeComponent(2)">
                     <p>Wszyscy producenci</p>
                 </div>
-                <div class="side-button" v-if="vendor" :class="{'side-menu-item' : true, 'side-menu-item active': type == 3}">
+                <div class="side-button" v-if="type == 3" :class="{'side-menu-item' : true, 'side-menu-item active': type == 3}">
                     <p>Edycja producenta</p>
                 </div>
             </div>
@@ -38,6 +38,7 @@
     methods:{
       changeComponent(type){
         this.type = type
+        this.vendor = ''
       },
 
       vendorToEdit(vendor){
