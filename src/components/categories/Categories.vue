@@ -4,10 +4,12 @@
             <h1 class="card-name">Kategorie</h1>
             <div class="side-menu-container">
                 <div id="side-menu">
-                    <div class="side-button" :class="{'side-menu-item': true, 'side-menu-item active': type == 1}" @click.prevent="changeComponent(1)">
+                    <div class="side-button" :class="{'side-menu-item': true, 'side-menu-item active': type == 1}"
+                         @click.prevent="changeComponent(1)">
                         <p>Dodaj kategorie</p>
                     </div>
-                    <div class="side-button" :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}" @click.prevent="changeComponent(2)">
+                    <div class="side-button" :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}"
+                         @click.prevent="changeComponent(2)">
                         <p>Wszystkie kategorie</p>
 
                     </div>
@@ -43,17 +45,9 @@
     }),
     methods: {
 
-      changeComponent(type){
+      changeComponent (type) {
         this.type = type
       },
-    },
-
-
-    created: function () {
-      axios('categories').then(result => this.items = result.data)
-      this.items.forEach((v, k) => {
-        this.underCategories[k] = false
-      })
     },
   }
 </script>

@@ -37,14 +37,11 @@
         this.showButtons[key] = !this.showButtons[key]
         this.$forceUpdate()
       },
-      deleteCategory(id){
-        console.log('usunieto')
-        axios.delete('categories/' + id).then(result => {
-          console.log(id)
-          axios('categories').
-          then(result => {
-            this.el = result.data
-          });
+      deleteCategory(item){
+        axios.delete('categories/' + item.id).then(result => {
+          let index = this.children.indexOf(this.children.find(el => el.id == item.id))
+          this.children.splice(index, 1)
+
         })
       },
     },

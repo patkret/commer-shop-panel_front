@@ -2,17 +2,19 @@
     <div class="attr-container">
         <h4 class="attr-p">Akcja</h4>
         <ul class="attr-list">
-            <li v-for="(item, key) in items" class="attr-list-item">
-                {{item.id}} {{item.name}}
+            <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
+                <p>{{item.id}}. {{item.name}}</p>
                 <div class="buttons-container">
-                    <button @click="showActions(key)" class="more-button">
+                    <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">
                         <span class="dot"></span>
                         <span class="dot"></span>
                         <span class="dot"></span>
                     </button>
+                    <div class="arrow-left"  v-if="index === key && show === true">
                     <div class="action-buttons">
                         <button class="delete" @click="deleteAttributeSet(item)">Usuń</button>
                         <button class="edit" @click = "editAttributeSet(item)">Edytuj</button>
+                    </div>
                     </div>
                 </div>
             </li>
@@ -27,11 +29,21 @@
       return {
       items: [],
         buttons: [],
+        index: '',
+        show : false
       }
   },
+
     methods: {
         showActions (key) {
-          document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
+          if(this.index === key){
+            this.show = false
+            this.index = ''
+          }
+          else{
+            this.show = true
+            this.index = key
+          }
         },
       deleteAttributeSet(item){
 
@@ -40,6 +52,8 @@
             axios('attribute-sets').
               then(result => {
                 this.items = result.data
+                this.index = ''
+                this.show = false
               });
           })
       },
@@ -71,6 +85,9 @@
     .attr-p {
         text-align: right;
     }
+    .attr-list{
+        padding: 0;
+    }
     .attr-list-item {
         display: flex;
         justify-content: space-between;
@@ -78,6 +95,10 @@
         height: 40px;
         line-height: 40px;
         margin: 5px 0;
+    }
+    .attr-list-item p{
+        margin: 0 0 0 10px;
+        padding: 0;
     }
     .buttons-container {
         position: relative;
@@ -98,12 +119,14 @@
     }
     .action-buttons {
         position: absolute;
-        top: 0;
-        left: -120px;
+        top: -22px;
+        left: -115px;
         display: flex;
         border: 1px solid #dde0e5;
         border-radius: 5px;
+        z-index: -1;
     }
+
     .action-buttons button {
         /*border: 1px solid #dde0e5;*/
         background-color: #ffffff;
@@ -117,12 +140,27 @@
         border-top-right-radius: 0;
     }
     .action-buttons button:last-child {
-        border-right: 1px solid #dde0e5;
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
     }
     .action-buttons button:hover {
         cursor: pointer;
         background-color: #dde0e5;
+    }
+    .active{
+        background-color: #F3F4F8;
+        border-radius: 5px;
+
+    }
+    .arrow-left{
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left:8px solid #FFFFFF;
+        position: absolute;
+        z-index: 20;
+        top: 36%;
+        right: 42px;
     }
 </style>
