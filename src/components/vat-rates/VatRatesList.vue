@@ -1,17 +1,18 @@
 <template>
     <ul class="vat-container">
-        <li v-for="(item, key) in items" class="attr-list-item">
-           {{item.name}}
-            {{item.rate}}
+        <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
+          <p> {{item.id}}. {{item.name}} {{item.rate}}</p>
             <div class="buttons-container">
-                <button @click="showActions(key)" class="more-button">
+                <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">
                     <span class="dot"></span>
                     <span class="dot"></span>
                     <span class="dot"></span>
                 </button>
-                <div v-if="showButtons[key]" class="action-buttons">
+                <div class="arrow-left"  v-if="index === key && show === true">
+                <div class="action-buttons">
                     <button @click="deleteRate(item)" class="delete">Usuń</button>
-                    <button class="edit">Edytuj</button>
+                    <button @click="editVatRate(item,key)" class="edit">Edytuj</button>
+                </div>
                 </div>
             </div>
         </li>
@@ -21,27 +22,40 @@
 <script>
   export default {
     name: "vat-rates-list",
+    props: ['vat-rates'],
     data () {
       return {
         items: [],
-        showButtons: {},
+        buttons: [],
+        index: '',
+        show : false
       }
     },
     methods: {
       showActions (key) {
-        this.showButtons[key] = !this.showButtons[key]
-        this.$forceUpdate()
+        if(this.index === key){
+          this.show = false
+          this.index = ''
+        }
+        else{
+          this.show = true
+          this.index = key
+        }
       },
-      deleteRate (item) {
+      deleteRate(item){
 
         axios.delete('vat-rates/' + item.id).then(result => {
 
           axios('vat-rates').
           then(result => {
             this.items = result.data
+            this.index = ''
+            this.show = false
           });
         })
-
+      },
+      editVatRate (item) {
+        this.$emit('singleVatRate', item)
       },
 
     },
@@ -49,9 +63,6 @@
       axios('vat-rates').
       then(result => {
         this.items = result.data
-        this.items.forEach((v,k) => {
-          this.showButtons[k] = false
-        })
       });
     }
   }
@@ -66,9 +77,6 @@
         border-radius: 5px;
         box-shadow: 5px 5px 5px 2px #eff1f4;
     }
-    .attr-p {
-        text-align: right;
-    }
     .attr-list-item {
         display: flex;
         justify-content: space-between;
@@ -76,6 +84,10 @@
         height: 40px;
         line-height: 40px;
         margin: 5px 0;
+    }
+    .attr-list-item p{
+        margin: 0 0 0 10px;
+        padding: 0;
     }
     .buttons-container {
         position: relative;
@@ -96,14 +108,14 @@
     }
     .action-buttons {
         position: absolute;
-        top: 0;
-        left: -120px;
+        top: -22px;
+        left: -115px;
         display: flex;
         border: 1px solid #dde0e5;
         border-radius: 5px;
+        z-index: -1;
     }
     .action-buttons button {
-        /*border: 1px solid #dde0e5;*/
         background-color: #ffffff;
         height: 40px;
         border-radius: 5px;
@@ -115,12 +127,26 @@
         border-top-right-radius: 0;
     }
     .action-buttons button:last-child {
-        border-right: 1px solid #dde0e5;
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
     }
     .action-buttons button:hover {
         cursor: pointer;
         background-color: #dde0e5;
+    }
+    .active{
+        background-color: #F3F4F8;
+        border-radius: 5px;
+    }
+    .arrow-left{
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left:8px solid #FFFFFF;
+        position: absolute;
+        z-index: 20;
+        top: 36%;
+        right: 42px;
     }
 </style>

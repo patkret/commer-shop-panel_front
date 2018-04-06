@@ -102,24 +102,31 @@
     },
 
     methods: {
-      saveCategory () {
+      saveCategory() {
         this.$validator.validateAll().then((result) => {
           if (result) {
             axios.post('/categories', {
               name: this.name,
               visibility: this.visibility,
+              title: this.title,
               parent_id: this.selectedCategory.id,
             }).then(() => {
-              this.$router.replace('/categories')
+              this.$parent.$data.type = 2
             })
           }
         });
       },
+    },
       created: function () {
-        axios('categories')
-          .then(result => this.items = result.data)
+        axios('all-categories')
+          .then(result => {
+              this.items = result.data
+          }
+
+
+          )
       },
-    }
+
   }
 </script>
 

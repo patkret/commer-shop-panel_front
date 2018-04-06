@@ -17,7 +17,8 @@
             </div>
             <div class="component-container">
                 <add-category v-if="type == 1"></add-category>
-                <category-list v-if="type == 2"></category-list>
+                <category-list v-if="type == 2" @singleCategory="editCategory" @child="getChild"></category-list>
+                <edit-category v-if="type == 3" :category="editingCategory" :childCategory="childCategory"></edit-category>
             </div>
         </div>
 
@@ -42,12 +43,22 @@
     data: () => ({
       type: 2,
       categories: '',
+      childCategory: '',
+      editingCategory: ''
     }),
     methods: {
-
+      getChild(item){
+        this.type = 3
+        this.childCategory = item
+        // console.log(this.childCategory)
+      },
       changeComponent (type) {
         this.type = type
       },
+      editCategory(category){
+        this.type = 3
+        this.editingCategory = category
+      }
     },
   }
 </script>
