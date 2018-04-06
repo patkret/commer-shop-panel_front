@@ -4,24 +4,30 @@
             <div class="list-container">
                 <draggable :element="'ul'"
                            :list="items"
-                           class="dragArea list-group"
+                           class="dragArea list-group lista-dziecko"
                            :options="{group:{name: 'g1'}}">
-                    <li class="categories-list-item" v-for="(item, key) in items">
-                        <img class="categories-list-img lvlUp" src="../../assets/img/icons/list-plus.png" alt="plusik">
-                        {{item.name}}
-                        <div class="buttons-container">
-                            <div v-if="showButtons[key]" class="action-buttons">
-                                <button class="delete" @click="deleteCategory(item)">Usuń</button>
-                                <button class="edit" @click = "editAttributeSet(item)">Edytuj</button>
-                                <button class="edit" @click = "editAttributeSet(item)">Duplikuj</button>
+                    <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
+                        <div class="top-category">
+                            <div>
+                            <!--<img class="categories-list-img lvlUp" src="../../assets/img/icons/list-plus.png" alt="plusik">-->
+                            {{item.name}}
                             </div>
-                            <button @click="showActions(key)" class="more-button">
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </button>
+                            <div class="buttons-container">
+                                <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                </button>
+                                <div class="arrow-left"  v-if="index === key && show === true">
+                                    <div class="action-buttons">
+                                        <button @click="deleteCategory(item)" class="delete">Usuń</button>
+                                        <button @click="editCategory(item)" class="edit">Edytuj</button>
+                                        <button @click="duplicateCategory(item)" class="edit">Duplikuj</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                            <drag class="list-item" v-if="item.children" :children="item.children" :item="item"></drag>
+                            <drag class="list-item" v-if="item.children" :children="item.children" :item="item" @singleCategory="editChild"></drag>
                     </li>
                 </draggable>
             </div>
@@ -35,22 +41,20 @@
 
   export default {
     name: "Categories",
+    props: ['editingCategory'],
     components: {
       draggable,
       drag,
     },
     data () {
       return {
-        name: '',
-        description: '',
-        title: '',
-        metaDescription: '',
-        metaKeywords: '',
-        addressUrl: '',
         items: [],
         selectedCategory: '',
         justCreated: false,
-        showButtons: {},
+        buttons: [],
+        index: '',
+        show : false,
+        child: ''
       }
     },
     watch: {
@@ -71,13 +75,22 @@
     },
 
     methods: {
-      showActions (key){
-        this.showButtons[key] = !this.showButtons[key]
-        this.$forceUpdate()
+      editChild(child){
+       this.child = child
+        this.$emit('child', this.child)
       },
-      editCategory(id){
-        let category = this.items.find(item => item.id === id)
-        this.name = category.name
+      showActions (key) {
+        if(this.index === key){
+          this.show = false
+          this.index = ''
+        }
+        else{
+          this.show = true
+          this.index = key
+        }
+      },
+      editCategory (item) {
+        this.$emit('singleCategory', item)
       },
       saveCategory () {
         this.$validator.validateAll().then((result) => {
@@ -100,23 +113,15 @@
           });
         })
       },
-
-
     },
     created: function () {
       axios('categories')
         .then(result => this.items = result.data)
-      this.items.forEach((v,k) => {
-        this.underCategories[k] = false
-      })
     },
   }
 </script>
 
 <style scoped>
-    .lvlUp {
-        z-index: 10;
-    }
     .categories-container {
         display: grid;
         grid-template-columns: 1fr;
@@ -124,20 +129,10 @@
     }
     .categories-list {
         grid-area: categories-list;
+        height: auto;
     }
     .sortable-chosen {
         border: 1px #000000 dashed;
-    }
-    .categories-list-item {
-        margin: 10px 0;
-    }
-    .categories-list-img {
-        padding-bottom: 3px;
-        margin-right: 5px;
-    }
-    .list-item {
-        margin: 10px 0;
-
     }
     .list-container {
         margin: 0px 50px 0 50px;
@@ -147,16 +142,35 @@
         padding: 30px;
         box-shadow: 5px 5px 5px 2px #eff1f4;
     }
-   .buttons-container {
-       /*display: none;*/
-       display: flex;
-       float: right;
-   }
+    .attr-list-item {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 0px 0px 0px 10px;
+        min-height: 40px;
+        line-height: 40px;
+        margin: 5px 0;
+        text-align: left;
+    }
+    .top-category {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+       padding: 10px;
+    }
+    .attr-list-item p{
+        margin: 0 0 0 10px;
+        padding: 0;
+    }
+    .buttons-container {
+        position: relative;
+    }
     .more-button {
-        height: 5px;
+        height: 40px;
         border: none;
         color: #dde0e5;
         background-color: #ffffff;
+        padding-bottom: 15px;
     }
     .dot {
         height: 6px;
@@ -164,23 +178,29 @@
         background-color: #bbb;
         border-radius: 50%;
         display: inline-block;
-        margin-bottom: 7px;
     }
     .action-buttons {
-        left: -120px;
-        margin-bottom: 5px;
+        position: absolute;
+        top: -22px;
+        left: -185px;
         display: flex;
         border: 1px solid #dde0e5;
         border-radius: 5px;
+        z-index: -1;
     }
     .action-buttons button {
         background-color: #ffffff;
-        height: 20px;
+        height: 40px;
         border-radius: 5px;
         border: none;
-    }
-    .action-buttons button {
         border-right: 1px solid #dde0e5;
+    }
+    .action-buttons button:first-child {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .action-buttons button:nth-child(2) {
+        border-radius: 0;
     }
     .action-buttons button:last-child {
         border-right: none;
@@ -191,4 +211,20 @@
         cursor: pointer;
         background-color: #dde0e5;
     }
+    .active .top-category, .active .more-button{
+        background-color: #F3F4F8;
+        border-radius: 5px;
+    }
+    .arrow-left{
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left:8px solid #FFFFFF;
+        position: absolute;
+        z-index: 20;
+        top: 36%;
+        right: 42px;
+    }
+
 </style>
