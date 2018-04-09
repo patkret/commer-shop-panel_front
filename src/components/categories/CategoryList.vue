@@ -113,6 +113,15 @@
           });
         })
       },
+      duplicateCategory: function (item) {
+        axios.post('/categories/' + item.id + '/duplicate').then(() => {
+          console.log('duplicated')
+        })
+        axios('categories').
+        then(result => {
+          this.items = Object.values(result.data)
+        })
+      },
     },
     created: function () {
       axios('categories')

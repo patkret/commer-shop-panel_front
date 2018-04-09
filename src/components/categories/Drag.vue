@@ -12,6 +12,7 @@
                     <div class="action-buttons">
                         <button @click="deleteCategory(el)" class="delete">Usuń</button>
                         <button @click="editCategory(el)" class="edit">Edytuj</button>
+                        <button @click="duplicateCategory(el)" class="edit">Duplikuj</button>
                     </div>
                 </div>
             </div>
@@ -56,6 +57,15 @@
       editCategory (item) {
         this.$emit('singleCategory', item)
         console.log(item)
+      },
+      duplicateCategory: function (el) {
+        axios.post('/categories/' + el.id + '/duplicate').then(() => {
+          console.log('duplicated')
+        })
+        axios('categories').
+        then(result => {
+          this.items = Object.values(result.data)
+        })
       },
     },
   }
@@ -108,7 +118,7 @@
 .action-buttons {
     position: absolute;
     top: -22px;
-    left: -115px;
+    left: -185px;
     display: flex;
     border: 1px solid #dde0e5;
     border-radius: 5px;
@@ -119,13 +129,17 @@
     height: 40px;
     border-radius: 5px;
     border: none;
+    border-right: 1px solid #dde0e5;
 }
 .action-buttons button:first-child {
-    border-right: 1px solid #dde0e5;
-    border-bottom-right-radius: 0;
     border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.action-buttons button:nth-child(2) {
+    border-radius: 0;
 }
 .action-buttons button:last-child {
+    border-right: none;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
 }

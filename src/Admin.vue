@@ -107,8 +107,17 @@
           },
           {icon: icons.clients, text: 'Klienci', path: ''},
           {icon: icons.marketing, text: 'Marketing', path: ''},
-          {icon: icons.reports, text: 'Raporty', path: '#5'},
-          {icon: icons.settings, text: 'Ustawienia', path: '#6'},
+          {icon: icons.reports, text: 'Raporty', path: ''},
+          {icon: icons.settings, text: 'Ustawienia', path: '', children:
+            [
+              {text: 'Użytkownicy' , path: '/users'},
+              {text: 'Sklepu' , path:''},
+              {text: 'Styli' , path:''},
+              {text: 'Płatności' , path:''},
+              {text: 'Dostawy' , path:''},
+              {text: 'Rozliczenia' , path:''},
+            ],
+          },
           {icon: icons.integrations, text: 'Integracje', path: '/buttons'},
         ],
         options: [
