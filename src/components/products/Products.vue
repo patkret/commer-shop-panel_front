@@ -7,6 +7,7 @@
             <li  :class="{'products-list-item': true, 'products-list-item active-blue': type == 3}" @click.prevent="changeComponent(3)">Zaimportowane</li>
             <li  :class="{'products-list-item': true, 'products-list-item active-blue': type == 4}" @click.prevent="changeComponent(4)">Brak na magazynie</li>
             <li  :class="{'products-list-item': true, 'products-list-item active-blue': type == 5}" @click.prevent="changeComponent(5)">Szkice produktów</li>
+            <li  :class="{'products-list-item': true, 'products-list-item active-blue': type == 6}" @click.prevent="changeComponent(6)">Dodaj produkt</li>
         </ul>
         <div class="component-container">
             <products-list v-if="type == 1"></products-list>
@@ -14,6 +15,7 @@
             <imported-products v-if="type == 3"></imported-products>
             <off-products v-if="type == 4"></off-products>
             <sketch-products v-if="type == 5"></sketch-products>
+            <add-product v-if="type == 6"></add-product>
         </div>
     </div>
 </template>
@@ -24,6 +26,7 @@
     import SketchProducts from './SketchProducts'
     import HighlitedProducts from './HighlitedProducts'
     import OffProducts from './OffProducts'
+    import addProduct from './addProduct'
   export default {
       components: {
         ProductsList,
@@ -31,6 +34,7 @@
         SketchProducts,
         HighlitedProducts,
         OffProducts,
+        addProduct
       },
 
     name: "products",
