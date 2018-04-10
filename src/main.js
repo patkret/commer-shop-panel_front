@@ -56,7 +56,8 @@ const dictionary = {
     messages:{
       required: () => 'Pole obowiązkowe',
       numeric: () => 'Pole może zawierać tylko cyfry ',
-      max_value: () => 'Podaj odpowiednią wartość'
+      max_value: () => 'Podaj odpowiednią wartość',
+      confirmed: () => 'Hasła muszą być takie same'
     }
   },
 };
@@ -66,7 +67,8 @@ Validator.localize(dictionary);
 const validator = new Validator({
   required: 'required',
   numeric: 'numeric',
-  max_value: 'max_value'
+  max_value: 'max_value',
+  confirmed: 'confirmed',
 });
 
 validator.localize('pl');

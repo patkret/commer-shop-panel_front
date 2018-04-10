@@ -1,5 +1,4 @@
 <template>
-    <div class="vat-container">
         <form action="" @submit.prevent="saveVatRate">
             <div class="form-row">
                 <label class="form-label col-1">Nazwa</label>
@@ -27,7 +26,6 @@
                 <button type="submit" class="custom-button col-2">Dodaj</button>
             </div>
         </form>
-    </div>
 </template>
 
 <script>
@@ -60,12 +58,6 @@
 </script>
 
 <style scoped>
-    .vat-container {
-        background-color: #F6F7FB;
-        margin-left: 20px;
-        padding: 20px;
-        border-radius: 5px;
-    }
     .form-row {
         display: grid;
         margin: 20px 0;

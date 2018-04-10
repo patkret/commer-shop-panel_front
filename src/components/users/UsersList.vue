@@ -2,7 +2,7 @@
     <div>
         <ul class="users-container">
             <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
-                <p> {{item.id}}. {{item.name}}</p>
+                <p> {{item.id}}. {{item.first_name + ' ' + item.last_name}}</p>
                 <div class="buttons-container">
                     <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">
                         <span class="dot"></span>
@@ -25,9 +25,13 @@
 <script>
   export default {
     name: "users-list",
+    props: ['editingUser'],
     data () {
       return {
         items: [],
+        buttons: [],
+        index: '',
+        show : false
       }
     },
     methods: {
@@ -41,6 +45,19 @@
             this.index = key
           }
         },
+      editUser (item) {
+        this.$emit('singleUser', item)
+      },
+      deleteUser(item){
+        axios.delete('users/' + item.id).then(result => {
+          axios('users').
+          then(result => {
+            this.items = result.data
+            this.index = ''
+            this.show = false
+          });
+        })
+      },
     },
     created: function () {
       axios('users').
