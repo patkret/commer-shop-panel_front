@@ -107,7 +107,7 @@
           },
           {icon: icons.clients, text: 'Klienci', path: ''},
           {icon: icons.marketing, text: 'Marketing', path: ''},
-          {icon: icons.reports, text: 'Raporty', path: ''},
+          {icon: icons.reports, text: 'Raporty', path: '/permission'},
           {icon: icons.settings, text: 'Ustawienia', path: '', children:
             [
               {text: 'Użytkownicy' , path: '/users'},
