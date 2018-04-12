@@ -1,170 +1,123 @@
 <template>
-    <div class="product-form-container">
-        <form class="product-form">
-            <div class="form-row">
-                <label class="form-label">
-                    Nazwa produktu
-                </label>
-                <div class="input-container">
-                    <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('name')}">
-                        <input type="text" v-validate="'required'"
-                               placeholder="Nazwa..." name="name" v-model="product.name">
-                    </div>
-                    <span v-show="errors.has('name')" class="validator-help">{{ errors.first('name') }}</span>
-                </div>
-            </div>
-            <div class="form-row">
-                <label class="form-label">
-                    Cena
-                </label>
-                <div class="input-container" style="width: 30%">
-                    <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('price')}">
-                        <input type="text" v-validate="'required|numeric'"
-                               placeholder="Cena..." name="price" v-model="product.price">
-                    </div>
-                    <p>zł</p>
-                    <span v-show="errors.has('price')" class="validator-help">{{ errors.first('price') }}</span>
-                </div>
-            </div>
-            <div class="form-row">
-                <label class="form-label">
-                    Stawka VAT
-                </label>
-                <div class="input-container" style="justify-self: start">
-                    <multiselect
-                    class="shop-select product-select"
-                    v-model="selectedRate"
-                    :options="vat_rates"
-                    :allow-empty="false"
-                    :searchable="false"
-                    :selectedLabel="''"
-                    track-by="name"
-                    label="name"
-                    id="ms-1"
-                    :custom-label="nameWithRate"
-                    :deselectLabel="''"
-                    :selectLabel="''"
-                    :hideSelected="true"
-                    placeholder="Wybierz"></multiselect>
-                </div>
-            </div>
-            <div class="form-row">
-                <label class="form-label">
-                    SKU
-                </label>
-                <div class="input-container" style="width: 30%">
-                    <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('symbol')}">
-                        <input type="text" v-validate="'required'"
-                               placeholder="Kod..." name="symbol" v-model="product.symbol">
-                    </div>
-                    <span v-show="errors.has('symbol')" class="validator-help">{{ errors.first('symbol') }}</span>
-                </div>
-            </div>
-        </form>
+
+    <div class="top-menu-container">
+        <h1 class="form-name">Dodaj produkt</h1>
+        <div class="top-menu">
+            <ul class="top-menu-items">
+                <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">
+                    Dane podstawowe
+                </li>
+                <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dane dodatkowe
+                </li>
+                <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
+                    Galeria
+                </li>
+                <li @click="changeType(4)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 4}">
+                    Zestawy atrybutów
+                </li>
+                <li @click="changeType(5)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 5}">
+                    Zestawy wariantów
+                </li>
+            </ul>
+        </div>
+        <div class="menu-tab">
+            <main-info v-if="type == 1"></main-info>
+            <additional-info v-if="type == 2"></additional-info>
+            <attribute-sets v-if="type == 4" @selectedSets="saveSelectedAttributeSets"></attribute-sets>
+        </div>
     </div>
 </template>
 
 <script>
+
+  import MainInfo from './mainInfo'
+  import AdditionalInfo from './additionalInfo'
+  import AttributeSets from './attributeSets'
+
   export default {
+    components: {
+      AttributeSets,
+      AdditionalInfo,
+      MainInfo},
     name: 'add-product',
     data: () => ({
+      type: 1,
       product: {
         name: '',
-        price: '',
-        vat_rate: '',
-        symbol: ''
-      },
-      vat_rates: [],
-      selectedRate: ''
-
+        attributeSets: []
+      }
     }),
-    watch: {
-      selectedRate: function (value) {
-        this.product.vat_rate = value.id
-      }
-    },
     methods: {
-      nameWithRate ({ name, rate }) {
-        return `${name} — [${rate}%] `
+      changeType(type){
+        this.type = type
+      },
+      saveSelectedAttributeSets(sets){
+        this.product.attributeSets = JSON.stringify(sets)
       }
-    },
-    created: function () {
-      axios('vat-rates').then(result => {
-        this.vat_rates = result.data
-      })
     }
+
   }
 </script>
 
 <style scoped>
-    .product-form-container {
+
+
+    .top-menu-container {
         display: grid;
-        grid-template-columns: 45px 45% 55%;
-        grid-template-areas: ". product-form .";
+        grid-template-columns: 97% 3%;
+        grid-template-rows: 25px 48px 20% 60px 80%;
+        grid-template-areas:
+                ". ."
+                "form-name ."
+                "top-menu ."
+                ". .  "
+                "menu-tab . ";
+        margin-top: 20px;
+        margin-left: 45px;
+
     }
 
-    .product-form {
-        grid-area: product-form;
+    .top-menu {
+        grid-area: top-menu;
+        border-bottom: 1px solid #E5E7ED;
+        height: 60px;
+        justify-items: start;
+        align-self: end;
 
     }
 
-    .form-row {
-        display: grid;
-        grid-template-columns: 20% 40px 80%;
-        grid-template-areas: "form-label . input-container";
-        margin-bottom: 20px;
-    }
-
-    .form-label {
-        grid-area: form-label;
-        justify-self: start;
-        align-self: center;
-    }
-
-    .input-container {
-        grid-area: input-container;
+    .top-menu-items {
         display: flex;
-        flex-direction: column;
-
-    }
-
-    .input-container p{
-        position: absolute;
-        margin-left: 205px;
-
-    }
-
-    .custom-input {
-        width: 100%;
-        height: 40px;
-        padding-left: 15px;
-        border: none;
-        border-radius: 5px;
-        background-color: #FFFFFF;
-    }
-
-    .custom-input input{
-        width: 96%;
-        margin-top: 9px;
-        border: none;
-        font-size: 110%;
-    }
-
-    .inpt-border {
-        border: 1px solid red;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-    .validator-help {
-        background-color: red;
-        border-radius: 5px;
-        color: #fff;
-        padding: 12px 0 10px 10px;
-        font-size: 12px;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: 0;
+        margin-top: 26px;
         font-weight: 700;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-        margin-right: -17px;
+        font-size: 12px;
+    }
+
+    .top-menu-item {
+        text-wrap: none;
+        margin-right: 60px;
+        cursor: pointer;
+        color: #626368;
+
+    }
+
+    .menu-tab {
+        grid-area: menu-tab;
+
+    }
+    .top-menu-item-active {
+        border-bottom: 2px solid #2595ec;
+        padding-bottom: 20px;
+        color: #000000;
+    }
+    .form-name{
+        grid-area: form-name;
+        font-size: 20px;
+        font-weight: normal;
+
     }
 
 </style>

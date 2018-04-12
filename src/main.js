@@ -20,6 +20,7 @@ Vue.use (VeeValidate);
 Vue.use(multiselectStyle);
 Vue.component('multiselect', Multiselect);
 
+
 import axios from 'axios';
 window.axios = axios
 
@@ -49,14 +50,15 @@ let token = localStorage.getItem('token')
 if(!token) {
   router.push({path: '/login'})
 } else {
-  router.push({path: '/dashboard'})
+  // router.push({path: '/dashboard'})
 }
 const dictionary = {
   pl: {
     messages:{
       required: () => 'Pole obowiązkowe',
       numeric: () => 'Pole może zawierać tylko cyfry ',
-      max_value: () => 'Podaj odpowiednią wartość'
+      max_value: () => 'Podaj odpowiednią wartość',
+      confirmed: () => 'Hasła muszą być takie same'
     }
   },
 };
@@ -66,7 +68,8 @@ Validator.localize(dictionary);
 const validator = new Validator({
   required: 'required',
   numeric: 'numeric',
-  max_value: 'max_value'
+  max_value: 'max_value',
+  confirmed: 'confirmed',
 });
 
 validator.localize('pl');

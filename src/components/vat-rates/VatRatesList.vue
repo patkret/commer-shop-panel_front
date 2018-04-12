@@ -43,7 +43,6 @@
         }
       },
       deleteRate(item){
-
         axios.delete('vat-rates/' + item.id).then(result => {
 
           axios('vat-rates').

@@ -34,9 +34,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="item in items">
-
-
+            <tr v-for="item in items" class="table-row">
+                <td>c</td>
+                <td>o</td>
+                <td>{{item.symbol}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.price}}</td>
+                <td>a</td>
             </tr>
             </tbody>
             <div class="action-select-container">
@@ -91,10 +95,11 @@
       }
     },
     methods: {},
-    // created: function () {
-    //   axios('products')
-    //     .then(result => this.items = result.data)
-    // },
+    created: function () {
+      axios('products')
+        .then(result =>
+        this.items = result.data)
+    },
   }
 </script>
 <style scoped>

@@ -2,9 +2,10 @@
     <div>
         <ul v-for="module in modules">{{module.name}}
             <li v-for="permission in permissions">
-               <label><input type="checkbox" v-model="temp" :value="module.id + '[' + permission.id + ']'">{{permission.name}}</label>
+               <label><input type="checkbox" v-model="selectedPermissions" :value="module.id + '|' + permission.id">{{permission.name}}</label>
             </li>
         </ul>
+        <button class="custom-button" @click="savePermissions()">Zapisz</button>
     </div>
 </template>
 
@@ -20,19 +21,24 @@
         //  permissions: []
         // }
       ],
-
-
     }),
 
 
     watch: {
       temp(val){
-      console.log(val)
+
       }
     },
-    // methods: {
-    //
-    // },
+    methods: {
+    savePermissions(){
+      axios.post('/user-access', {
+        user_id: 2,
+        permissions: this.selectedPermissions
+      }).then(() => {
+        console.log('dodano')
+      })
+    }
+    },
 
     created: function () {
       axios('modules').then(result => {

@@ -17,8 +17,8 @@
             </div>
             <div class="component-container">
                 <add-user v-if="type == 1"></add-user>
-                <users-list v-if="type == 2"></users-list>
-                <edit-user v-if="type == 3"></edit-user>
+                <users-list v-if="type == 2" @singleUser="editUser"></users-list>
+                <edit-user v-if="type == 3" :user="editingUser"></edit-user>
             </div>
         </div>
     </div>
@@ -46,6 +46,10 @@
       changeComponent (type) {
         this.type = type
       },
+      editUser(user){
+        this.type = 3
+        this.editingUser = user
+      }
     }
   }
 </script>
