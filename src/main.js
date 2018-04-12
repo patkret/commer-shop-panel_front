@@ -9,9 +9,13 @@ import VeeValidate from 'vee-validate';
 import { Validator } from 'vee-validate';
 import Multiselect from 'vue-multiselect'
 import multiselectStyle from 'vue-multiselect/dist/vue-multiselect.min.css'
+import VueSweetalert2 from 'vue-sweetalert2';
 
 import './assets/css/main.css'
 import './assets/css/custom-buttons.css'
+
+
+
 
 Vue.config.productionTip = false
 
@@ -19,6 +23,7 @@ Vue.use(normalize);
 Vue.use (VeeValidate);
 Vue.use(multiselectStyle);
 Vue.component('multiselect', Multiselect);
+Vue.use(VueSweetalert2);
 
 
 import axios from 'axios';

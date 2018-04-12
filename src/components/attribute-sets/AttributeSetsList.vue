@@ -45,17 +45,33 @@
             this.index = key
           }
         },
-      deleteAttributeSet(item){
-
-          axios.delete('attribute-sets/' + item.id).then(result => {
-
-            axios('attribute-sets').
-              then(result => {
-                this.items = result.data
-                this.index = ''
-                this.show = false
-              });
-          })
+      deleteAttributeSet (item) {
+        this.$swal({
+          title: 'Czy chcesz usunąć zestaw atrybutów?',
+          text: 'Ta akcja nieodwracalnie usunie zestaw atrybutów',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Usuń',
+        }).then((result) => {
+            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+            this.items.splice(itemIndex, 1)
+            axios.delete('attribute-sets/' + item.id).then(
+              result => {
+                console.log(result)
+              })
+            this.$swal({
+              title: 'Usunięto!',
+              text: 'Zestaw atrybutów został usunięty',
+              type: 'success',
+              confirmButtonText: 'OK'
+            })
+          },
+          dismiss => {
+            console.log(result.dismiss)
+          }).catch(swal.noop)
       },
       editAttributeSet(item){
         axios('attribute-sets/' + item.id).

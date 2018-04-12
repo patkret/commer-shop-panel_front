@@ -42,9 +42,28 @@
           this.index = key
         }
       },
-
       deleteVariant (index) {
-        this.items.splice(index, 1)
+        this.$swal({
+          title: 'Czy chcesz usunąć użytkownika?',
+          text: 'Ta akcja nieodwracalnie usunie użytkownika',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Usuń',
+        }).then((result) => {
+            this.items.splice(index, 1)
+            this.$swal({
+              title: 'Usunięto!',
+              text: 'Użytkownik został usunięty',
+              type: 'success',
+              confirmButtonText: 'OK'
+            })
+          },
+          dismiss => {
+            console.log(result.dismiss)
+          }).catch(swal.noop)
       },
       editVariant (item, key) {
         this.$emit('singleVariant', item, key)

@@ -42,16 +42,35 @@
           this.index = key
         }
       },
-      deleteRate(item){
-        axios.delete('vat-rates/' + item.id).then(result => {
 
-          axios('vat-rates').
-          then(result => {
-            this.items = result.data
-            this.index = ''
-            this.show = false
-          });
-        })
+      deleteRate (item) {
+        this.$swal({
+          title: 'Czy chcesz usunąć stawkę VAT?',
+          text: 'Ta akcja nieodwracalnie usunie stawkę VAT',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Usuń',
+        }).then((result) => {
+            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+            this.items.splice(itemIndex, 1)
+            axios.delete('vat-rates/' + item.id).then(
+              result => {
+                console.log(result)
+              })
+            this.$swal({
+              title: 'Usunięto!',
+              text: 'Stawka VAT została usunięta',
+              type: 'success',
+              confirmButtonText: 'OK'
+            })
+          },
+          dismiss => {
+            console.log(result.dismiss)
+          }).catch(swal.noop)
+
       },
       editVatRate (item) {
         this.$emit('singleVatRate', item)

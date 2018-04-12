@@ -43,6 +43,7 @@
                 <add-variant v-if="type == 1" @variant=getVariant></add-variant>
                 <variants-list v-if="type == 2" :variants="variants" @singleVariant="editVariant"></variants-list>
                 <edit-variant v-if="type == 3" :singleVariant="variant" @variant="updateVariant"></edit-variant>
+
             </div>
         </div>
     </div>

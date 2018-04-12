@@ -48,11 +48,33 @@
           this.index = key
         }
       },
-      deleteCategory(item){
-        axios.delete('categories/' + item.id).then(result => {
-          let index = this.children.indexOf(this.children.find(el => el.id == item.id))
-          this.children.splice(index, 1)
-        })
+      deleteCategory (item) {
+        this.$swal({
+          title: 'Czy chcesz usunąć kategorie?',
+          text: 'Ta akcja nieodwracalnie usunie kategorie',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Usuń',
+        }).then((result) => {
+            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+            this.items.splice(itemIndex, 1)
+            axios.delete('categories/' + item.id).then(result => {
+              let index = this.children.indexOf(this.children.find(el => el.id == item.id))
+              this.children.splice(index, 1)
+            })
+            this.$swal({
+              title: 'Usunięto!',
+              text: 'Kategoria została usunięta',
+              type: 'success',
+              confirmButtonText: 'OK'
+            })
+          },
+          dismiss => {
+            console.log(result.dismiss)
+          }).catch(swal.noop)
       },
       editCategory (item) {
         this.$emit('singleCategory', item)

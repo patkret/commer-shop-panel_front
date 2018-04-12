@@ -105,7 +105,7 @@
         background-color: #ffffff;
         margin-left: 10px;
         margin-right: 10px;
-        border-radius: 10px;
+        border-radius: 5px;
         height: 35px;
         line-height: 35px;
         padding-left: 10px;
@@ -121,7 +121,7 @@
         margin-left: 10px;
         padding: 10px 0 0 10px;
         border: none;
-        border-radius: 10px;
+        border-radius: 5px;
         font-size: 12px;
         font-weight: 700;
         width: 100%;
