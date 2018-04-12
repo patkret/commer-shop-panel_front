@@ -11,7 +11,9 @@
                     <div class="side-button" :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}"
                          @click.prevent="changeComponent(2)">
                         <p>Wszystkie kategorie</p>
-
+                    </div>
+                    <div class="side-button side-menu-item active" v-if="type == 3">
+                        <p>Edycja kategorii</p>
                     </div>
                 </div>
             </div>
@@ -64,6 +66,9 @@
 </script>
 
 <style scoped>
-
+    .active {
+        background-color: #F3F4F8;
+        border-radius: 5px;
+    }
 
 </style>

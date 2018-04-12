@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container.">
         <ul class="users-container">
             <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
                 <p> {{item.id}}. {{item.first_name + ' ' + item.last_name}}</p>
@@ -13,6 +13,7 @@
                         <div class="action-buttons">
                             <button @click="deleteUser(item)" class="delete">Usuń</button>
                             <button @click="editUser(item,key)" class="edit">Edytuj</button>
+                            <button @click="duplicateUser(item,key)">Duplikuj</button>
                         </div>
                     </div>
                 </div>
@@ -23,6 +24,9 @@
 </template>
 
 <script>
+  import swal from 'vue-sweetalert2';
+  window.swal = swal
+
   export default {
     name: "users-list",
     props: ['editingUser'],
@@ -31,7 +35,8 @@
         items: [],
         buttons: [],
         index: '',
-        show : false
+        show : false,
+        modal: false,
       }
     },
     methods: {
@@ -45,18 +50,40 @@
             this.index = key
           }
         },
+
       editUser (item) {
         this.$emit('singleUser', item)
       },
-      deleteUser(item){
-        axios.delete('users/' + item.id).then(result => {
-          axios('users').
-          then(result => {
-            this.items = result.data
-            this.index = ''
-            this.show = false
-          });
-        })
+      duplicateUser (item) {
+        this.$emit('duplUser', item)
+      },
+      deleteUser (item) {
+        this.$swal({
+          title: 'Czy chcesz usunąć użytkownika?',
+          text: 'Ta akcja nieodwracalnie usunie użytkownika',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Usuń',
+        }).then((result) => {
+            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+            this.items.splice(itemIndex, 1)
+            axios.delete('users/' + item.id).then(
+              result => {
+                console.log(result)
+              })
+            this.$swal({
+              title: 'Usunięto!',
+              text: 'Użytkownik został usunięty',
+              type: 'success',
+              confirmButtonText: 'OK'
+            })
+          },
+          dismiss => {
+            console.log(result.dismiss)
+          }).catch(swal.noop)
       },
     },
     created: function () {
@@ -69,6 +96,9 @@
 </script>
 
 <style scoped>
+    .container {
+        position: relative;
+    }
     .users-container {
         width: 80%;
         background-color: #ffffff;
@@ -97,7 +127,7 @@
         border: none;
         color: #dde0e5;
         background-color: #ffffff;
-        padding-bottom: 15px;
+
     }
     .dot {
         height: 6px;
@@ -106,10 +136,14 @@
         border-radius: 50%;
         display: inline-block;
     }
+    .active{
+        background-color: #F3F4F8;
+        border-radius: 5px;
+    }
     .action-buttons {
         position: absolute;
         top: -22px;
-        left: -115px;
+        left: -185px;
         display: flex;
         border: 1px solid #dde0e5;
         border-radius: 5px;
@@ -120,13 +154,17 @@
         height: 40px;
         border-radius: 5px;
         border: none;
+        border-right: 1px solid #dde0e5;
     }
     .action-buttons button:first-child {
-        border-right: 1px solid #dde0e5;
-        border-bottom-right-radius: 0;
         border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .action-buttons button:nth-child(2) {
+        border-radius: 0;
     }
     .action-buttons button:last-child {
+        border-right: none;
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
     }
@@ -134,7 +172,7 @@
         cursor: pointer;
         background-color: #dde0e5;
     }
-    .active{
+    .active .top-category, .active .more-button{
         background-color: #F3F4F8;
         border-radius: 5px;
     }

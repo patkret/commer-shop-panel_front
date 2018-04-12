@@ -105,13 +105,33 @@
           }
         });
       },
-      deleteCategory(item){
-        axios.delete('categories/' + item.id).then(result => {
-          axios('categories').
-          then(result => {
-            this.items = result.data
-          });
-        })
+      deleteCategory (item) {
+        this.$swal({
+          title: 'Czy chcesz usunąć kategorie?',
+          text: 'Ta akcja nieodwracalnie usunie kategorie',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Usuń',
+        }).then((result) => {
+            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+            this.items.splice(itemIndex, 1)
+            axios.delete('categories/' + item.id).then(
+              result => {
+                console.log(result)
+              })
+            this.$swal({
+              title: 'Usunięto!',
+              text: 'Kategoria została usunięta',
+              type: 'success',
+              confirmButtonText: 'OK'
+            })
+          },
+          dismiss => {
+            console.log(result.dismiss)
+          }).catch(swal.noop)
       },
       duplicateCategory: function (item) {
         axios.post('/categories/' + item.id + '/duplicate').then(() => {
@@ -166,6 +186,10 @@
         justify-content: space-between;
         width: 100%;
        padding: 10px;
+    }
+    .active {
+        background-color: #F3F4F8;
+        border-radius: 5px;
     }
     .attr-list-item p{
         margin: 0 0 0 10px;

@@ -35,15 +35,33 @@
         this.$emit('vendor', item)
       },
 
-      deleteVendor (item) {
-
-        axios.delete('vendors/' + item.id).then(result => {
-          axios('vendors').
-          then(result => {
-            this.items = result.data
-          });
-        })
-
+      deleteVendor6 (item) {
+        this.$swal({
+          title: 'Czy chcesz usunąć użytkownika?',
+          text: 'Ta akcja nieodwracalnie usunie użytkownika',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Usuń',
+        }).then((result) => {
+            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+            this.items.splice(itemIndex, 1)
+            axios.delete('users/' + item.id).then(
+              result => {
+                console.log(result)
+              })
+            this.$swal({
+              title: 'Usunięto!',
+              text: 'Użytkownik został usunięty',
+              type: 'success',
+              confirmButtonText: 'OK'
+            })
+          },
+          dismiss => {
+            console.log(result.dismiss)
+          }).catch(swal.noop)
       },
 
     },
