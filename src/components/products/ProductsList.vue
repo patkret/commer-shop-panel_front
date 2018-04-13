@@ -34,13 +34,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="item in items" class="table-row">
-                <td>c</td>
-                <td>o</td>
-                <td>{{item.symbol}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.price}}</td>
-                <td>a</td>
+
+            <tr class="table-row" v-for="item in items">
+                <td class="col-1">
+                        <input type="checkbox" id="checkbox" v-model="selectedProducts" :value="item.id">
+                </td>
+                <td class="col-2">{{item.name}}</td>
+                <td class="col-3">{{item.name}}</td>
+                <td class="col-4">{{item.symbol}}</td>
+                <td class="col-5">{{item.price}}</td>
+                <td class="col-6">{{item.name}}</td>
+
             </tr>
             </tbody>
             <div class="action-select-container">
@@ -73,6 +77,7 @@
     data () {
       return {
         items: [],
+        selectedProducts: [],
         filters: [
           {name: 'Po ID'},
           {name: 'Po nazwie'},
@@ -96,8 +101,7 @@
     },
     methods: {},
     created: function () {
-      axios('products')
-        .then(result =>
+      axios('products').then(result =>
         this.items = result.data)
     },
   }
@@ -180,6 +184,10 @@
 
     .table-heading {
         padding-top: 40px;
+    }
+    .table-row {
+        text-align: center;
+        margin: 20px 0;
     }
 
     .products-row {
