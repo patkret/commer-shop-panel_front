@@ -34,9 +34,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="item in items">
-
-
+            <tr class="table-row" v-for="item in items">
+                <td class="col-1">
+                        <input type="checkbox" id="checkbox" v-model="visibility">
+                </td>
+                <td class="col-2">{{item.name}}</td>
+                <td class="col-3">{{item.name}}</td>
+                <td class="col-4">{{item.name}}</td>
+                <td class="col-5">{{item.name}}</td>
+                <td class="col-6">{{item.name}}</td>
             </tr>
             </tbody>
             <div class="action-select-container">
@@ -91,10 +97,10 @@
       }
     },
     methods: {},
-    // created: function () {
-    //   axios('products')
-    //     .then(result => this.items = result.data)
-    // },
+    created: function () {
+      axios('products')
+        .then(result => this.items = result.data)
+    },
   }
 </script>
 <style scoped>
@@ -175,6 +181,10 @@
 
     .table-heading {
         padding-top: 40px;
+    }
+    .table-row {
+        text-align: center;
+        margin: 20px 0;
     }
 
     .products-row {
