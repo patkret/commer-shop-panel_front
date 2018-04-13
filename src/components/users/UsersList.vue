@@ -27,9 +27,6 @@
 </template>
 
 <script>
-  import swal from 'vue-sweetalert2';
-  window.swal = swal
-
   export default {
     name: "users-list",
     props: ['editingUser'],

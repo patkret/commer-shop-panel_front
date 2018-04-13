@@ -6,7 +6,7 @@
                     Opis krótki
                 </label>
                 <div class="input-container">
-                    <textarea name="description" class="desc-area" rows="4" v-model="shortDescription" maxlength="255" placeholder="Maksymalnie 255 znaków"></textarea>
+                    <textarea name="description" class="desc-area" rows="4" v-model="product.shortDescription" maxlength="255" placeholder="Maksymalnie 255 znaków"></textarea>
                 </div>
             </div>
             <div class="form-row">
@@ -14,7 +14,7 @@
                     Opis długi
                 </label>
                 <div class="input-container">
-                    <textarea name="description" class="desc-area" rows="8" v-model="longDescription"  placeholder="..."></textarea>
+                    <textarea name="description" class="desc-area" rows="8" v-model="product.longDescription"  placeholder="..."></textarea>
                 </div>
             </div>
             <div class="form-row">
@@ -23,7 +23,7 @@
                 </label>
                 <div class="input-container" style="width: 40%">
                     <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('weight')}">
-                        <input type="text" placeholder="..." name="weight" v-model="weight" v-validate="'numeric'">
+                        <input type="text" placeholder="..." name="weight" v-model="product.weight" v-validate="'numeric'">
                     </div>
                     <span v-show="errors.has('weight')" class="validator-help">{{ errors.first('weight') }}</span>
                 </div>
@@ -34,7 +34,7 @@
                 </label>
                 <div class="input-container" style="width: 40%">
                     <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('height')}">
-                        <input type="text" placeholder="..." name="height" v-model="height" v-validate="'numeric'">
+                        <input type="text" placeholder="..." name="height" v-model="product.height" v-validate="'numeric'">
                     </div>
                     <span v-show="errors.has('height')" class="validator-help">{{ errors.first('height') }}</span>
                 </div>
@@ -45,7 +45,7 @@
                 </label>
                 <div class="input-container" style="width: 40%">
                     <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('width')}">
-                        <input type="text" placeholder="..." name="width" v-model="width" v-validate="'numeric'">
+                        <input type="text" placeholder="..." name="width" v-model="product.width" v-validate="'numeric'">
                     </div>
                     <span v-show="errors.has('width')" class="validator-help">{{ errors.first('width') }}</span>
                 </div>
@@ -56,20 +56,9 @@
                 </label>
                 <div class="input-container" style="width: 40%">
                     <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('depth')}">
-                        <input type="text" placeholder="..." name="depth" v-model="depth" v-validate="'numeric'">
+                        <input type="text" placeholder="..." name="depth" v-model="product.depth" v-validate="'numeric'">
                     </div>
                     <span v-show="errors.has('depth')" class="validator-help">{{ errors.first('depth') }}</span>
-                </div>
-            </div>
-            <div class="form-row">
-                <label class="form-label">
-                   Opakowanie
-                </label>
-                <div class="input-container" style="width: 40%">
-                    <!--<div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('depth')}">-->
-                        <!--<input type="text" placeholder="..." name="depth" v-model="depth" v-validate="'numeric'">-->
-                    <!--</div>-->
-                    <!--<span v-show="errors.has('depth')" class="validator-help">{{ errors.first('depth') }}</span>-->
                 </div>
             </div>
         </form>
@@ -80,15 +69,19 @@
 <script>
   export default {
     name: 'additional-info',
-    data: () => ({
-      shortDescription: '',
-      longDescription: '',
-      weight: '',
-      height: '',
-      width: '',
-      depth: ''
+    computed: {
+      product: function () {
+        return this.$store.getters.getProduct;
+      },
+    },
 
-    })
+    beforeDestroy: function () {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          this.$store.commit('addProduct', this.product)
+        }
+      })
+    }
   }
 </script>
 

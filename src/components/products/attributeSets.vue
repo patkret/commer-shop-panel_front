@@ -1,51 +1,105 @@
 <template>
     <div>
         <ul>
+            <li v-for="item in selectedSets">
+                <label class="check-container">
+                    <p class="label">
+                        {{item.name}}
+                    </p>
+                    <input type="checkbox" v-model="selectedSets" :value="item" @click="addToSets(item)">
+                    <span class="checkmark"></span>
+                </label>
+                <transition name="fade">
+                    <div v-if="selectedSets.find(el => el === item)" class="attr-list">
+                        <div v-for="attribute in item.attributes">
+                            <div v-if="attribute.type.type === 0" class="attr-list-row">
+                                <label class="attr-label">
+                                    {{attribute.name}}
+                                </label>
+                                <div class="attr-type">
+                                    <input type="text" name="defValue" v-model="attribute.defaultValue"
+                                           class="attr-input">
+                                </div>
+                            </div>
+                            <div v-if="attribute.type.type === 1" class="attr-list-row">
+                                <label class="attr-label">{{attribute.name}}</label>
+                                <div class="checkbox-square form-group attr-type"
+                                     v-if="attribute.visibility === true || 1">
+                                    <input type="checkbox" id="def-checked" class="visibility-hidden"
+                                           v-model="attribute.checked">
+                                    <label for="def-checked" class="square"></label>
+                                </div>
+                            </div>
+                            <div v-if="attribute.type.type === 2" class="attr-list-row">
+                                <label class="attr-label">{{attribute.name}}</label>
+                                <multiselect
+                                        class="shop-select attr-type"
+                                        v-model="attribute.defaultValue"
+                                        :options="attribute.selectOptions"
+                                        :allow-empty="false"
+                                        :searchable="false"
+                                        :selectedLabel="''"
+                                        track-by="name"
+                                        label="name"
+                                        :deselectLabel="''"
+                                        :selectLabel="''"
+                                        :hideSelected="true"
+                                        placeholder="Wybierz"></multiselect>
+                            </div>
+
+                        </div>
+                    </div>
+                </transition>
+            </li>
+
+
             <li v-for="(set, index) in sets" class="cat-item">
                 <label class="check-container">
                     <p class="label">
                         {{set.name}}
                     </p>
-                    <input type="checkbox" v-model="selectedSets" :value="set" @change="saveSelectedSets">
+                    <input type="checkbox" v-model="selectedSets" :value="set" @click="removeFromSets(index)">
                     <span class="checkmark"></span>
                 </label>
                 <transition name="fade">
-                <div v-if="selectedSets.find(el => el === set)" class="attr-list">
-                    <div v-for="attribute in set.attributes">
-                        <div v-if="attribute.type.type === 0" class="attr-list-row">
-                            <label class="attr-label">
-                                {{attribute.name}}
-                            </label>
-                            <div class="attr-type">
-                                <input type="text" name="defValue" v-model="attribute.defaultValue" class="attr-input">
+                    <div v-if="selectedSets.find(el => el === set)" class="attr-list">
+                        <div v-for="attribute in set.attributes">
+                            <div v-if="attribute.type.type === 0" class="attr-list-row">
+                                <label class="attr-label">
+                                    {{attribute.name}}
+                                </label>
+                                <div class="attr-type">
+                                    <input type="text" name="defValue" v-model="attribute.defaultValue"
+                                           class="attr-input">
+                                </div>
                             </div>
-                        </div>
-                        <div v-if="attribute.type.type === 1" class="attr-list-row">
-                            <label class="attr-label">{{attribute.name}}</label>
-                            <div class="checkbox-square form-group attr-type" v-if="attribute.visibility === true">
-                                <input type="checkbox" id="def-checked" class="visibility-hidden" v-model="attribute.checked">
-                                <label for="def-checked" class="square"></label>
+                            <div v-if="attribute.type.type === 1" class="attr-list-row">
+                                <label class="attr-label">{{attribute.name}}</label>
+                                <div class="checkbox-square form-group attr-type" v-if="attribute.visibility === true">
+                                    <input type="checkbox" id="checked" class="visibility-hidden"
+                                           v-model="attribute.checked">
+                                    <label for="checked" class="square"></label>
+                                </div>
                             </div>
-                        </div>
-                        <div v-if="attribute.type.type === 2" class="attr-list-row">
-                            <label class="attr-label">{{attribute.name}}</label>
-                            <multiselect
-                                    class="shop-select attr-type"
-                                    v-model="attribute.defaultValue"
-                                    :options="attribute.selectOptions"
-                                    :allow-empty="false"
-                                    :searchable="false"
-                                    :selectedLabel="''"
-                                    track-by="name"
-                                    label="name"
-                                    :deselectLabel="''"
-                                    :selectLabel="''"
-                                    :hideSelected="true"
-                                    placeholder="Wybierz"></multiselect>
-                        </div>
+                            <div v-if="attribute.type.type === 2" class="attr-list-row">
+                                <label class="attr-label">{{attribute.name}}</label>
+                                <multiselect
+                                        class="shop-select attr-type"
+                                        v-model="attribute.defaultValue"
+                                        :options="attribute.selectOptions"
+                                        :allow-empty="false"
+                                        :searchable="false"
+                                        :selectedLabel="''"
+                                        track-by="name"
+                                        label="name"
+                                        :deselectLabel="''"
+                                        :selectLabel="''"
+                                        :hideSelected="true"
+                                        placeholder="Wybierz"></multiselect>
+                            </div>
 
+                        </div>
                     </div>
-                </div>
                 </transition>
             </li>
         </ul>
@@ -55,23 +109,49 @@
 <script>
   export default {
     name: 'attribute-sets',
+    props: ['firstSelectedSets'],
+    computed: {
+      sets: function () {
+        return this.$store.getters.sets
+      },
+    },
     data: () => ({
-      sets: [],
       selectedSets: [],
+
     }),
 
     methods: {
-    saveSelectedSets(){
-      this.$emit('selectedSets', this.selectedSets)
-    }
+      removeFromSets (index) {
+        this.sets.splice(index, 1)
+      },
+
+      addToSets (item) {
+        axios('attribute-sets').then(result => {
+          let sets = result.data
+          for (let set of sets) {
+            set.attributes = JSON.parse(set.attributes)
+          }
+          let set = sets.find(el => el.id === item.id)
+          this.sets.unshift(set)
+        })
+      },
     },
+
     created: function () {
-      axios('attribute-sets').then(result => {
-        this.sets = result.data
-        for (let set of this.sets) {
-          set.attributes = JSON.parse(set.attributes)
-        }
-      })
+
+      if (this.$store.state.product.attributeSets != 0) {
+        this.selectedSets = this.$store.getters.getProductAttributeSets
+      }
+      else {
+        this.$store.dispatch('getSets')
+      }
+    },
+
+    beforeDestroy: function () {
+
+      this.$store.commit('saveProductAttributes', this.selectedSets)
+      this.$store.commit('getSets', this.sets)
+
     },
   }
 </script>
@@ -139,11 +219,11 @@
         transform: rotate(45deg);
     }
 
-    .attr-list{
+    .attr-list {
         margin: 35px 0 0 35px;
     }
 
-    .attr-list-row{
+    .attr-list-row {
         display: grid;
         grid-template-columns: 15% 30px 80%;
         grid-template-areas: "attr-label . attr-type";
@@ -151,27 +231,30 @@
 
     }
 
-    .attr-label{
+    .attr-label {
         grid-area: attr-label;
         align-self: center;
     }
 
-    .attr-type{
+    .attr-type {
         grid-area: attr-type;
     }
-    .attr-input{
+
+    .attr-input {
         padding: 15px;
         border: none;
         border-radius: 5px;
         width: 40%;
     }
 
-    .checkbox-square{
+    .checkbox-square {
         margin-left: -10px;
     }
+
     .fade-enter-active, .fade-leave-active {
         transition: opacity .5s;
     }
+
     .fade-enter, .fade-leave-to {
         opacity: 0;
     }

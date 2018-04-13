@@ -1,6 +1,6 @@
 <template>
     <div class="product-form-container">
-        <form class="product-form">
+        <form class="product-form" @submit.prevent="saveProduct()">
             <div class="form-row">
                 <label class="form-label">
                     Nazwa produktu
@@ -32,7 +32,7 @@
                 <div class="input-container" style="width: 30%">
                     <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('stock')}">
                         <input type="text" v-validate="'required|numeric'"
-                               placeholder="..." name="stock" v-model="stock">
+                               placeholder="..." name="stock" v-model="product.stock">
                     </div>
                     <span v-show="errors.has('stock')" class="validator-help">{{ errors.first('stock') }}</span>
                 </div>
@@ -44,7 +44,7 @@
                 <div class="input-container" style="width: 30%">
                     <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('stockAvail')}">
                         <input type="text" v-validate="'required|numeric'"
-                               placeholder="..." name="stockAvail" v-model="stockAvail">
+                               placeholder="..." name="stockAvail" v-model="product.stockAvail">
                     </div>
                     <span v-show="errors.has('stockAvail')"
                           class="validator-help">{{ errors.first('stockAvail') }}</span>
@@ -57,7 +57,7 @@
                 <div class="input-container" style="width: 30%">
                     <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('intoStockPrice')}">
                         <input type="text" v-validate="'required|numeric'"
-                               placeholder="Cena..." name="intoStockPrice" v-model="intoStockPrice">
+                               placeholder="Cena..." name="intoStockPrice" v-model="product.intoStockPrice">
                     </div>
                     <p>zł</p>
                     <span v-show="errors.has('intoStockPrice')" class="validator-help">{{ errors.first('intoStockPrice') }}</span>
@@ -187,8 +187,7 @@
             </div>
             <br>
             <br>
-            <br>
-            <br>
+            <button type="submit" class="custom-button">DODAJ</button>
         </form>
     </div>
 </template>
@@ -196,23 +195,31 @@
 <script>
   export default {
     name: 'main-info',
+    props: ['attributeSets',],
+    computed: {
+      product: function () {
+        return this.$store.getters.getProduct
+      }
+
+    },
     data: () => ({
-      product: {
-        name: '',
-        price: '',
-        vat_rate: '',
-        symbol: '',
-        visibility: 1,
-        barcode: '',
-        pkwiuCode: '',
-        vendor: '',
-      },
+      // product: {
+      //   name: '',
+      //   price: '',
+      //   vat_rate: '',
+      //   symbol: '',
+      //   visibility: 1,
+      //   barcode: '',
+      //   pkwiuCode: '',
+      //   vendor: '',
+      //   attributeSets: '',
+      //   stock: '',
+      //   stockAvail: '',
+      //   intoStockPrice: '',
+      // },
       vat_rates: [],
       selectedRate: '',
       selectedVendor: '',
-      stock: '',
-      stockAvail: '',
-      intoStockPrice: '',
       vendors: [],
       selectedCategories: [],
       options: [],
@@ -229,8 +236,25 @@
       nameWithRate ({name, rate}) {
         return `${name} — [${rate}%] `
       },
+
+      saveProduct(){
+        this.$validator.validateAll().then((result) => {
+          if (result) {
+            this.product.attributeSets = JSON.stringify(this.product.attributeSets)
+            axios.post('/products', {
+              product: this.product
+            }).then(() => {
+              this.$router.push('/products')
+              console.log(this.$route)
+              this.$forceUpdate()
+              this.$store.commit('clearProduct')
+            })
+          }
+        })
+      }
     },
     created: function () {
+
       axios('vat-rates').then(result => {
         this.vat_rates = result.data
       })
@@ -241,8 +265,12 @@
       axios('all-categories').then(result => {
         this.options = result.data
       })
-
     },
+
+    beforeDestroy: function () {
+
+      this.$store.commit('addProduct', this.product)
+    }
   }
 </script>
 

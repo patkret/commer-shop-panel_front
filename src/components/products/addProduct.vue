@@ -10,20 +10,24 @@
                 <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dane dodatkowe
                 </li>
                 <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
-                    Galeria
+                    SEO
                 </li>
                 <li @click="changeType(4)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 4}">
-                    Zestawy atrybutów
+                    Galeria
                 </li>
                 <li @click="changeType(5)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 5}">
+                    Zestawy atrybutów
+                </li>
+                <li @click="changeType(6)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 6}">
                     Zestawy wariantów
                 </li>
+
             </ul>
         </div>
         <div class="menu-tab">
             <main-info v-if="type == 1"></main-info>
             <additional-info v-if="type == 2"></additional-info>
-            <attribute-sets v-if="type == 4" @selectedSets="saveSelectedAttributeSets"></attribute-sets>
+            <attribute-sets v-if="type == 5"></attribute-sets>
         </div>
     </div>
 </template>
@@ -42,20 +46,14 @@
     name: 'add-product',
     data: () => ({
       type: 1,
-      product: {
-        name: '',
-        attributeSets: []
-      }
+      attributeSets: [],
+      productMainInfo: {}
     }),
     methods: {
       changeType(type){
         this.type = type
       },
-      saveSelectedAttributeSets(sets){
-        this.product.attributeSets = JSON.stringify(sets)
-      }
-    }
-
+    },
   }
 </script>
 
