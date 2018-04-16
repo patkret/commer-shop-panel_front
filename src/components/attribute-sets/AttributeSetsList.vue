@@ -56,22 +56,25 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
-            this.items.splice(itemIndex, 1)
-            axios.delete('attribute-sets/' + item.id).then(
-              result => {
-                console.log(result)
+            if (result.value) {
+              let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+                    this.items.splice(itemIndex, 1)
+                    axios.delete('attribute-sets/' + item.id).then(
+                      result => {
+                        console.log(result)
+                      })
+              this.$swal({
+                title: 'Usunięto!',
+                text: 'Zestaw atrybutów został usunięty',
+                type: 'success',
+                confirmButtonText: 'OK'
               })
-            this.$swal({
-              title: 'Usunięto!',
-              text: 'Zestaw atrybutów został usunięty',
-              type: 'success',
-              confirmButtonText: 'OK'
-            })
+            } else {
+              this.$swal('Anulowane', 'Zestaw atrybutów nie został usunięty', 'info')
+            }
           },
           dismiss => {
-            console.log(result.dismiss)
-          }).catch(swal.noop)
+          }).catch(this.$swal.noop)
       },
       editAttributeSet(item){
         axios('attribute-sets/' + item.id).

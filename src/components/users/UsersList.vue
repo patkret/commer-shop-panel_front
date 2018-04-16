@@ -68,22 +68,25 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
-            this.items.splice(itemIndex, 1)
-            axios.delete('users/' + item.id).then(
-              result => {
-                console.log(result)
+            if(result.value) {
+              let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+              this.items.splice(itemIndex, 1)
+              axios.delete('users/' + item.id).then(
+                result => {
+                  console.log(result)
+                })
+              this.$swal({
+                title: 'Usunięto!',
+                text: 'Użytkownik został usunięta',
+                type: 'success',
+                confirmButtonText: 'OK'
               })
-            this.$swal({
-              title: 'Usunięto!',
-              text: 'Użytkownik został usunięty',
-              type: 'success',
-              confirmButtonText: 'OK'
-            })
+            } else {
+              this.$swal('Anulowane', 'Użytkownik nie został usunięty.', 'info')
+            }
           },
           dismiss => {
-            console.log(result.dismiss)
-          }).catch(swal.noop)
+          }).catch(this.$swal.noop)
       },
     },
     created: function () {

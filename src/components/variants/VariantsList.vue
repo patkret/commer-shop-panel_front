@@ -44,7 +44,7 @@
       },
       deleteVariant (index) {
         this.$swal({
-          title: 'Czy chcesz usunąć użytkownika?',
+          title: 'Czy chcesz usunąć wariant?',
           text: 'Ta akcja nieodwracalnie usunie użytkownika',
           type: 'warning',
           showCancelButton: true,
@@ -53,17 +53,20 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-            this.items.splice(index, 1)
-            this.$swal({
-              title: 'Usunięto!',
-              text: 'Użytkownik został usunięty',
-              type: 'success',
-              confirmButtonText: 'OK'
-            })
+            if (result.value) {
+              this.items.splice(index, 1)
+              this.$swal({
+                title: 'Usunięto!',
+                text: 'Wariant został usunięty',
+                type: 'success',
+                confirmButtonText: 'OK'
+              })
+            } else {
+              this.$swal('Anulowane', 'Wariant nie został usunięty', 'info')
+            }
           },
           dismiss => {
-            console.log(result.dismiss)
-          }).catch(swal.noop)
+          }).catch(this.$swal.noop)
       },
       editVariant (item, key) {
         this.$emit('singleVariant', item, key)
