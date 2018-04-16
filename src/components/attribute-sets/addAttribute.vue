@@ -88,6 +88,24 @@
                     </div>
                 </div>
             </div>
+            <div class="sing-attr-row" v-if="attribute.selectOptions != 0">
+                <label class="attr-label">Domyślna opcja</label>
+                <div class="input-container">
+                    <multiselect
+                            class="shop-select"
+                            v-model="attribute.defaultValue"
+                            :options="attribute.selectOptions"
+                            :allow-empty="false"
+                            :searchable="false"
+                            :selectedLabel="''"
+                            track-by="name"
+                            label="name"
+                            :deselectLabel="''"
+                            :selectLabel="''"
+                            :hideSelected="true"
+                            placeholder="Wybierz"></multiselect>
+                </div>
+            </div>
 
             <div class="sing-attr-row">
                 <label class="attr-label">Opis</label>

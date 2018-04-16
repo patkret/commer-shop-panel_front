@@ -2,7 +2,10 @@
     <div class="container.">
         <ul class="users-container">
             <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
-                <p> {{item.id}}. {{item.first_name + ' ' + item.last_name}}</p>
+
+                <p> {{item.id}}. {{item.first_name + ' ' + item.last_name}}  </p>
+
+
                 <div class="buttons-container">
                     <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">
                         <span class="dot"></span>
@@ -24,9 +27,6 @@
 </template>
 
 <script>
-  import swal from 'vue-sweetalert2';
-  window.swal = swal
-
   export default {
     name: "users-list",
     props: ['editingUser'],

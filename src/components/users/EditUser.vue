@@ -102,7 +102,7 @@
             this.showInfoEdit = true
             setTimeout(() => {
               this.$parent.$data.type = 2
-            }, 500)
+            }, 1500)
           }
         })
       },

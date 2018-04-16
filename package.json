@@ -12,14 +12,14 @@
   "dependencies": {
     "axios": "^0.18.0",
     "normalize.css": "^8.0.0",
-    "sweetalert": "^2.1.0",
     "sweetalert2": "^7.18.0",
     "vee-validate": "^2.0.6",
     "vue": "^2.5.2",
     "vue-multiselect": "^2.1.0",
     "vue-router": "^3.0.1",
     "vue-sweetalert2": "^1.2.4",
-    "vuedraggable": "^2.16.0"
+    "vuedraggable": "^2.16.0",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

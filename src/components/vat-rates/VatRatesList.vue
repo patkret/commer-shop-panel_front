@@ -42,6 +42,7 @@
           this.index = key
         }
       },
+
       deleteRate (item) {
         this.$swal({
           title: 'Czy chcesz usunąć stawkę VAT?',
@@ -73,6 +74,7 @@
           dismiss => {
           }).catch(this.$swal.noop)
         },
+
       editVatRate (item) {
         this.$emit('singleVatRate', item)
       },

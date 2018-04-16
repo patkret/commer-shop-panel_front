@@ -46,7 +46,7 @@
             axios.post('/vat-rates', {
               name: this.name,
               rate: this.rate,
-              description: this.description,
+              description: this.rateDescription,
             }).then(() => {
               this.$parent.$data.type = 2
             })

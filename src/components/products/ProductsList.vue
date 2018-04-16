@@ -96,6 +96,7 @@
         buttons: [],
         index: '',
         show : false,
+
         filters: [
           {name: 'Po ID'},
           {name: 'Po nazwie'},
@@ -138,8 +139,8 @@
       },
     },
     created: function () {
-      axios('products')
-        .then(result => this.items = result.data)
+      axios('products').then(result =>
+        this.items = result.data)
     },
   }
 </script>
