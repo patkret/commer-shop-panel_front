@@ -25,7 +25,7 @@
         <table class="products-table">
             <thead class="table-heading">
             <tr class="table-row">
-                <th class="col-1">C</th>
+                <th class="col-1"></th>
                 <th class="col-2">Obraz</th>
                 <th class="col-3">SKU Produktu</th>
                 <th class="col-4">Nazwa produktu</th>

@@ -38,16 +38,16 @@
         <div class="top-menu-container">
             <div class="top-menu">
                 <ul class="top-menu-items">
-                    <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">
+                    <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 1}">
                         Kategorie dla zestawu
                     </li>
-                    <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dodaj
+                    <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 2}">Dodaj
                         atrybut
                     </li>
-                    <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
+                    <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 3}">
                         Wybrane atrybuty
                     </li>
-                    <li v-if="type == 4" :class="{'top-menu-item': true, 'top-menu-item-active': type == 4}">
+                    <li v-if="type === 4" :class="{'top-menu-item': true, 'top-menu-item-active': type === 4}">
                         Edycja atrybutu
                     </li>
                 </ul>

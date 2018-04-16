@@ -92,7 +92,12 @@
         this.type = type
       },
       getVariant (variant) {
-        this.variants.push(variant)
+        if(variant.required === 1){
+          this.variants.unshift(variant)
+        }
+        else{
+          this.variants.push(variant)
+        }
 
         setTimeout(() => {
           this.type = 2

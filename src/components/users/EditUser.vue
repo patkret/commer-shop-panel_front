@@ -33,41 +33,17 @@
                     <span v-show="errors.has('phone_no')" class="help is-danger">{{ errors.first('phone_no') }}</span>
                 </div>
             </div>
-            <div class="passwords-container" v-if="passwords">
 
-                <div class="form-row">
-                    <label class="form-label col-1">Stare Hasło</label>
-                    <div class="form-data col-2">
-                        <input  v-model="editingUser.oldPassword" v-validate="'required|confirmed:password'" :class="{'input': true, 'is-danger input-border': errors.has('password') }" class="form-input " type="password" name="password">
-                        <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <label class="form-label col-1">Hasło</label>
-                    <div class="form-data col-2">
-                        <input  v-model="editingUser.newPassword" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('newPassword') }" class="form-input " type="password" name="newPassword">
-                        <span v-show="errors.has('newPassword')" class="help is-danger">{{ errors.first('newPassword') }}</span>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <label class="form-label col-1">Powtórz hasło</label>
-                    <div class="form-data col-2">
-                        <input  v-model="editingUser.newPasswordConfirmation" v-validate="'required|confirmed:newPassword'" :class="{'input': true, 'is-danger input-border': errors.has('newPasswordConfirmation') }" class="form-input " type="password" name="newPasswordConfirmation">
-                        <span v-show="errors.has('newPasswordConfirmation')" class="help is-danger">{{ errors.first('newPasswordConfirmation') }}</span>
-                    </div>
-                </div>
-            </div>
 
             <div class="form-row  col-2 button-row ">
-                <button type="submit" class="custom-button">Dodaj</button>
-                <div @click="showPasswords" class="custom-button showPass">Zmień hasło</div>
+                <button type="submit" class="custom-button">Edytuj</button>
+                <div @click="changePassword" class="custom-button showPass">Zmień hasło</div>
             </div>
         </form>
 </template>
 
 <script>
+
 
   export default {
     name: "edit-user",
@@ -81,6 +57,7 @@
           phone_no: '',
         },
         showInfoEdit: false,
+        showChangePassword: false
       }
     },
     watch: {
@@ -106,17 +83,19 @@
           }
         })
       },
-      showPasswords() {
-        this.passwords = !this.passwords
-      },
+
+      changePassword(){
+        this.$parent.$data.type = 5
+        this.$emit('currUserId', this.editingUser.id)
+      }
     },
     created: function () {
+      this.editingUser = this.user;
       axios('users')
         .then(result => {
           this.items = result.data
         });
-      this.editingUser = this.user;
-      console.log(this.editingUser);
+
     }
   }
 </script>

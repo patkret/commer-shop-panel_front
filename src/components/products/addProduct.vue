@@ -28,6 +28,7 @@
             <main-info v-if="type == 1"></main-info>
             <additional-info v-if="type == 2"></additional-info>
             <attribute-sets v-if="type == 5"></attribute-sets>
+            <variant-sets v-if="type == 6"></variant-sets>
         </div>
     </div>
 </template>
@@ -37,9 +38,11 @@
   import MainInfo from './mainInfo'
   import AdditionalInfo from './additionalInfo'
   import AttributeSets from './attributeSets'
+  import VariantSets from './variantSets'
 
   export default {
     components: {
+      VariantSets,
       AttributeSets,
       AdditionalInfo,
       MainInfo},

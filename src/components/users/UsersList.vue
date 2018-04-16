@@ -83,7 +83,7 @@
           },
           dismiss => {
             console.log(result.dismiss)
-          }).catch(swal.noop)
+          }).catch(this.$swal.noop)
       },
     },
     created: function () {

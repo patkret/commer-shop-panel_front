@@ -10,7 +10,7 @@
                 </button>
                 <div class="arrow-left"  v-if="index === key && show === true">
                     <div class="action-buttons">
-                        <button @click="deleteVariant(item)" class="delete">Usuń</button>
+                        <button @click="deleteVariant(key)" class="delete">Usuń</button>
                         <button @click="editVariant(item)" class="edit">Edytuj</button>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
       },
       deleteVariant (index) {
         this.$swal({
-          title: 'Czy chcesz usunąć użytkownika?',
+          title: 'Czy chcesz usunąć wariant?',
           text: 'Ta akcja nieodwracalnie usunie użytkownika',
           type: 'warning',
           showCancelButton: true,
@@ -53,17 +53,20 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-            this.items.splice(index, 1)
-            this.$swal({
-              title: 'Usunięto!',
-              text: 'Użytkownik został usunięty',
-              type: 'success',
-              confirmButtonText: 'OK'
-            })
+            if(result.value) {
+              this.items.splice(index, 1)
+              this.$swal({
+                title: 'Usunięto!',
+                text: 'Użytkownik został usunięty',
+                type: 'success',
+                confirmButtonText: 'OK'
+              })
+            } else {
+              this.$swal('Cancelled', 'Your file is still intact', 'info')
+            }
           },
           dismiss => {
-            console.log(result.dismiss)
-          }).catch(swal.noop)
+          }).catch(this.$swal.noop)
       },
       editVariant (item, key) {
         this.$emit('singleVariant', item, key)

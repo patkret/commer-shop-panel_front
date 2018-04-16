@@ -15,6 +15,7 @@
             </div>
         </div>
         <div class="component-container">
+            <!--<router-view></router-view>-->
             <vendor-form v-if="type == 1"></vendor-form>
             <vendors-list v-if="type == 2" @vendor="vendorToEdit"></vendors-list>
             <vendor-form v-if="type == 3" :vendorEdit="vendor"></vendor-form>
@@ -23,8 +24,8 @@
 </template>
 
 <script>
-    import VendorForm from './VendorForm'
-    import VendorsList from './VendorsList'
+  import VendorForm from './VendorForm'
+  import VendorsList from './VendorsList'
   export default {
     components: {
       VendorForm,
