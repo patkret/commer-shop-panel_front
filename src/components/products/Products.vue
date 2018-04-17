@@ -9,11 +9,12 @@
             <li  :class="{'products-list-item': true, 'products-list-item active-blue': type == 5}" @click.prevent="changeComponent(5)">Szkice produktów</li>
         </ul>
         <div class="component-container">
-            <products-list v-if="type == 1"></products-list>
+            <products-list v-if="type == 1" @singleProduct="editProduct"></products-list>
             <highlited-products v-if="type == 2"></highlited-products>
             <imported-products v-if="type == 3"></imported-products>
             <off-products v-if="type == 4"></off-products>
             <sketch-products v-if="type == 5"></sketch-products>
+            <edit-product v-if="type ==6" :product="editingProduct" ></edit-product>
         </div>
     </div>
 </template>
@@ -25,8 +26,11 @@
     import HighlitedProducts from './HighlitedProducts'
     import OffProducts from './OffProducts'
     import addProduct from './addProduct'
+    import EditProduct from "./editProduct";
+
   export default {
       components: {
+        EditProduct,
         ProductsList,
         ImportedProducts,
         SketchProducts,
@@ -38,11 +42,16 @@
     data () {
         return {
           type: 1,
+          editingProduct: '',
         }
     },
     methods: {
       changeComponent(type){
         this.type = type
+      },
+      editProduct (product){
+        this.type = 6
+        this.editingProduct = product
       }
     }
   }

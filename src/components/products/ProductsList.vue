@@ -4,7 +4,7 @@
         <div class="products-row">
             <div class="filter-container">
                 <div class="filter-status">
-                    <label class="action-select-p">Filtruj</label>
+                    <label class="filter-label">Filtruj</label>
                     <multiselect
                             class="admin-select"
                             v-model="selectedFilter"
@@ -54,8 +54,8 @@
                         </button>
                         <div class="arrow-left"  v-if="index === key && show === true">
                             <div class="action-buttons">
-                                <button @click="deleteVariant(item)" class="delete">Usuń</button>
-                                <button @click="editVariant(item)" class="edit">Edytuj</button>
+                                <button @click="deleteProduct(item)" class="delete">Usuń</button>
+                                <button @click="editProduct(item)" class="edit">Edytuj</button>
                             </div>
                         </div>
                     </div>
@@ -89,6 +89,7 @@
 <script>
   export default {
     name: 'products-list',
+    props: ['editingProduct'],
     data () {
       return {
         items: [],
@@ -136,6 +137,40 @@
           this.show = true
           this.index = key
         }
+      },
+      deleteProduct (item) {
+        this.$swal({
+          title: 'Czy chcesz usunąć produkt',
+          text: 'Ta akcja nieodwracalnie usunie produkt',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Usuń',
+        }).then((result) => {
+            if(result.value) {
+              let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+              this.items.splice(itemIndex, 1)
+              axios.delete('products/' + item.id).then(
+                result => {
+                  console.log(result)
+                })
+              this.$swal({
+                title: 'Usunięto!',
+                text: 'Produkt został usunięty',
+                type: 'success',
+                confirmButtonText: 'OK'
+              })
+            } else {
+              this.$swal('Anulowane', 'Produkt nie została usunięty.', 'info')
+            }
+          },
+          dismiss => {
+          }).catch(this.$swal.noop)
+      },
+      editProduct (item) {
+        this.$emit('singleProduct',item)
       },
     },
     created: function () {
@@ -403,6 +438,11 @@
     .text-left {
         text-align: left;
         padding-left: 30px;
+        margin-bottom: 10px;
+    }
+    .filter-label {
+        font-size: 14px;
+        font-weight: 700;
         margin-bottom: 10px;
     }
 </style>

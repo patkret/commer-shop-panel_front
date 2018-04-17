@@ -12,6 +12,7 @@ import VatRates from '../components/vat-rates/VatRates'
 import Variants from '../components/variants/Variants'
 import Vendors from '../components/vendors/Vendors'
 import Users from '../components/users/Users'
+import Warehouse from '../components/warehouse/Warehouse'
 import permissionList from '../components/users/permissionList'
 
 Vue.use(Router)
@@ -83,6 +84,11 @@ export default new Router({
           path: '/permission',
           name: 'permissionList',
           component: permissionList,
+        },
+        {
+          path: '/warehouse',
+          name: 'warehouse',
+          component: Warehouse,
         },
       ],
     },
