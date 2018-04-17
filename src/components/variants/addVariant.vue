@@ -241,6 +241,7 @@
     },
     methods: {
       addOption () {
+
         this.variant.selectOptions.push({
           name: this.selectName,
           priceOption: this.variant.priceOption,

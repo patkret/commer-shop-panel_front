@@ -199,7 +199,10 @@ input:checked + .square:after {
 .curr-select .multiselect__tags{
     width: 70px !important;
 }
-.price-select .multiselect__tags{
+.shop-select .price-select {
+    width: 120px;
+}
+.shop-select .price-select .multiselect__tags{
     width: 120px;
 }
 .product-select{
@@ -221,6 +224,13 @@ input:checked + .square:after {
 .product-categories-select .multiselect__input{
     background: transparent;
     padding-top: 8px;
+}
+
+ .variant-select{
+    width: 250px;
+}
+.variant-select .multiselect__tags{
+    width: 250px;
 }
 
 

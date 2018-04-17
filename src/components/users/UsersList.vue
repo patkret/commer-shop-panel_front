@@ -74,6 +74,8 @@
               axios.delete('users/' + item.id).then(
                 result => {
                   console.log(result)
+                  this.show = false
+                  this.index = ''
                 })
               this.$swal({
                 title: 'Usunięto!',

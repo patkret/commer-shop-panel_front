@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h3 class="header">Wybierz zestawy atrybutów dla produktu</h3>
         <ul>
             <li v-for="item in selectedSets">
                 <label class="check-container">
@@ -109,7 +110,6 @@
 <script>
   export default {
     name: 'attribute-sets',
-    props: ['firstSelectedSets'],
     computed: {
       sets: function () {
         return this.$store.getters.sets
@@ -157,6 +157,7 @@
 </script>
 
 <style scoped>
+
     .check-container {
         display: block;
         position: relative;
@@ -257,5 +258,9 @@
 
     .fade-enter, .fade-leave-to {
         opacity: 0;
+    }
+
+    .header{
+        margin-bottom: 20px;
     }
 </style>

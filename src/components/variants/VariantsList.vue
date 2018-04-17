@@ -10,7 +10,7 @@
                 </button>
                 <div class="arrow-left"  v-if="index === key && show === true">
                     <div class="action-buttons">
-                        <button @click="deleteVariant(item)" class="delete">Usuń</button>
+                        <button @click="deleteVariant(key)" class="delete">Usuń</button>
                         <button @click="editVariant(item)" class="edit">Edytuj</button>
                     </div>
                 </div>
@@ -53,6 +53,7 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
+
             if (result.value) {
               this.items.splice(index, 1)
               this.$swal({

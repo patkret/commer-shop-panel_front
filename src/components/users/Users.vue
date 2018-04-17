@@ -18,13 +18,17 @@
                     <div class="side-button side-menu-item active" v-if="type == 4">
                         <p>Duplikacja użytkownika</p>
                     </div>
+                    <div class="side-button side-menu-item active" v-if="type == 5">
+                        <p>Zmiana hasła</p>
+                    </div>
                 </div>
             </div>
             <div class="component-container">
                 <add-user v-if="type == 1"></add-user>
                 <users-list v-if="type == 2" @singleUser="editUser" @duplUser="duplicateUser"></users-list>
-                <edit-user v-if="type == 3" :user="editingUser"></edit-user>
+                <edit-user v-if="type == 3" :user="editingUser" @currUserId="getUserId"></edit-user>
                 <duplicate-user v-if="type == 4" :user="duplicatingUser"></duplicate-user>
+                <change-password v-if="type == 5" :userId="userId"></change-password>
             </div>
         </div>
     </div>
@@ -35,10 +39,12 @@
   import EditUser from './EditUser'
   import UsersList from './UsersList'
   import DuplicateUser from './DuplicateUser'
+  import ChangePassword from './changePassword'
 
   export default {
     name: "users",
     components: {
+      ChangePassword,
       AddUser,
       EditUser,
       UsersList,
@@ -48,6 +54,7 @@
       return {
         type: 2,
         users: '',
+        userId: ''
       }
     },
     methods: {
@@ -61,6 +68,9 @@
       duplicateUser(user){
         this.type = 4
         this.duplicatingUser = user
+      },
+      getUserId(id){
+        this.userId = id
       }
     }
   }

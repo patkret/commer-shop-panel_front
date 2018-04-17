@@ -11,6 +11,7 @@ import Products from '../components/products/Products'
 import VatRates from '../components/vat-rates/VatRates'
 import Variants from '../components/variants/Variants'
 import Vendors from '../components/vendors/Vendors'
+import AddVendor from '../components/vendors/VendorForm'
 import Users from '../components/users/Users'
 import Warehouse from '../components/warehouse/Warehouse'
 import permissionList from '../components/users/permissionList'
@@ -74,6 +75,11 @@ export default new Router({
           path: '/vendors',
           name: 'Vendors',
           component: Vendors,
+        },
+        {
+          path: '/add-vendor',
+          name: 'AddVendor',
+          component: AddVendor,
         },
         {
           path: '/users',
