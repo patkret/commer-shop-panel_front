@@ -34,8 +34,31 @@
       showActions (key) {
         document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
       },
-      deleteAttribute(index){
-        this.attributes.splice(index, 1)
+      deleteAttribute (index) {
+        this.$swal({
+          title: 'Czy chcesz usunąć atrybut?',
+          text: 'Ta akcja nieodwracalnie usunie atrybut',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Usuń',
+        }).then((result) => {
+            if (result.value) {
+              this.attributes.splice(index, 1)
+              this.$swal({
+                title: 'Usunięto!',
+                text: 'Atrybut został usunięty',
+                type: 'success',
+                confirmButtonText: 'OK'
+              })
+            } else {
+              this.$swal('Anulowane', 'Atrybut nie został usunięty', 'info')
+            }
+          },
+          dismiss => {
+          }).catch(this.$swal.noop)
       },
       editAttribute(item, key){
         this.$emit('singleAttribute', item, key)

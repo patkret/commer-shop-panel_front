@@ -53,16 +53,17 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-            if(result.value) {
+
+            if (result.value) {
               this.items.splice(index, 1)
               this.$swal({
                 title: 'Usunięto!',
-                text: 'Użytkownik został usunięty',
+                text: 'Wariant został usunięty',
                 type: 'success',
                 confirmButtonText: 'OK'
               })
             } else {
-              this.$swal('Cancelled', 'Your file is still intact', 'info')
+              this.$swal('Anulowane', 'Wariant nie został usunięty', 'info')
             }
           },
           dismiss => {

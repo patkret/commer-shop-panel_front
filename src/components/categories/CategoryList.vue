@@ -9,7 +9,6 @@
                     <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
                         <div class="top-category">
                             <div>
-                            <!--<img class="categories-list-img lvlUp" src="../../assets/img/icons/list-plus.png" alt="plusik">-->
                             {{item.name}}
                             </div>
                             <div class="buttons-container">
@@ -105,10 +104,10 @@
           }
         });
       },
-      deleteCategory (item) {
+      deleteCategory (index) {
         this.$swal({
           title: 'Czy chcesz usunąć kategorie?',
-          text: 'Ta akcja nieodwracalnie usunie kategorie',
+          text: 'Ta akcja nieodwracalnie usunie kategorię',
           type: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#d33',
@@ -116,22 +115,20 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
-            this.items.splice(itemIndex, 1)
-            axios.delete('categories/' + item.id).then(
-              result => {
-                console.log(result)
+            if (result.value) {
+              this.items.splice(index, 1)
+              this.$swal({
+                title: 'Usunięto!',
+                text: 'Kategoria została usunięta',
+                type: 'success',
+                confirmButtonText: 'OK'
               })
-            this.$swal({
-              title: 'Usunięto!',
-              text: 'Kategoria została usunięta',
-              type: 'success',
-              confirmButtonText: 'OK'
-            })
+            } else {
+              this.$swal('Anulowane', 'Kategoria nie została usunięta', 'info')
+            }
           },
           dismiss => {
-            console.log(result.dismiss)
-          }).catch(swal.noop)
+          }).catch(this.$swal.noop)
       },
       duplicateCategory: function (item) {
         axios.post('/categories/' + item.id + '/duplicate').then(() => {

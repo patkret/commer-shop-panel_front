@@ -54,24 +54,27 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
-            this.items.splice(itemIndex, 1)
-            axios.delete('vat-rates/' + item.id).then(
-              result => {
-                console.log(result)
-              })
-            this.$swal({
-              title: 'Usunięto!',
-              text: 'Stawka VAT została usunięta',
-              type: 'success',
-              confirmButtonText: 'OK'
-            })
+            if(result.value) {
+              let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+                    this.items.splice(itemIndex, 1)
+                    axios.delete('vat-rates/' + item.id).then(
+                      result => {
+                        console.log(result)
+                      })
+                    this.$swal({
+                      title: 'Usunięto!',
+                      text: 'Stawka VAT została usunięta',
+                      type: 'success',
+                      confirmButtonText: 'OK'
+                    })
+            } else {
+              this.$swal('Anulowane', 'Stawka VAT nie została usunięta.', 'info')
+            }
           },
           dismiss => {
-            console.log(result.dismiss)
-          }).catch(swal.noop)
+          }).catch(this.$swal.noop)
+        },
 
-      },
       editVatRate (item) {
         this.$emit('singleVatRate', item)
       },

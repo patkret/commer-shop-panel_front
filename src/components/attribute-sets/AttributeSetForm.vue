@@ -1,6 +1,8 @@
 <template>
     <div>
+        <p v-if="info" class="attribute-alert"> Przynajmniej jeden atrybut musi być wybrany.</p>
         <form class="attribute-form">
+
             <div class="attributes-col">
                 <div class="attributes-row">
                     <div class="label-col">
@@ -88,7 +90,8 @@
       mainCategories: '',
       children: '',
       attribute: '',
-      indexOfAttribute: ''
+      indexOfAttribute: '',
+      info: false,
 
     }),
 
@@ -127,7 +130,10 @@
       },
       saveAttributeSet () {
         this.$validator.validateAll().then((result) => {
-          if (result) {
+          if(this.attributes.length === 0) {
+                this.info = !this.info
+          }
+          else if (result)  {
             axios.post('/attribute-sets', {
               name: this.name,
               visibility: this.visibility,
@@ -143,7 +149,6 @@
     },
   }
 </script>
-
 <style scoped>
     .attribute-form {
         display: grid;
@@ -151,7 +156,15 @@
         grid-template-areas: ". attributes-col .";
         margin-top: 20px;
     }
-
+    .attribute-alert {
+        padding: 20px;
+        background-color: #FF4136;
+        border-radius: 5px;
+        margin: 0 40px;
+        color: #ffffff;
+        text-align: center;
+        font-weight: 700;
+    }
     .attributes-col {
         grid-area: attributes-col;
     }
@@ -228,12 +241,10 @@
         margin-right: 60px;
         cursor: pointer;
     }
-
     .menu-tab {
         grid-area: menu-tab;
 
     }
-
     .validator-help {
         background-color: red;
         border-radius: 5px;
