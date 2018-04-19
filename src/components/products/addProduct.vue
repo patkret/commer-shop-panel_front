@@ -4,21 +4,21 @@
         <h1 class="form-name">Dodaj produkt</h1>
         <div class="top-menu">
             <ul class="top-menu-items">
-                <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">
+                <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 1}">
                     Dane podstawowe
                 </li>
-                <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dane dodatkowe
+                <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 2}">Dane dodatkowe
                 </li>
-                <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
+                <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 3}">
                     SEO
                 </li>
-                <li @click="changeType(4)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 4}">
+                <li @click="changeType(4)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 4}">
                     Galeria
                 </li>
-                <li @click="changeType(5)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 5}">
+                <li @click="changeType(5)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 5}">
                     Zestawy atrybutów
                 </li>
-                <li @click="changeType(6)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 6}">
+                <li @click="changeType(6)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 6}">
                     Zestawy wariantów
                 </li>
 

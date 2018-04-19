@@ -17,9 +17,10 @@
                     placeholder="Wybierz"/>
         </div>
         <div class="variants-container" v-if="selectedVariantSet !== 0">
+
             <div class="single-variant" v-for="variant in selectedVariantSet.variants">
                 <label class="check-container variant-check-cont" v-if="variant.required === false">
-                    <input type="checkbox" v-model="selectedVariants" :value="variant" class="variant-checkbox">
+                    <input type="checkbox" @change="setVariants(variant)" :value="variant" class="variant-checkbox">
                     <span class="checkmark"></span>
                 </label>
                 <div class="variant-header">
@@ -32,6 +33,8 @@
                         <p style="margin-right: 25px " v-if="variant.type.type === 0" class="label">Gdy wpisano:</p>
                         <p style="margin-right: 25px " v-if="variant.type.type === 1" class="label">Gdy zaznaczono:</p>
                         <p style="margin-right: 25px " v-if="variant.type.type === 3" class="label">Gdy dodano plik:</p>
+
+
                         <multiselect
                                 class="shop-select price-select"
                                 v-model="variant.priceOption"
@@ -45,12 +48,13 @@
                                 :selectLabel="''"
                                 :hideSelected="true"
                                 placeholder="Wybierz"
+                                style="width: 100%"
 
                         />
-
-                        <input type="text" v-model="variant.priceValue"
-                               v-if="variant.priceOption.type !== 0" placeholder="..." class="price-inpt"/>
-
+                        <div class="price-inpt">
+                            <input type="text" v-model="variant.priceValue"
+                                   v-if="variant.priceOption.type !== 0" placeholder="..."/>
+                        </div>
                         <multiselect v-if="variant.priceOption.type !== 0"
                                      class="shop-select curr-select"
                                      v-model="variant.curr"
@@ -64,7 +68,9 @@
                                      :selectLabel="''"
                                      :hideSelected="true"
                                      placeholder="Wybierz"
+                                     style="width: 20%; margin-left: 25px"
                         />
+
 
                     </div>
                     <div v-if="variant.type.type === 2">
@@ -110,6 +116,8 @@
                                                  :selectLabel="''"
                                                  :hideSelected="true"
                                                  placeholder="Wybierz"
+                                                 style="width: 9%"
+
                                     />
                                 </div>
                             </li>
@@ -133,6 +141,15 @@
       variantSets: function () {
         return this.$store.getters.variantSets
       },
+      selectedVariants: {
+        get: function () {
+          return this.selectedVariantSet.variants.filter(el => el.required === 1)
+        },
+        set: function (newValue) {
+          this.selectedVariants.push(newValue)
+        }
+
+      }
     },
 
     data: () => ({
@@ -147,8 +164,20 @@
         {type: 1, name: '%'},
       ],
       selectedVariantOptions: [],
-      selectedVariants: [],
     }),
+
+    methods: {
+
+      setVariants(variant){
+        if(this.selectedVariants.find(el => el === variant)){
+          let index = this.selectedVariants.indexOf(this.selectedVariants.find(el => el === variant))
+          this.selectedVariants.splice(index, 1)
+        }
+        else{
+          this.selectedVariants.push(variant)
+        }
+      }
+    },
 
     created: function () {
       this.selectedVariantSet = this.$store.getters.selectedVariantSet
@@ -157,6 +186,7 @@
 
     beforeDestroy: function () {
       this.$store.commit('selectedVariantSet', this.selectedVariantSet)
+      this.$store.commit('setSelectedVariants', this.selectedVariants)
     },
   }
 </script>
@@ -254,9 +284,6 @@
         grid-template-columns: 25% 20px 75%;
         grid-template-areas: "checkmark . price-options-container";
         align-items: center;
-        /*display: flex;*/
-        /*flex-direction: row;*/
-        /*flex-wrap: nowrap;*/
     }
 
     .price-options-container {
@@ -273,36 +300,23 @@
         width: 80px;
     }
 
-    /*.variant-check{*/
-    /*margin-left: 0;*/
-    /*padding-top: 2px;*/
-    /*}*/
-
-    /*.check-container .variant-check input {*/
-    /*position: absolute;*/
-    /*opacity: 0;*/
-    /*cursor: pointer;*/
-    /*top: 35px;*/
-    /*margin-left: -25px;*/
-    /*}*/
-
-    .single-variant:nth-child(1) input {
-        top: 35px;
-    }
-
     .price-options {
         width: 80%;
-        display: inline-flex;
-        /*display: grid;*/
-        /*grid-template-columns: 32% 23% 10% 40%;*/
+        display: grid;
+        grid-template-columns: 32% 23% 12% 38%;
         margin: 15px 0 15px 45px;
     }
 
-    .price-inpt {
+    .price-inpt input {
         border: none;
         border-radius: 5px;
+        height: 38px;
+        align-content: center;
         margin-left: 25px;
-        padding: 0 0 0 15px;
+        margin-right: 25px;
+        width: 80px;
+        padding-left: 15px;
+        margin-top: 5px;
 
     }
 
@@ -314,6 +328,5 @@
     .variant-check-cont {
         top: -10px;
     }
-
 
 </style>

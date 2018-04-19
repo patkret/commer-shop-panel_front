@@ -29,7 +29,8 @@ export const store = new Vuex.Store({
 
     sets: [],
     variantSets: [],
-    selectedSet: ''
+    selectedSet: '',
+    selectedVariants: []
   },
 
   getters: {
@@ -61,6 +62,10 @@ export const store = new Vuex.Store({
 
     selectedVariantSet: (state, payload) => {
       state.selectedSet = payload
+    },
+
+    setSelectedVariants: (state, payload) => {
+      state.selectedVariants = payload
     },
 
     clearProduct: state => {
@@ -110,7 +115,9 @@ export const store = new Vuex.Store({
         }
         context.commit('getVariantSets', result.data)
       })
-    }
+
+
+    },
   },
 
 })
