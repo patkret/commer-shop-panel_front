@@ -7,7 +7,8 @@
                 <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">
                     Dane podstawowe
                 </li>
-                <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dane dodatkowe
+                <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dane
+                    dodatkowe
                 </li>
                 <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
                     SEO
@@ -27,8 +28,10 @@
         <div class="menu-tab">
             <main-info v-if="type == 1"></main-info>
             <additional-info v-if="type == 2"></additional-info>
+            <products-seo v-if="type==3"></products-seo>
             <attribute-sets v-if="type == 5"></attribute-sets>
             <variant-sets v-if="type == 6"></variant-sets>
+
         </div>
     </div>
 </template>
@@ -39,13 +42,16 @@
   import AdditionalInfo from './additionalInfo'
   import AttributeSets from './attributeSets'
   import VariantSets from './variantSets'
+  import ProductsSeo from './ProductsSeo'
 
   export default {
     components: {
       VariantSets,
       AttributeSets,
       AdditionalInfo,
-      MainInfo},
+      MainInfo,
+      ProductsSeo,
+    },
     name: 'add-product',
     data: () => ({
       type: 1,
@@ -53,10 +59,17 @@
       productMainInfo: {}
     }),
     methods: {
-      changeType(type){
+      changeType(type) {
         this.type = type
       },
     },
+
+    created: function () {
+      console.log('im created')
+      let product_id = this.$route.params.item
+      this.$store.dispatch('getProduct', product_id)
+
+    }
   }
 </script>
 
@@ -67,12 +80,7 @@
         display: grid;
         grid-template-columns: 97% 3%;
         grid-template-rows: 25px 48px 20% 60px 80%;
-        grid-template-areas:
-                ". ."
-                "form-name ."
-                "top-menu ."
-                ". .  "
-                "menu-tab . ";
+        grid-template-areas: ". ." "form-name ." "top-menu ." ". .  " "menu-tab . ";
         margin-top: 20px;
         margin-left: 45px;
 
@@ -109,12 +117,14 @@
         grid-area: menu-tab;
 
     }
+
     .top-menu-item-active {
         border-bottom: 2px solid #2595ec;
         padding-bottom: 20px;
         color: #000000;
     }
-    .form-name{
+
+    .form-name {
         grid-area: form-name;
         font-size: 20px;
         font-weight: normal;
