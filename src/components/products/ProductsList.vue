@@ -37,7 +37,12 @@
                         <table class="products-table">
                             <thead class="table-heading">
                             <tr class="table-row">
-                                <th class="col-1"></th>
+                                <th class="col-1">
+                                    <label class="check-container">
+                                        <input type="checkbox" @click="selectAll" >
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </th>
                                 <th class="col-2">Obraz</th>
                                 <th class="col-3">SKU Produktu</th>
                                 <th class="col-4 text-left">Nazwa produktu</th>
@@ -91,7 +96,7 @@
                                         :selectLabel="''"
                                         :hideSelected="true"
                                         placeholder="Wybierz"></multiselect>
-                                <button class="use-button">Wykonaj</button>
+                                <button @click="deleteSelected()" class="use-button">Wykonaj</button>
                             </div>
                         </div>
                     </div>
@@ -100,7 +105,6 @@
                 <imported-products v-if="type == 3"></imported-products>
                 <off-products v-if="type == 4"></off-products>
                 <sketch-products v-if="type == 5"></sketch-products>
-                <!--<edit-product v-if="type ==6" :product="editingProduct" ></edit-product>-->
             </div>
         </div>
 
@@ -114,12 +118,13 @@
     data () {
       return {
         items: [],
-        selectedProduct: [],
+        selectedProducts: [],
         buttons: [],
         index: '',
         show : false,
         type: 1,
         editingProduct: '',
+        checkAll: false,
 
         filters: [
           {name: 'Po ID'},
@@ -130,10 +135,6 @@
         actions: [
           {
             id: 0,
-            name: 'Zaznacz wszystkie',
-          },
-          {
-            id: 1,
             name: 'Usuń zaznaczone',
           },
         ],
@@ -145,8 +146,7 @@
     watch: {
       selectedAction: function (val)  {
         if(val.id === 0){
-          this.selectedProduct = this.items
-          console.log(this.selectedProduct)
+
         }
       },
     },
@@ -160,6 +160,15 @@
           this.show = true
           this.index = key
         }
+      },
+      selectAll () {
+        if (this.selectedProducts.length !== 0) {
+          this.selectedProducts = []
+        }
+        else {
+          this.selectedProducts = this.items
+        }
+
       },
       deleteProduct (item) {
         this.$swal({
@@ -192,6 +201,39 @@
           dismiss => {
           }).catch(this.$swal.noop)
       },
+    //   deleteSelected () {
+    //     if (this.selectedAction != 0 ) {
+    //       this.$swal({
+    //         title: 'Czy chcesz usunąć produkty',
+    //         text: 'Ta akcja nieodwracalnie usunie zaznaczone produkty',
+    //         type: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#d33',
+    //         cancelButtonColor: '#3085d6',
+    //         cancelButtonText: 'Anuluj',
+    //         confirmButtonText: 'Usuń',
+    //       }).then((result) => {
+    //           if(result.value) {
+    //             let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+    //             this.items.splice(itemIndex, 1)
+    //             axios.delete('products/' + item.id).then(
+    //               result => {
+    //                 console.log(result)
+    //               })
+    //             this.$swal({
+    //               title: 'Usunięto!',
+    //               text: 'Produkt został usunięty',
+    //               type: 'success',
+    //               confirmButtonText: 'OK'
+    //             })
+    //           } else {
+    //             this.$swal('Anulowane', 'Produkty nie zostały usunięte.', 'info')
+    //           }
+    //         },
+    //         dismiss => {
+    //         }).catch(this.$swal.noop)
+    //     }
+    // },
       editProduct (item) {
         this.$emit('singleProduct',item)
       },

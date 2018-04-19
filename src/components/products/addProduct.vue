@@ -62,14 +62,18 @@
       changeType(type) {
         this.type = type
       },
+
     },
 
     created: function () {
-      console.log('im created')
       let product_id = this.$route.params.item
-      this.$store.dispatch('getProduct', product_id)
-
-    }
+      if (product_id) {
+        this.$store.dispatch('getProduct', product_id)
+      }
+    },
+    // beforeDestroy: function () {
+    //   // this.$store.commit('getProduct', this.product)
+    // }
   }
 </script>
 

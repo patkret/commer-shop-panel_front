@@ -7,7 +7,6 @@ import buttons from '../components/buttons'
 import AttributeSets from '../components/attribute-sets/AttributeSets'
 import Categories from '../components/categories/Categories'
 import AddProduct from '../components/products/addProduct'
-
 import Products from '../components/products/Products'
 import ProductsList from '../components/products/ProductsList'
 import VatRates from '../components/vat-rates/VatRates'
@@ -68,7 +67,6 @@ export default new Router({
           name: 'Products',
           component: Products
         },
-
         {
           path: '/products/edit/:item',
           name: 'AddProduct',
