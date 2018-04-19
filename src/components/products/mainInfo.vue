@@ -187,7 +187,7 @@
             </div>
             <br>
             <br>
-            <button type="submit" class="custom-button">DODAJ</button>
+            <button type="submit" class="custom-button">Zapisz</button>
         </form>
     </div>
 </template>
@@ -198,25 +198,11 @@
     props: ['attributeSets',],
     computed: {
       product: function () {
-        return this.$store.getters.getProduct
+          return this.$store.getters.getProduct
       }
 
     },
     data: () => ({
-      // product: {
-      //   name: '',
-      //   price: '',
-      //   vat_rate: '',
-      //   symbol: '',
-      //   visibility: 1,
-      //   barcode: '',
-      //   pkwiuCode: '',
-      //   vendor: '',
-      //   attributeSets: '',
-      //   stock: '',
-      //   stockAvail: '',
-      //   intoStockPrice: '',
-      // },
       vat_rates: [],
       selectedRate: '',
       selectedVendor: '',
@@ -252,6 +238,8 @@
           }
         })
       }
+
+
     },
     created: function () {
 

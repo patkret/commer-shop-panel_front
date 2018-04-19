@@ -24,13 +24,17 @@ export const store = new Vuex.Store({
       weight: '',
       height: '',
       width: '',
-      depth: ''
+      depth: '',
+      metaDescription: '',
+      metaKeywords: '',
+      addressUrl: '',
     },
 
     sets: [],
     variantSets: [],
     selectedSet: '',
-    selectedVariants: []
+    selectedVariants: [],
+    otherVariants: []
   },
 
   getters: {
@@ -40,11 +44,15 @@ export const store = new Vuex.Store({
     },
     sets: state => state.sets,
     variantSets: state => state.variantSets,
-    selectedVariantSet: state => state.selectedSet
+    selectedVariantSet: state => state.selectedSet,
+    selectedVariants: state => state.selectedVariants,
+    otherVariants: state => state.otherVariants
   },
 
   mutations: {
+
     addProduct: (state, payload) => {
+      console.log(payload)
       state.product = payload
     },
 
@@ -68,6 +76,10 @@ export const store = new Vuex.Store({
       state.selectedVariants = payload
     },
 
+    setOtherVariants: (state, payload) => {
+      state.otherVariants = payload
+    },
+
     clearProduct: state => {
       state.product =  {
         name: '',
@@ -88,13 +100,27 @@ export const store = new Vuex.Store({
         height: '',
         width: '',
         depth: '',
+        metaDescription: '',
+        metaKeywords: '',
+        addressUrl: '',
 
       }
+    },
+
+    clearSelectedVariants: state => {
+      state.selectedVariants = []
     }
 
   },
 
   actions: {
+
+    getProduct: (context, payload) => {
+      axios('products/' + payload).then(result => {
+      context.commit('addProduct', result.data)
+      }
+    )
+    },
 
     getSets: context => {
 
@@ -115,8 +141,6 @@ export const store = new Vuex.Store({
         }
         context.commit('getVariantSets', result.data)
       })
-
-
     },
   },
 
