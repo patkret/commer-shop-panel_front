@@ -7,6 +7,7 @@ import buttons from '../components/buttons'
 import AttributeSets from '../components/attribute-sets/AttributeSets'
 import Categories from '../components/categories/Categories'
 import AddProduct from '../components/products/addProduct'
+import EditProduct from '../components/products/addProduct'
 import ProductsList from '../components/products/ProductsList'
 import VatRates from '../components/vat-rates/VatRates'
 import Variants from '../components/variants/Variants'
@@ -62,14 +63,8 @@ export default new Router({
         },
         {
           path: '/products/edit/:item',
-          name: 'AddProduct',
-          component: AddProduct
-
-        },
-        {
-          path: '/products/edit/:item',
-          name: 'AddProduct',
-          component: AddProduct
+          name: 'EditProduct',
+          component: EditProduct
         },
         {
           path: '/vat-rates',

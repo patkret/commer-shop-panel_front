@@ -227,20 +227,31 @@
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.product.attributeSets = JSON.stringify(this.product.attributeSets)
-            axios.post('/products', {
-              product: this.product
-            }).then(() => {
-              this.$router.push('/products')
-              console.log(this.$route)
-              this.$forceUpdate()
-              this.$store.commit('clearProduct')
-            })
+            this.product.variantSets = JSON.stringify(this.product.variantSets)
+            if (this.product.id > 0) {
+              axios.put('/products/'+ this.product.id, {
+                product: this.product,
+              }).then(() => {
+                this.$router.push('/products')
+                this.$store.commit('clearProduct')
+                this.$store.commit('clearSets')
+              })
+            } else {
+              axios.post('/products' , {
+                product: this.product
+              }).then(() => {
+                this.$router.push('/products')
+                this.$store.commit('clearProduct')
+                this.$store.commit('clearSets')
+              })
+            }
+
           }
         })
-      }
-
+      },
 
     },
+
     created: function () {
 
       axios('vat-rates').then(result => {

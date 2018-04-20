@@ -17,10 +17,10 @@
                     placeholder="Wybierz"/>
         </div>
         <div class="variants-container" v-if="selectedVariantSet !== 0">
-            <div v-if="this.$store.state.selectedVariants.length !== 0" style="border: 1px solid hotpink">
+            <div v-if="this.$store.state.product.variantSets.length !== 0" >
                 <div class="single-variant" v-for="variant in selectedVariants">
                     <label class="check-container variant-check-cont" v-if="variant.required === false">
-                        <input type="checkbox" @change="setVariants(variant)" :value="variant" class="variant-checkbox"
+                        <input type="checkbox" @change="removeVariant(variant)" :value="variant" class="variant-checkbox"
                                :checked = true>
                         <span class="checkmark"></span>
                     </label>
@@ -83,7 +83,7 @@
                                         <p class="label">
                                             {{option.name}}
                                         </p>
-                                        <input type="checkbox" v-model="selectedVariantOptions" :value="option">
+                                        <input type="checkbox" v-model="selectedVariantOptions" :value="option" @click="setVariantOption(variant, option)">
                                         <span class="checkmark"></span>
                                     </label>
                                     <div class="price-options-container"
@@ -129,7 +129,9 @@
                     </div>
                 </div>
             </div>
-            <p>--------------------------------------------------------------------------------------------</p>
+            <!--<p>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</p>-->
+            <!--<p>-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;NOT SELECTED-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</p>-->
+            <!--<p>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</p>-->
 
             <!--******************-->
             <!--NOT SELECTED ARRAY-->
@@ -146,118 +148,118 @@
                     </div>
                 </div>
             </div>
-
-            <div v-if="this.$store.state.selectedVariants.length === 0">
-                <div class="single-variant" v-for="variant in selectedVariantSet.variants">
-                    <label class="check-container variant-check-cont" v-if="variant.required === false">
-                        <input type="checkbox" @change="setVariants(variant)" :value="variant" class="variant-checkbox">
-                        <span class="checkmark"></span>
-                    </label>
-                    <div class="variant-header">
-                        <p v-if="variant.required !== 1"> {{variant.name}} </p>
-                        <p v-if="variant.required === 1"> {{variant.name}} * </p>
-                    </div>
-                    <div class="variant-content">
-                        <div v-if="variant.type.type !== 2 "
-                             class="price-options">
-                            <p style="margin-right: 25px " v-if="variant.type.type === 0" class="label">Gdy wpisano:</p>
-                            <p style="margin-right: 25px " v-if="variant.type.type === 1" class="label">Gdy
-                                zaznaczono:</p>
-                            <p style="margin-right: 25px " v-if="variant.type.type === 3" class="label">Gdy dodano
-                                plik:</p>
-
-
-                            <multiselect
-                                    class="shop-select price-select"
-                                    v-model="variant.priceOption"
-                                    :options="priceOptions"
-                                    :allow-empty="false"
-                                    :searchable="false"
-                                    :selectedLabel="''"
-                                    track-by="name"
-                                    label="name"
-                                    :deselectLabel="''"
-                                    :selectLabel="''"
-                                    :hideSelected="true"
-                                    placeholder="Wybierz"
-                                    style="width: 100%"
-
-                            />
-                            <div class="price-inpt">
-                                <input type="text" v-model="variant.priceValue"
-                                       v-if="variant.priceOption.type !== 0" placeholder="..."/>
-                            </div>
-                            <multiselect v-if="variant.priceOption.type !== 0"
-                                         class="shop-select curr-select"
-                                         v-model="variant.curr"
-                                         :options="currOptions"
-                                         :allow-empty="false"
-                                         :searchable="false"
-                                         :selectedLabel="''"
-                                         track-by="name"
-                                         label="name"
-                                         :deselectLabel="''"
-                                         :selectLabel="''"
-                                         :hideSelected="true"
-                                         placeholder="Wybierz"
-                                         style="width: 20%; margin-left: 25px"
-                            />
+            <!--<p>ALL</p>-->
+            <!--<div v-if="this.$store.state.product.variantSets.length === 0" style="border: 2px solid cornflowerblue">-->
+                <!--<div class="single-variant" v-for="variant in selectedVariantSet.variants">-->
+                    <!--<label class="check-container variant-check-cont" v-if="variant.required === false">-->
+                        <!--<input type="checkbox" @change="setVariants(variant)" :value="variant" class="variant-checkbox" :checked="false">-->
+                        <!--<span class="checkmark"></span>-->
+                    <!--</label>-->
+                    <!--<div class="variant-header">-->
+                        <!--<p v-if="variant.required !== 1"> {{variant.name}} </p>-->
+                        <!--<p v-if="variant.required === 1"> {{variant.name}} * </p>-->
+                    <!--</div>-->
+                    <!--<div class="variant-content" v-if="variant.required === 1">-->
+                        <!--<div v-if="variant.type.type !== 2 "-->
+                             <!--class="price-options">-->
+                            <!--<p style="margin-right: 25px " v-if="variant.type.type === 0" class="label">Gdy wpisano:</p>-->
+                            <!--<p style="margin-right: 25px " v-if="variant.type.type === 1" class="label">Gdy-->
+                                <!--zaznaczono:</p>-->
+                            <!--<p style="margin-right: 25px " v-if="variant.type.type === 3" class="label">Gdy dodano-->
+                                <!--plik:</p>-->
 
 
-                        </div>
-                        <div v-if="variant.type.type === 2">
-                            <ul>
-                                <li v-for="option in variant.selectOptions" class="select-options">
-                                    <label class="check-container">
-                                        <p class="label">
-                                            {{option.name}}
-                                        </p>
-                                        <input type="checkbox" v-model="selectedVariantOptions" :value="option">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                    <div class="price-options-container"
-                                         v-if="selectedVariantOptions.find(el => el === option)">
-                                        <multiselect
-                                                class="shop-select price-select"
-                                                v-model="option.priceOption"
-                                                :options="priceOptions"
-                                                :allow-empty="false"
-                                                :searchable="false"
-                                                :selectedLabel="''"
-                                                track-by="name"
-                                                label="name"
-                                                :deselectLabel="''"
-                                                :selectLabel="''"
-                                                :hideSelected="true"
-                                                placeholder="Wybierz"
-                                                style="width: 25%"/>
+                            <!--<multiselect-->
+                                    <!--class="shop-select price-select"-->
+                                    <!--v-model="variant.priceOption"-->
+                                    <!--:options="priceOptions"-->
+                                    <!--:allow-empty="false"-->
+                                    <!--:searchable="false"-->
+                                    <!--:selectedLabel="''"-->
+                                    <!--track-by="name"-->
+                                    <!--label="name"-->
+                                    <!--:deselectLabel="''"-->
+                                    <!--:selectLabel="''"-->
+                                    <!--:hideSelected="true"-->
+                                    <!--placeholder="Wybierz"-->
+                                    <!--style="width: 100%"-->
 
-                                        <input type="text" v-model="option.priceValue"
-                                               v-if="option.priceOption.type !== 0" placeholder="..."/>
+                            <!--/>-->
+                            <!--<div class="price-inpt">-->
+                                <!--<input type="text" v-model="variant.priceValue"-->
+                                       <!--v-if="variant.priceOption.type !== 0" placeholder="..."/>-->
+                            <!--</div>-->
+                            <!--<multiselect v-if="variant.priceOption.type !== 0"-->
+                                         <!--class="shop-select curr-select"-->
+                                         <!--v-model="variant.curr"-->
+                                         <!--:options="currOptions"-->
+                                         <!--:allow-empty="false"-->
+                                         <!--:searchable="false"-->
+                                         <!--:selectedLabel="''"-->
+                                         <!--track-by="name"-->
+                                         <!--label="name"-->
+                                         <!--:deselectLabel="''"-->
+                                         <!--:selectLabel="''"-->
+                                         <!--:hideSelected="true"-->
+                                         <!--placeholder="Wybierz"-->
+                                         <!--style="width: 20%; margin-left: 25px"-->
+                            <!--/>-->
 
-                                        <multiselect v-if="option.priceOption.type !== 0"
-                                                     class="shop-select curr-select"
-                                                     v-model="option.curr"
-                                                     :options="currOptions"
-                                                     :allow-empty="false"
-                                                     :searchable="false"
-                                                     :selectedLabel="''"
-                                                     track-by="name"
-                                                     label="name"
-                                                     :deselectLabel="''"
-                                                     :selectLabel="''"
-                                                     :hideSelected="true"
-                                                     placeholder="Wybierz"
-                                                     style="width: 9%"
 
-                                        />
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        <!--</div>-->
+                        <!--<div v-if="variant.type.type === 2">-->
+                            <!--<ul>-->
+                                <!--<li v-for="option in variant.selectOptions" class="select-options">-->
+                                    <!--<label class="check-container">-->
+                                        <!--<p class="label">-->
+                                            <!--{{option.name}}-->
+                                        <!--</p>-->
+                                        <!--<input type="checkbox" v-model="selectedVariantOptions" :value="option" @click="setVariantOption(variant, option)">-->
+                                        <!--<span class="checkmark"></span>-->
+                                    <!--</label>-->
+                                    <!--<div class="price-options-container"-->
+                                         <!--v-if="selectedVariantOptions.find(el => el === option)">-->
+                                        <!--<multiselect-->
+                                                <!--class="shop-select price-select"-->
+                                                <!--v-model="option.priceOption"-->
+                                                <!--:options="priceOptions"-->
+                                                <!--:allow-empty="false"-->
+                                                <!--:searchable="false"-->
+                                                <!--:selectedLabel="''"-->
+                                                <!--track-by="name"-->
+                                                <!--label="name"-->
+                                                <!--:deselectLabel="''"-->
+                                                <!--:selectLabel="''"-->
+                                                <!--:hideSelected="true"-->
+                                                <!--placeholder="Wybierz"-->
+                                                <!--style="width: 25%"/>-->
+
+                                        <!--<input type="text" v-model="option.priceValue"-->
+                                               <!--v-if="option.priceOption.type !== 0" placeholder="..."/>-->
+
+                                        <!--<multiselect v-if="option.priceOption.type !== 0"-->
+                                                     <!--class="shop-select curr-select"-->
+                                                     <!--v-model="option.curr"-->
+                                                     <!--:options="currOptions"-->
+                                                     <!--:allow-empty="false"-->
+                                                     <!--:searchable="false"-->
+                                                     <!--:selectedLabel="''"-->
+                                                     <!--track-by="name"-->
+                                                     <!--label="name"-->
+                                                     <!--:deselectLabel="''"-->
+                                                     <!--:selectLabel="''"-->
+                                                     <!--:hideSelected="true"-->
+                                                     <!--placeholder="Wybierz"-->
+                                                     <!--style="width: 9%"-->
+
+                                        <!--/>-->
+                                    <!--</div>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
         <br>
         <br>
@@ -287,7 +289,7 @@
       },
       selectedVariants: {
         get: function () {
-          if (this.$store.state.selectedVariants.length === 0) {
+          if (this.$store.state.product.variantSets.length === 0) {
             return this.selectedVariantSet.variants.filter(el => el.required === 1)
           }
           else {
@@ -301,11 +303,11 @@
 
       otherVariants: {
         get: function () {
-          return this.$store.getters.otherVariants
+          return this.$store.state.otherVariants
         },
 
         set: function (val) {
-          this.$store.commit('setOtherVariants', val)
+          // this.$store.commit('setOtherVariants', val)
         },
 
       },
@@ -335,29 +337,30 @@
 
     methods: {
 
+      removeVariant(variant){
+        let index = this.selectedVariants.indexOf(variant)
+        this.selectedVariants.splice(index, 1)
+        this.otherVariants.unshift(variant)
+      },
+
+
       setVariants (variant) {
-        if (this.selectedVariants.find(el => el === variant)) {
-          let index = this.selectedVariants.indexOf(this.selectedVariants.find(el => el === variant))
-          this.selectedVariants.splice(index, 1)
-          this.otherVariants.push(variant)
-        }
-        else {
-          this.selectedVariants.push(variant)
-          let index = this.otherVariants.indexOf(this.otherVariants.find(el => el === variant))
-          this.otherVariants.splice(index, 1)
-        }
+        this.selectedVariants.push(variant)
+        let index = this.otherVariants.indexOf(variant)
+        this.otherVariants.splice(index, 1)
       },
     },
 
     created: function () {
       this.$store.dispatch('getVariantSets')
-    },
-
-    beforeDestroy: function () {
-
-      this.otherVariants = this.selectedVariantSet.variants.filter((el) => !this.selectedVariants.includes(el))
 
     },
+    //
+    // beforeDestroy: function () {
+    //
+    //   this.otherVariants = this.selectedVariantSet.variants.filter((el) => !this.selectedVariants.includes(el))
+    //
+    // },
 
     destroyed: function () {
       this.$store.commit('selectedVariantSet', this.selectedVariantSet)
