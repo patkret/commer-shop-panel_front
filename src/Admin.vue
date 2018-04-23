@@ -97,7 +97,7 @@
           {icon: icons.orders, text: 'Sprzedaż', path: '#2'},
           {icon: icons.products, text: 'Produkty', path: '', children:
             [
-              {text: 'Lista produktów', path: '/productsList'},
+              {text: 'Lista produktów', path: '/products'},
               {text: 'Dodaj produkt', path: '/product-add'},
               {text: 'Kategorie', path: '/categories'},
               {text: 'Zestawy atrybutów', path: '/attribute-sets'},

@@ -1,25 +1,29 @@
 <template>
 
     <div class="top-menu-container">
-        <h1 class="form-name">Dodaj produkt</h1>
+        <div v-if="product.id" class="edit-header form-name">
+            <h2>{{productName}}</h2>
+            <router-link :to="'/products'" tag="button" class="link-button">wróć do listy produktów</router-link>
+        </div>
+
+        <h1 class="form-name" v-if="product.id == null">Dodaj produkt</h1>
         <div class="top-menu">
             <ul class="top-menu-items">
-                <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">
+                <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 1}">
                     Dane podstawowe
                 </li>
-                <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">Dane
-                    dodatkowe
+                <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 2}">Dane dodatkowe
                 </li>
-                <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
+                <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 3}">
                     SEO
                 </li>
-                <li @click="changeType(4)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 4}">
+                <li @click="changeType(4)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 4}">
                     Galeria
                 </li>
-                <li @click="changeType(5)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 5}">
+                <li @click="changeType(5)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 5}">
                     Zestawy atrybutów
                 </li>
-                <li @click="changeType(6)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 6}">
+                <li @click="changeType(6)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 6}">
                     Zestawy wariantów
                 </li>
 
@@ -31,7 +35,6 @@
             <products-seo v-if="type==3"></products-seo>
             <attribute-sets v-if="type == 5"></attribute-sets>
             <variant-sets v-if="type == 6"></variant-sets>
-
         </div>
     </div>
 </template>
@@ -52,12 +55,30 @@
       MainInfo,
       ProductsSeo,
     },
+    computed: {
+      product: function () {
+        return this.$store.getters.getProduct
+      }
+    },
     name: 'add-product',
     data: () => ({
       type: 1,
       attributeSets: [],
-      productMainInfo: {}
+      productMainInfo: {},
+      productName: '',
     }),
+    watch: {
+      product: function () {
+        this.productName = this.product.name
+      },
+      '$route.path': function (newPath) {
+        if(newPath === '/product-add'){
+          this.$store.commit('clearProduct')
+          this.$store.commit('clearOtherSets')
+        }
+      }
+
+    },
     methods: {
       changeType(type) {
         this.type = type
@@ -67,13 +88,16 @@
 
     created: function () {
       let product_id = this.$route.params.item
-      if (product_id) {
-        this.$store.dispatch('getProduct', product_id)
-      }
+        if(product_id){
+          this.$store.dispatch('getProduct', product_id)
+        }
+
     },
-    // beforeDestroy: function () {
-    //   // this.$store.commit('getProduct', this.product)
-    // }
+
+    beforeDestroy: function () {
+      this.$store.commit('clearProduct')
+
+    }
   }
 </script>
 
@@ -133,6 +157,23 @@
         font-size: 20px;
         font-weight: normal;
 
+    }
+
+    .edit-header{
+        display: inline-flex;
+        font-size: 12px;
+    }
+
+    .edit-header h2{
+        margin-right: 50px;
+    }
+
+    .link-button{
+        background: none;
+        border: none;
+        color: #2595ec;
+        text-decoration: underline #2595ec;
+        font-size: 110%;
     }
 
 </style>

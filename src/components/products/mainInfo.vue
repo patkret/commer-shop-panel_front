@@ -198,9 +198,7 @@
     props: ['attributeSets',],
     computed: {
       product: function () {
-        getter: {
           return this.$store.getters.getProduct
-        }
       }
 
     },
@@ -229,23 +227,22 @@
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.product.attributeSets = JSON.stringify(this.product.attributeSets)
+            this.product.variantSets = JSON.stringify(this.product.variantSets)
             if (this.product.id > 0) {
               axios.put('/products/'+ this.product.id, {
-                product: this.product
+                product: this.product,
               }).then(() => {
                 this.$router.push('/products')
-                this.$forceUpdate()
                 this.$store.commit('clearProduct')
-                this.$router.replace({ path: '/productsList' })
+                this.$store.commit('clearSets')
               })
             } else {
               axios.post('/products' , {
                 product: this.product
               }).then(() => {
                 this.$router.push('/products')
-                this.$forceUpdate()
                 this.$store.commit('clearProduct')
-                this.$router.replace({ path: '/productsList' })
+                this.$store.commit('clearSets')
               })
             }
 

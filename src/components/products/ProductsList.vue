@@ -59,7 +59,7 @@
                                     </label>
                                 </td>
                                 <td class="table-td col-2"><img class="ziemniak" src="../../assets/img/ziemniak.jpeg" alt=""></td>
-                                <td class="table-td col-3">{{item.pkwiuCode}}</td>
+                                <td class="table-td col-3">{{item.symbol}}</td>
                                 <td class="table-td col-4 text-left">{{item.name}}</td>
                                 <td class="table-td col-5">{{item.price}}</td>
                                 <td class="table-td col-6">
@@ -103,18 +103,15 @@
                 </div>
                 <highlited-products v-if="type == 2"></highlited-products>
                 <imported-products v-if="type == 3"></imported-products>
-                <off-products v-if="type == 4"></off-products>
+                <!--<off-products v-if="type == 4"></off-products>-->
                 <sketch-products v-if="type == 5"></sketch-products>
             </div>
         </div>
-
     </div>
 </template>
-
 <script>
   export default {
     name: 'products-list',
-    // props: ['editingProduct'],
     data () {
       return {
         items: [],
@@ -193,7 +190,7 @@
                 confirmButtonText: 'OK'
               })
             } else {
-              this.$swal('Anulowane', 'Produkt nie została usunięty.', 'info')
+              this.$swal('Anulowane', 'Produkt nie został usunięty.', 'info')
             }
           },
           dismiss => {
@@ -270,7 +267,6 @@
         border-bottom: 2px solid #2596eb;
         color: #000000;
     }
-
     /*KONIEC PRODUKTÓW*/
     .products-container {
         background-color: #ffffff;
@@ -285,23 +281,19 @@
         align-self: center;
         height: 20px;
     }
-
     .action-select-container {
         display: flex;
         flex-direction: column;
         margin: 40px 0;
     }
-
     .action-select {
         display: flex;
         height: 40px;
     }
-
     .action-select-p {
         font-size: 12px;
         padding-left: 5px;
     }
-
     .use-button {
         margin: 10px 0 0 10px;
         align-self: center;
@@ -418,7 +410,6 @@
         padding-bottom: 30px;
     }
     /*ACTION BUTTONS*/
-
     .buttons-container {
         position: relative;
     }
@@ -513,21 +504,17 @@
         border: 1px solid #DAD8DA;
         border-radius: 5px;
     }
-
     .check-container:hover input ~ .checkmark {
         background-color: #ccc;
     }
-
     .checkmark:after {
         content: "";
         position: absolute;
         display: none;
     }
-
     .check-container input:checked ~ .checkmark:after {
         display: block;
     }
-
     .check-container .checkmark:after {
         left: 8px;
         top: 3px;

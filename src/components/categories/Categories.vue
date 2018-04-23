@@ -52,7 +52,6 @@
       getChild(item){
         this.type = 3
         this.childCategory = item
-        // console.log(this.childCategory)
       },
       changeComponent (type) {
         this.type = type

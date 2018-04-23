@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from 'vue'
+import Vuex from 'vuex'
 import axios from 'axios/index'
 
 Vue.use(Vuex)
@@ -15,7 +15,7 @@ export const store = new Vuex.Store({
       barcode: '',
       pkwiuCode: '',
       vendor: '',
-      attributeSets: '',
+      attributeSets: [],
       stock: '',
       stockAvail: '',
       intoStockPrice: '',
@@ -28,11 +28,16 @@ export const store = new Vuex.Store({
       metaDescription: '',
       metaKeywords: '',
       addressUrl: '',
+      selectedVariantSet: '',
+      variantSets: []
     },
 
     sets: [],
     variantSets: [],
-    selectedSet: ''
+    selectedSet: '',
+    selectedVariants: [],
+    otherVariants: [],
+    selectedVariantSet: ''
   },
 
   getters: {
@@ -42,13 +47,27 @@ export const store = new Vuex.Store({
     },
     sets: state => state.sets,
     variantSets: state => state.variantSets,
-    selectedVariantSet: state => state.selectedSet,
+    selectedVariantSet: state => {
+     return state.variantSets.find(el => el.id === state.product.selectedVariantSet)
+    },
+    selectedVariants: state => state.product.variantSets,
+    otherVariants: state => state.otherVariants,
+    getNotSelectedSets: state => {
+      state.sets.forEach(item => {
+        state.product.attributeSets.forEach(el => {
+          if (item.id === el.id) {
+            let index = state.sets.indexOf(item)
+            state.sets.splice(index, 1)
+          }
+        })
+      })
+      return state.sets
+    },
   },
 
   mutations: {
 
     addProduct: (state, payload) => {
-      console.log(payload)
       state.product = payload
     },
 
@@ -66,10 +85,29 @@ export const store = new Vuex.Store({
 
     selectedVariantSet: (state, payload) => {
       state.selectedSet = payload
+      if(state.product.variantSets.length === 0){
+        let req = payload.variants.filter(variant => {return variant.required === 1 })
+        let other = payload.variants.filter(variant => {return variant.required === false })
+        state.product.variantSets = req
+        state.otherVariants = other
+        state.product.selectedVariantSet = payload.id
+
+      }
+      else {
+        state.otherVariants = payload.variants.filter(el => !state.product.variantSets.includes(el))
+      }
+    },
+
+    setSelectedVariants: (state, payload) => {
+      state.product.variantSets = payload
+    },
+
+    setOtherVariants: (state, payload) => {
+      state.otherVariants = payload
     },
 
     clearProduct: state => {
-      state.product =  {
+      state.product = {
         name: '',
         price: '',
         vat_rate: '',
@@ -91,8 +129,20 @@ export const store = new Vuex.Store({
         metaDescription: '',
         metaKeywords: '',
         addressUrl: '',
+        variantSets: []
 
       }
+    },
+
+    clearSelectedVariants: state => {
+      state.selectedVariants = []
+    },
+
+    clearSets: state => {
+      state.sets = []
+    },
+    clearOtherSets: state => {
+      state.otherVariants = []
     }
 
   },
@@ -101,9 +151,11 @@ export const store = new Vuex.Store({
 
     getProduct: (context, payload) => {
       axios('products/' + payload).then(result => {
-      context.commit('addProduct', result.data)
-      }
-    )
+          result.data.attributeSets = JSON.parse(result.data.attributeSets)
+          result.data.variantSets = JSON.parse(result.data.variantSets)
+          context.commit('addProduct', result.data)
+        },
+      )
     },
 
     getSets: context => {
@@ -126,7 +178,6 @@ export const store = new Vuex.Store({
         context.commit('getVariantSets', result.data)
       })
     },
-
   },
 
 })

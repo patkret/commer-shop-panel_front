@@ -7,12 +7,11 @@ import buttons from '../components/buttons'
 import AttributeSets from '../components/attribute-sets/AttributeSets'
 import Categories from '../components/categories/Categories'
 import AddProduct from '../components/products/addProduct'
-import Products from '../components/products/Products'
+import EditProduct from '../components/products/addProduct'
 import ProductsList from '../components/products/ProductsList'
 import VatRates from '../components/vat-rates/VatRates'
 import Variants from '../components/variants/Variants'
 import Vendors from '../components/vendors/Vendors'
-import AddVendor from '../components/vendors/VendorForm'
 import Users from '../components/users/Users'
 import Warehouse from '../components/warehouse/Warehouses'
 import permissionList from '../components/users/permissionList'
@@ -58,20 +57,14 @@ export default new Router({
           component: AddProduct
         },
         {
-          path: '/productsList',
+          path: '/products',
           name: 'ProductsList',
           component: ProductsList
         },
         {
-          path: '/products',
-          name: 'Products',
-          component: Products
-        },
-        {
           path: '/products/edit/:item',
-          name: 'AddProduct',
-          component: AddProduct
-
+          name: 'EditProduct',
+          component: EditProduct
         },
         {
           path: '/vat-rates',
@@ -87,11 +80,6 @@ export default new Router({
           path: '/vendors',
           name: 'Vendors',
           component: Vendors,
-        },
-        {
-          path: '/add-vendor',
-          name: 'AddVendor',
-          component: AddVendor,
         },
         {
           path: '/users',
