@@ -85,17 +85,25 @@ export const store = new Vuex.Store({
 
     selectedVariantSet: (state, payload) => {
       state.selectedSet = payload
-      if(state.product.variantSets.length === 0){
-        let req = payload.variants.filter(variant => {return variant.required === 1 })
-        let other = payload.variants.filter(variant => {return variant.required === false })
-        state.product.variantSets = req
-        state.otherVariants = other
-        state.product.selectedVariantSet = payload.id
+      if(payload.length !== 0){
+        if(state.product.variantSets.length === 0){
+          console.log('if')
+          let req = payload.variants.filter(variant => {return variant.required === 1 })
+          let other = payload.variants.filter(variant => {return variant.required === false })
+          state.product.variantSets = req
+          state.otherVariants = other
+          state.product.selectedVariantSet = payload.id
 
+        }
+        else {
+          console.log('else')
+          state.product.selectedVariantSet = payload.id
+          // let other = payload.variants.filter(variant => {return variant.required === false })
+          // state.otherVariants = other
+          // state.otherVariants = payload.variants.filter(el => !state.product.variantSets.includes(el))
+        }
       }
-      else {
-        state.otherVariants = payload.variants.filter(el => !state.product.variantSets.includes(el))
-      }
+
     },
 
     setSelectedVariants: (state, payload) => {

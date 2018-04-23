@@ -16,7 +16,7 @@
                     :hideSelected="true"
                     placeholder="Wybierz"/>
         </div>
-        <div class="variants-container" v-if="selectedVariantSet !== 0">
+        <div class="variants-container" v-if="selectedVariantSet !== 0" style="border: 2px dashed red">
             <div v-if="this.$store.state.product.variantSets.length !== 0" >
                 <div class="single-variant" v-for="variant in selectedVariants">
                     <label class="check-container variant-check-cont" v-if="variant.required === false">
@@ -137,7 +137,7 @@
             <!--NOT SELECTED ARRAY-->
             <!--******************-->
 
-            <div v-if="otherVariants.length !== 0">
+            <div v-if="otherVariants.length !== 0" style="border: 2px solid hotpink">
                 <div class="single-variant" v-for="variant in otherVariants">
                     <label class="check-container variant-check-cont" v-if="variant.required === false">
                         <input type="checkbox" @change="setVariants(variant)" :value="variant" class="variant-checkbox" :checked = false >
@@ -316,6 +316,7 @@
 
     watch: {
       selectedVariantSet: function (newSet) {
+        console.log('sth')
         this.$store.commit('selectedVariantSet', newSet)
         this.$store.commit('clearSelectedVariants')
         this.otherVariants = []
@@ -365,7 +366,7 @@
     destroyed: function () {
       this.$store.commit('selectedVariantSet', this.selectedVariantSet)
       this.$store.commit('setOtherVariants', this.otherVariants)
-      this.$store.commit('setSelectedVariants', this.selectedVariants)
+      // this.$store.commit('setSelectedVariants', this.selectedVariants)
     },
   }
 </script>
