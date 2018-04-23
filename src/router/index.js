@@ -14,7 +14,7 @@ import Variants from '../components/variants/Variants'
 import Vendors from '../components/vendors/Vendors'
 import AddVendor from '../components/vendors/VendorForm'
 import Users from '../components/users/Users'
-import Warehouse from '../components/warehouse/Warehouse'
+import Warehouse from '../components/warehouse/Warehouses'
 import permissionList from '../components/users/permissionList'
 
 Vue.use(Router)
@@ -104,8 +104,8 @@ export default new Router({
           component: permissionList,
         },
         {
-          path: '/warehouse',
-          name: 'warehouse',
+          path: '/warehouses',
+          name: 'warehouses',
           component: Warehouse,
         },
       ],

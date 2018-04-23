@@ -38,7 +38,7 @@
                             <thead class="table-heading">
                             <tr class="table-row">
                                 <th class="col-1">
-                                    <label class="check-container">
+                                    <label class="check-container check-all">
                                         <input type="checkbox" @click="selectAll" >
                                         <span class="checkmark"></span>
                                     </label>
@@ -52,17 +52,17 @@
                             </thead>
                             <tbody>
                             <tr class="table-row" v-for="(item,key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
-                                <td class="col-1">
+                                <td class="table-td col-1">
                                     <label class="check-container">
-                                        <input type="checkbox" v-model="selectedProduct" :value="item">
+                                        <input type="checkbox" v-model="selectedProducts" :value="item.id">
                                         <span class="checkmark"></span>
                                     </label>
                                 </td>
-                                <td class="col-2">{{item.name}}</td>
-                                <td class="col-3">{{item.name}}</td>
-                                <td class="col-4 text-left">{{item.name}}</td>
-                                <td class="col-5">{{item.name}}</td>
-                                <td class="col-6">
+                                <td class="table-td col-2"><img class="ziemniak" src="../../assets/img/ziemniak.jpeg" alt=""></td>
+                                <td class="table-td col-3">{{item.pkwiuCode}}</td>
+                                <td class="table-td col-4 text-left">{{item.name}}</td>
+                                <td class="table-td col-5">{{item.price}}</td>
+                                <td class="table-td col-6">
                                     <div class="buttons-container">
                                         <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">
                                             <span class="dot"></span>
@@ -124,8 +124,6 @@
         show : false,
         type: 1,
         editingProduct: '',
-        checkAll: false,
-
         filters: [
           {name: 'Po ID'},
           {name: 'Po nazwie'},
@@ -201,39 +199,39 @@
           dismiss => {
           }).catch(this.$swal.noop)
       },
-    //   deleteSelected () {
-    //     if (this.selectedAction != 0 ) {
-    //       this.$swal({
-    //         title: 'Czy chcesz usunąć produkty',
-    //         text: 'Ta akcja nieodwracalnie usunie zaznaczone produkty',
-    //         type: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#d33',
-    //         cancelButtonColor: '#3085d6',
-    //         cancelButtonText: 'Anuluj',
-    //         confirmButtonText: 'Usuń',
-    //       }).then((result) => {
-    //           if(result.value) {
-    //             let itemIndex = this.items.map(x => x.id).indexOf(item.id)
-    //             this.items.splice(itemIndex, 1)
-    //             axios.delete('products/' + item.id).then(
-    //               result => {
-    //                 console.log(result)
-    //               })
-    //             this.$swal({
-    //               title: 'Usunięto!',
-    //               text: 'Produkt został usunięty',
-    //               type: 'success',
-    //               confirmButtonText: 'OK'
-    //             })
-    //           } else {
-    //             this.$swal('Anulowane', 'Produkty nie zostały usunięte.', 'info')
-    //           }
-    //         },
-    //         dismiss => {
-    //         }).catch(this.$swal.noop)
-    //     }
-    // },
+      deleteSelected (selectedProducts) {
+        if (this.selectedAction != 0 ) {
+          this.$swal({
+            title: 'Czy chcesz usunąć produkty',
+            text: 'Ta akcja nieodwracalnie usunie zaznaczone produkty',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            cancelButtonText: 'Anuluj',
+            confirmButtonText: 'Usuń',
+          }).then((result) => {
+              if(result.value) {
+                axios.delete('/products/delete-all/' + this.selectedProducts
+                ).then((result) => {
+                 console.log(result)
+                  console.log(this.selectedProducts)
+                })
+
+                this.$swal({
+                  title: 'Usunięto!',
+                  text: 'Produkt został usunięty',
+                  type: 'success',
+                  confirmButtonText: 'OK'
+                })
+              } else {
+                this.$swal('Anulowane', 'Produkty nie zostały usunięte.', 'info')
+              }
+            },
+            dismiss => {
+            }).catch(this.$swal.noop)
+        }
+    },
       editProduct (item) {
         this.$emit('singleProduct',item)
       },
@@ -258,7 +256,7 @@
         padding-left: 0;
     }
     .products-list-item {
-        padding: 0 0 20px 0;
+        padding: 20px;
         margin: 0 20px;
         cursor: pointer;
         color: #626364;
@@ -280,9 +278,7 @@
         font-weight: 500;
     }
     .attr-list-item {
-        height: 50px;
-        line-height: 50px;
-        padding-left: 10px;
+     padding: 10px 0 10px 10px;
     }
     .products-select {
         width: 200px;
@@ -318,10 +314,29 @@
         color: #ffffff;
         font-size: 14px;
     }
+    thead .table-row {
+        display: grid;
+        grid-template-columns: 35px 100px 150px 350px 65px 300px;
+        grid-template-areas: 'col-1 col-2 col-3 col-4 col-5 col-6';
+        text-align: center;
+        padding: 20px 0 0 0;
+        height: 20px;
+        line-height: 20px;
+    }
+    thead .check-container {
+        bottom: 40%;
+        left: 35%;
+    }
     .table-row {
         display: grid;
         grid-template-columns: 35px 100px 150px 350px 65px 300px;
         grid-template-areas: 'col-1 col-2 col-3 col-4 col-5 col-6';
+        text-align: center;
+        margin: 40px 0;
+    }
+    .table-td {
+        height: 50px;
+        line-height: 50px;
     }
     .col-1 {
         grid-area: col-1;
@@ -344,9 +359,8 @@
     .table-heading {
         padding-top: 40px;
     }
-    .table-row {
-        text-align: center;
-        margin: 20px 0;
+    .table-row:first-of-type {
+        margin-top: 10px;
     }
     .products-row {
         display: flex;
@@ -538,5 +552,9 @@
         font-size: 14px;
         font-weight: 700;
         margin-bottom: 10px;
+    }
+    .ziemniak {
+        height: 62px;
+        width: 62px;
     }
 </style>

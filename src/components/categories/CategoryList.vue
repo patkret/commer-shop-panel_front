@@ -6,8 +6,8 @@
                            :list="items"
                            class="dragArea list-group lista-dziecko"
                            :options="{group:{name: 'g1'}}">
-                    <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
-                        <div class="top-category">
+                    <li v-for="(item, key) in items">
+                        <div class="top-category" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
                             <div>
                             {{item.name}}
                             </div>
@@ -91,20 +91,7 @@
       editCategory (item) {
         this.$emit('singleCategory', item)
       },
-      saveCategory () {
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            axios.post('/categories', {
-              name: this.name,
-              visibility: this.visibility,
-              parent_id: this.selectedCategory.id,
-            }).then(() => {
-              this.$router.replace('/categories')
-            })
-          }
-        });
-      },
-      deleteCategory (index) {
+      deleteCategory (item) {
         this.$swal({
           title: 'Czy chcesz usunąć kategorie?',
           text: 'Ta akcja nieodwracalnie usunie kategorię',
@@ -116,7 +103,9 @@
           confirmButtonText: 'Usuń',
         }).then((result) => {
             if (result.value) {
-              this.items.splice(index, 1)
+              let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+              this.items.splice(itemIndex, 1)
+              axios.delete('categories/' + item.id)
               this.$swal({
                 title: 'Usunięto!',
                 text: 'Kategoria została usunięta',
@@ -172,7 +161,7 @@
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
-        padding: 0px 0px 0px 10px;
+        padding: 0 0 0 10px;
         min-height: 40px;
         line-height: 40px;
         margin: 5px 0;
