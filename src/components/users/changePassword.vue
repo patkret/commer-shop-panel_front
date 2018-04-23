@@ -35,7 +35,7 @@
         </div>
          <div class="form-row">
              <label class="form-label"></label>
-            <button type="submit" class="custom-button">ZMIEŃ HASŁO</button>
+            <button type="submit" class="custom-button">Zapisz hasło</button>
         </div>
         </form>
     </div>
@@ -47,6 +47,9 @@
     props: ['userId'],
     data: () => ({
       user: {
+        oldPassword: '',
+        newPassword: '',
+        newPasswordConfirmation: '',
       },
       showInfo: false,
 
@@ -57,7 +60,8 @@
         this.$validator.validateAll().then((result) => {
         if (result) {
           axios.put('/users/'+ this.userId + '/change-password', {
-            user: this.user,
+            password: this.newPassword,
+            passwordConfirmation: this.newPasswordConfirmation,
           }).then(response => {
             if(response.status === 200){
               this.showInfo = true
@@ -72,6 +76,12 @@
       });
       }
     },
+    created: function () {
+      axios('users').then(result => {
+        this.items = result.data
+      })
+    },
+
 
   }
 </script>

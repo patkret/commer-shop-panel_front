@@ -28,7 +28,7 @@
         <div class="form-row">
             <label class="form-label col-1" for="">Aktywność</label>
             <div class="checkbox-square form-group">
-                <input class="visibility-hidden" type="checkbox" id="checkbox">
+                <input v-model="visibility" class="visibility-hidden" type="checkbox" id="checkbox">
                 <label for="checkbox" class="square"></label>
             </div>
         </div>
@@ -102,25 +102,38 @@
         addressUrl: '',
         items: [],
         selectedCategory: '',
+        visibility: '',
+
       }
     },
 
     methods: {
       saveCategory () {
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            axios.post('/categories', {
-              name: this.name,
-              visibility: this.visibility,
-              title: this.title,
-              parent_id: this.selectedCategory.id,
-            }).then(() => {
-              this.$parent.$data.type = 2
-            })
-          }
-        })
+          this.$validator.validateAll().then((result) => {
+            let parent_id = this.selectedCategory.id
+            if (parent_id > 0) {
+              axios.post('/categories', {
+                name: this.name,
+                visibility: this.visibility,
+                title: this.title,
+                parent_id: this.selectedCategory.id,
+              }).then(() => {
+                this.$parent.$data.type = 2
+              })
+            } else {
+              axios.post('/categories', {
+                name: this.name,
+                visibility: this.visibility,
+                title: this.title,
+                parent_id: 0,
+              }).then(() => {
+                this.$parent.$data.type = 2
+              })
+
+            }
+          })
+        },
       },
-    },
     created: function () {
       axios('all-categories').then(result => {
         this.items = result.data
