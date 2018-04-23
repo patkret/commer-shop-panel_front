@@ -29,7 +29,7 @@
                                             :deselectLabel="''"
                                             :selectLabel="''"
                                             :hideSelected="true"
-                                            placeholder="Wybierz"></multiselect>
+                                            placeholder="Wybierz"/>
                                 </div>
                             </div>
                             <div class="search-container"></div>
@@ -95,7 +95,7 @@
                                         :deselectLabel="''"
                                         :selectLabel="''"
                                         :hideSelected="true"
-                                        placeholder="Wybierz"></multiselect>
+                                        placeholder="Wybierz"/>
                                 <button @click="deleteSelected()" class="use-button">Wykonaj</button>
                             </div>
                         </div>
