@@ -162,6 +162,7 @@ export const store = new Vuex.Store({
           result.data.attributeSets = JSON.parse(result.data.attributeSets)
           result.data.variantSets = JSON.parse(result.data.variantSets)
           context.commit('addProduct', result.data)
+
         },
       )
     },

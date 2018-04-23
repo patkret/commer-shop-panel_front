@@ -13,7 +13,7 @@ import VatRates from '../components/vat-rates/VatRates'
 import Variants from '../components/variants/Variants'
 import Vendors from '../components/vendors/Vendors'
 import Users from '../components/users/Users'
-import Warehouse from '../components/warehouse/Warehouses'
+import Stock from '../components/stock/Stock'
 import permissionList from '../components/users/permissionList'
 
 Vue.use(Router)
@@ -92,10 +92,11 @@ export default new Router({
           component: permissionList,
         },
         {
-          path: '/warehouses',
-          name: 'warehouses',
-          component: Warehouse,
+          path: '/stock',
+          name: 'Stock',
+          component: Stock,
         },
+
       ],
     },
   ],
