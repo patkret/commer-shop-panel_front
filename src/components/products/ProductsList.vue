@@ -103,7 +103,6 @@
                 </div>
                 <highlited-products v-if="type == 2"></highlited-products>
                 <imported-products v-if="type == 3"></imported-products>
-                <!--<off-products v-if="type == 4"></off-products>-->
                 <sketch-products v-if="type == 5"></sketch-products>
             </div>
         </div>
