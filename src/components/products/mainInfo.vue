@@ -209,6 +209,7 @@
       vendors: [],
       selectedCategories: [],
       options: [],
+      categories: []
     }),
     watch: {
       selectedRate: function (value) {
@@ -217,6 +218,10 @@
       selectedVendor: function (value) {
         this.product.vendor = value.id
       },
+      selectedCategories: function (value) {
+        value = value.map(el =>{return  el.id })
+        this.categories = value
+      }
     },
     methods: {
       nameWithRate ({name, rate}) {
@@ -231,14 +236,17 @@
             if (this.product.id > 0) {
               axios.put('/products/'+ this.product.id, {
                 product: this.product,
+                categories: this.categories
               }).then(() => {
                 this.$router.push('/products')
                 this.$store.commit('clearProduct')
                 this.$store.commit('clearSets')
               })
             } else {
+
               axios.post('/products' , {
-                product: this.product
+                product: this.product,
+                categories: this.categories
               }).then(() => {
                 this.$router.push('/products')
                 this.$store.commit('clearProduct')

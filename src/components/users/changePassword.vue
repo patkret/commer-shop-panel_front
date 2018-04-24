@@ -3,6 +3,9 @@
         <div class="info" v-if="showInfo === true">
             <p>Hasło zostało zmienione!</p>
         </div>
+        <div class="info" v-if="infoError === true">
+            <p>Hasło niepoprawne!</p>
+        </div>
         <form @submit.prevent="updatePassword()">
         <div class="form-row">
             <label class="form-label col-1">Stare Hasło</label>
@@ -52,6 +55,7 @@
         newPasswordConfirmation: '',
       },
       showInfo: false,
+      infoError: false,
 
     }),
 
@@ -60,9 +64,9 @@
         this.$validator.validateAll().then((result) => {
         if (result) {
           axios.put('/users/'+ this.userId + '/change-password', {
-            password: this.newPassword,
-            passwordConfirmation: this.newPasswordConfirmation,
+            user: this.user
           }).then(response => {
+
             if(response.status === 200){
               this.showInfo = true
               setTimeout(() => {
@@ -70,6 +74,9 @@
                 console.log(this.$router.path)
                 this.$parent.$data.type = 3
             }, 3000)
+            }
+            else{
+              this.infoError = true
             }
           })
         }

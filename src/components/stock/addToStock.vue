@@ -49,10 +49,17 @@
         console.log(date)
         const date_arr = date.split(' ')
         this.warehouse_item.added_at = date_arr[2] + ' ' + date_arr [1] + ' ' + date_arr[3] + ' ' + date_arr[4]
+        // let items = []
+        //
+        //  for (let i = 0; i< this.quantity ; i++){
+        //   items.push(Object.values(this.warehouse_item))
+        // }
+        console.log(this.warehouse_item)
         axios.post('warehouse-items', {
           warehouse_item: this.warehouse_item,
           quantity: this.quantity,
-        }).then(() => {
+        }).then(response => {
+          console.log(response)
           this.$parent.$data.type = 1
         })
       },

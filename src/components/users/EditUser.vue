@@ -70,9 +70,9 @@
     },
     methods: {
       updateUser() {
+        delete this.user.password
         this.$validator.validateAll().then((result) => {
           if (result) {
-
             axios.put('users/' + this.editingUser.id , {
               editedUser: this.editingUser,
             });
