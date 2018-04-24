@@ -104,7 +104,7 @@
               {text: 'Zestawy wariantów', path: '/variants'},
               {text: 'Producenci', path: '/vendors'},
               {text: 'Stawki VAT', path: '/vat-rates'},
-              {text:'Magazyn', path: '/warehouses'},
+              {text:'Magazyn', path: '/stock'},
             ],
           },
           {icon: icons.clients, text: 'Klienci', path: ''},
