@@ -1,6 +1,9 @@
 <template>
     <div>
-        <h3 class="header">Wybierz zestawy atrybutów dla produktu</h3>
+        <h3 class="header" v-if="sets.length > 0">Wybierz zestawy atrybutów dla produktu</h3>
+        <div class="info" v-if="sets.length == 0">
+            <p>BRAK ZESTAWÓW ATRYBUTÓW</p>
+        </div>
         <ul>
             <li v-for="item in selectedSets">
                 <label class="check-container">
@@ -258,5 +261,23 @@
 
     .attr-header p {
         padding: 10px 0 0 15px;
+    }
+
+    .info{
+        opacity: 0.1;
+        font-weight: 900;
+        font-size: 300%;
+        box-shadow: #cccccc;
+        margin: auto;
+        width: 50%;
+        margin-top: 17%;
+
+
+    }
+
+    .info  p{
+        text-shadow: 2px 2px #2D2E2F;
+        align-self: center;
+        justify-self: center;
     }
 </style>

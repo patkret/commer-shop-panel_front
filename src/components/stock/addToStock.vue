@@ -10,17 +10,24 @@
             <div class="form-data col-2">
                 <input v-model="quantity" v-validate="'required|numeric'"
                        :class="{'input': true, 'is-danger input-border': errors.has('quantity') }" class="form-input "
-                       type="text" name="quantity" placeholder="...">
+                       type="text" name="quantity" placeholder="szt">
                 <span v-show="errors.has('quantity')" class="help is-danger">{{ errors.first('quantity') }}</span>
             </div>
         </div>
         <div class="form-row">
             <label class="form-label col-1">Cena (netto)</label>
-            <div class="form-data col-2">
-                <input v-model="warehouse_item.price" v-validate="'required'"
+            <div class="form-data col-2" style="width: 150px">
+                <input v-model="price_zl" v-validate="'required|numeric'"
+                       :class="{'input': true, 'is-danger input-border': errors.has('price_zl') }" class="form-input "
+                       type="text" name="price_zl" placeholder="zł">
+                <span v-show="errors.has('price_zl')" class="help is-danger">{{ errors.first('price_zl') }}</span>
+            </div>
+            <div class="form-data col-3">
+                <input v-model="price_gr" v-validate="'numeric|max_value:99'"
                        :class="{'input': true, 'is-danger input-border': errors.has('price') }" class="form-input "
-                       type="text" name="price" placeholder="...">
+                       type="text" name="price" placeholder="gr">
                 <span v-show="errors.has('price')" class="help is-danger">{{ errors.first('price') }}</span>
+                <p>.</p>
             </div>
         </div>
         <div class="form-row col-2">
@@ -41,26 +48,34 @@
         added_at: '',
       },
       quantity: '',
+      price_zl: '',
+      price_gr: ''
     }),
+
+    watch: {
+      price_zl: function (val) {
+        this.warehouse_item.price = val
+      }
+    },
 
     methods: {
       addToStock () {
         let date = new Date() + ''
-        console.log(date)
         const date_arr = date.split(' ')
         this.warehouse_item.added_at = date_arr[2] + ' ' + date_arr [1] + ' ' + date_arr[3] + ' ' + date_arr[4]
-        // let items = []
-        //
-        //  for (let i = 0; i< this.quantity ; i++){
-        //   items.push(Object.values(this.warehouse_item))
-        // }
-        console.log(this.warehouse_item)
-        axios.post('warehouse-items', {
-          warehouse_item: this.warehouse_item,
-          quantity: this.quantity,
-        }).then(response => {
-          console.log(response)
-          this.$parent.$data.type = 1
+
+        this.$validator.validateAll().then((result) => {
+          if(this.price_gr === ''){
+            this.warehouse_item.price = this.price_zl + '.' + '00'
+          }
+          if (result) {
+            axios.post('warehouse-items', {
+              warehouse_item: this.warehouse_item,
+              quantity: this.quantity,
+            }).then(() => {
+              this.$parent.$data.type = 1
+            })
+          }
         })
       },
 
@@ -91,8 +106,8 @@
     .form-row {
         display: grid;
         margin: 20px 0;
-        grid-template-areas: 'col-1 col-2';
-        grid-template-columns: 130px 520px;
+        grid-template-areas: 'col-1 col-2 col-3';
+        grid-template-columns: 130px 320px;
     }
 
     .col-1 {
@@ -101,6 +116,19 @@
 
     .col-2 {
         grid-area: col-2;
+
+    }
+    .col-3{
+        grid-area: col-3;
+        width: 150px;
+        margin-left: -150px;
+    }
+
+    .col-3 p{
+        margin-top: -25px;
+        margin-left: 2px;
+        font-size: 150%;
+        width: 5px;
     }
 
     .form-data {
@@ -129,7 +157,7 @@
         border: none;
         font-size: 12px;
         font-weight: 700;
-        width: 40%;
+        width: 100%;
     }
 
     .input-border {
@@ -148,7 +176,7 @@
         margin-left: 10px;
         border-top-right-radius: 0;
         border-top-left-radius: 0;
-        width: 40%;
+        width: 100%;
     }
 
     .header {
@@ -164,4 +192,5 @@
         font-size: 80%;
         margin-left: 50px;
     }
+
 </style>
