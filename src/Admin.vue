@@ -67,9 +67,6 @@
                 </li>
 
             </ul>
-            <div id="sidebar-button">
-                <button class="primary-button">Stwórz kolejny sklep</button>
-            </div>
         </div>
         <div id="content">
             <router-view></router-view>

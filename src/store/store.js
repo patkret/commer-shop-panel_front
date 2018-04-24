@@ -40,6 +40,7 @@ export const store = new Vuex.Store({
     selectedVariantSet: '',
     selectedRate: '',
     selectedVendor: '',
+    selectedStock: '',
     selectedCategories: [],
   },
 
@@ -68,7 +69,8 @@ export const store = new Vuex.Store({
     },
     getVendor: state => state.selectedVendor,
     getVatRate: state => state.selectedRate,
-    getCategories: state => state.selectedCategories,
+    getStock: state => state.selectedStock,
+    getCategory: state => state.selectedCategories,
   },
 
   mutations: {
@@ -131,7 +133,6 @@ export const store = new Vuex.Store({
         pkwiuCode: '',
         vendor: '',
         attributeSets: [],
-        stock: '',
         stockAvail: '',
         intoStockPrice: '',
         shortDescription: '',
@@ -144,7 +145,8 @@ export const store = new Vuex.Store({
         metaKeywords: '',
         addressUrl: '',
         variantSets: [],
-        categories: [],
+        categories: '',
+        stock: '',
       }
     },
 
@@ -166,9 +168,13 @@ export const store = new Vuex.Store({
       state.selectedVendor = payload
       state.product.vendor = payload.id
     },
-    saveCategories: (state,payload) => {
-      state.selectedCategories = payload
-      state.product.category = payload.id
+    // saveCategories: (state,payload) => {
+    //   state.selectedCategories = payload
+    //   state.product.category = payload.id
+    // },
+    saveStock: (state,payload) => {
+      state.selectedStock = payload
+      state.product.stock = payload.id
     }
 
 
@@ -189,8 +195,11 @@ export const store = new Vuex.Store({
           let rate = response.data.find(el => el.id === result.data.vat_rate)
           context.commit('saveVatRate', rate)
         })
+        axios('warehouses').then(response => {
+          let stoc = response.data.find(el => el.id === result.data.stock)
+          context.commit('saveStock', stoc)
+        })
           context.commit('addProduct', result.data)
-
         },
       )
     },

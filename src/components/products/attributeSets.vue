@@ -107,7 +107,6 @@
         // this.sets.splice(index, 1)
 
       },
-
       addToSets (item) {
         this.sets.unshift(item)
         let index = this.selectedSets.indexOf(item)

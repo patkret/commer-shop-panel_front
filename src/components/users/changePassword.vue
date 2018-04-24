@@ -61,7 +61,6 @@
           if (result) {
             axios.put('/users/'+ this.userId + '/change-password', {
               password: this.newPassword,
-              passwordConfirmation: this.newPasswordConfirmation,
             }).then(response => {
               if(response.status === 200){
                 this.showInfo = true

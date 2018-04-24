@@ -27,6 +27,28 @@
             </div>
             <div class="form-row">
                 <label class="form-label">
+                    Magazyn
+                </label>
+                <div class="input-container" style="justify-self: start">
+                    <multiselect
+                            class="shop-select product-select"
+                            v-model="selectedStock"
+                            :options="stocks"
+                            :allow-empty="false"
+                            :searchable="false"
+                            :selectedLabel="''"
+                            track-by="name"
+                            label="name"
+                            id="ms-1"
+                            :custom-label="nameWithRate"
+                            :deselectLabel="''"
+                            :selectLabel="''"
+                            :hideSelected="true"
+                            placeholder="Wybierz"></multiselect>
+                </div>
+            </div>
+            <div class="form-row">
+                <label class="form-label">
                     Stan dostępności
                 </label>
                 <div class="input-container" style="width: 30%">
@@ -206,18 +228,28 @@
       },
       selectedCategories: {
         get: function () {
-          return this.$store.getters.getCategories
+          return this.$store.getters.getCategory
         },
         set: function (value) {
           this.$store.commit('saveCategories', value)
         }
       },
+      selectedStock: {
+        get: function () {
+          return this.$store.getters.getStock
+        },
+        set: function (value) {
+          this.$store.commit('saveStock', value)
+        }
+      }
 
     },
     data: () => ({
       vat_rates: [],
       vendors: [],
       options: [],
+      stocks: [],
+
     }),
     methods: {
       nameWithRate ({name, rate}) {
@@ -236,6 +268,9 @@
                 this.$router.push('/products')
                 this.$store.commit('clearProduct')
                 this.$store.commit('clearSets')
+                this.$store.state.selectedRate = ''
+                this.$store.state.selectedVendor = ''
+                this.$store.state.selectedStock = ''
               })
             } else {
               axios.post('/products' , {
@@ -244,6 +279,9 @@
                 this.$router.push('/products')
                 this.$store.commit('clearProduct')
                 this.$store.commit('clearSets')
+                this.$store.state.selectedRate = ''
+                this.$store.state.selectedVendor = ''
+                this.$store.state.selectedStock = ''
               })
             }
 
@@ -264,6 +302,9 @@
       })
       axios('all-categories').then(result => {
         this.options = result.data
+      })
+      axios('warehouses').then(result => {
+        this.stocks = result.data
       })
     },
 
