@@ -1,18 +1,18 @@
 <template>
-        <form action="" @submit.prevent="saveStock">
-            <div class="form-row">
-                <label class="form-label col-1">Nazwa</label>
-                <div class="form-data col-2">
-                    <input v-model="stock.name" v-validate="'required'"
-                           :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input "
-                           type="text" name="name">
-                    <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
-                </div>
+    <form action="" @submit.prevent="saveStock">
+        <div class="form-row">
+            <label class="form-label col-1">Nazwa</label>
+            <div class="form-data col-2">
+                <input v-model="stock.name" v-validate="'required'"
+                       :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input "
+                       type="text" name="name" placeholder="...">
+                <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
             </div>
-            <div class="form-row col-2">
-                <button type="submit" class="custom-button col-2">ZAPISZ</button>
-            </div>
-        </form>
+        </div>
+        <div class="form-row col-2">
+            <button type="submit" class="custom-button col-2">ZAPISZ</button>
+        </div>
+    </form>
 </template>
 
 <script>

@@ -9,15 +9,16 @@
         <table class="table-container" v-if="type === 1">
             <tr class="table-head">
                 <th>ID</th>
+                <th>Dodano</th>
                 <th>Ilość</th>
                 <th>Cena</th>
                 <th>Akcja</th>
             </tr>
             <tr v-for="(item,key) in items" :class="{'single-item': true, 'single-item active': index === key}">
                 <td>{{item.group_id}}.</td>
-                <!--<td></td>-->
+                <td>{{item.added_at}}</td>
                 <td>{{item.quantity}}</td>
-                <td>{{item.price}}</td>
+                <td>{{item.price}} zł</td>
                 <td>
                     <div class="buttons-container">
                         <button @click="showActions(key)" class="more-button">
@@ -52,12 +53,12 @@
 
     watch: {
       type: function (val) {
-        if(val === 1) {
+        if (val === 1) {
           axios('warehouse-items/' + this.stock.id).then(result => {
             this.items = result.data
           })
         }
-      }
+      },
     },
     methods: {
       showActions (key) {
@@ -75,7 +76,7 @@
         this.type = type
       },
 
-      deleteStockItems(item){
+      deleteStockItems (item) {
         axios.delete('warehouse-items/' + item.group_id).then(() => {
           axios('warehouse-items/' + this.stock.id).then(result => {
             this.items = result.data
@@ -83,7 +84,7 @@
           this.index = ''
           this.show = false
         })
-      }
+      },
     },
 
     created: function () {
@@ -190,16 +191,16 @@
         height: 55px;
     }
 
-    .active{
+    .active {
         background-color: #cccccc;
     }
 
-    .custom-button{
+    .custom-button {
         width: 150px;
         margin: 10px 0 0 60px;
     }
 
-    .card-header{
+    .card-header {
         display: inline-flex;
         margin: 0 0 45px 20px;
     }

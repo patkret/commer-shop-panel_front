@@ -2,7 +2,7 @@
 
     <ul class="vat-container">
         <li v-for="(item, key) in items" class="attr-list-item">
-           {{item.id}}. {{item.name}}
+            {{item.id}}. {{item.name}}
             <div class="buttons-container">
                 <button @click="showActions(key)" class="more-button">
                     <span class="dot"></span>
@@ -21,7 +21,7 @@
 
 <script>
   export default {
-    name: "stock-list",
+    name: 'stock-list',
     data () {
       return {
         items: [],
@@ -33,10 +33,10 @@
         this.showButtons[key] = !this.showButtons[key]
         this.$forceUpdate()
       },
-      addToStock(item) {
+      addToStock (item) {
         this.$emit('addToStock', item)
       },
-      editStock(item){
+      editStock (item) {
         this.$emit('stock', item)
       },
 
@@ -51,7 +51,7 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-            if(result.value) {
+            if (result.value) {
               let itemIndex = this.items.map(x => x.id).indexOf(item.id)
               this.items.splice(itemIndex, 1)
               axios.delete('warehouses/' + item.id).then(
@@ -62,7 +62,7 @@
                 title: 'Usunięto!',
                 text: 'Magazyn został usunięty',
                 type: 'success',
-                confirmButtonText: 'OK'
+                confirmButtonText: 'OK',
               })
             } else {
               this.$swal('Anulowano', 'Magazyn nie został usunięty.', 'info')
@@ -75,13 +75,13 @@
     },
     created: function () {
       axios('warehouses').
-      then(result => {
-        this.items = result.data
-        this.items.forEach((v,k) => {
-          this.showButtons[k] = false
+        then(result => {
+          this.items = result.data
+          this.items.forEach((v, k) => {
+            this.showButtons[k] = false
+          })
         })
-      });
-    }
+    },
   }
 </script>
 
@@ -94,9 +94,11 @@
         border-radius: 5px;
         box-shadow: 5px 5px 5px 2px #eff1f4;
     }
+
     .attr-p {
         text-align: right;
     }
+
     .attr-list-item {
         display: flex;
         justify-content: space-between;
@@ -105,9 +107,11 @@
         line-height: 40px;
         margin: 5px 0;
     }
+
     .buttons-container {
         position: relative;
     }
+
     .more-button {
         height: 40px;
         border: none;
@@ -115,6 +119,7 @@
         background-color: #ffffff;
         padding-bottom: 15px;
     }
+
     .dot {
         height: 6px;
         width: 6px;
@@ -122,6 +127,7 @@
         border-radius: 50%;
         display: inline-block;
     }
+
     .action-buttons {
         position: absolute;
         top: 0;
@@ -130,6 +136,7 @@
         border: 1px solid #dde0e5;
         border-radius: 5px;
     }
+
     .action-buttons button {
         /*border: 1px solid #dde0e5;*/
         background-color: #ffffff;
@@ -137,20 +144,24 @@
         border-radius: 5px;
         border: none;
     }
+
     .action-buttons button:first-child {
         border-right: 1px solid #dde0e5;
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
     }
+
     .action-buttons button:nth-child(2) {
         border-right: 1px solid #dde0e5;
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
     }
+
     .action-buttons button:last-child {
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
     }
+
     .action-buttons button:hover {
         cursor: pointer;
         background-color: #dde0e5;
