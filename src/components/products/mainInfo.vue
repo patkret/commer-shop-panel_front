@@ -27,18 +27,6 @@
             </div>
             <div class="form-row">
                 <label class="form-label">
-                    Stan magazynowy
-                </label>
-                <div class="input-container" style="width: 30%">
-                    <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('stock')}">
-                        <input type="text" v-validate="'required|numeric'"
-                               placeholder="..." name="stock" v-model="product.stock">
-                    </div>
-                    <span v-show="errors.has('stock')" class="validator-help">{{ errors.first('stock') }}</span>
-                </div>
-            </div>
-            <div class="form-row">
-                <label class="form-label">
                     Stan dostępności
                 </label>
                 <div class="input-container" style="width: 30%">
@@ -199,18 +187,40 @@
     computed: {
       product: function () {
           return this.$store.getters.getProduct
-      }
+      },
+      selectedVendor: {
+        get: function () {
+          return this.$store.getters.getVendor
+        },
+        set: function (value) {
+          this.$store.commit('saveVendor', value)
+        }
+      },
+      selectedRate: {
+        get: function () {
+          return this.$store.getters.getVatRate
+        },
+        set: function (value) {
+          this.$store.commit('saveVatRate', value)
+        }
+      },
+      selectedCategories: {
+        get: function () {
+          return this.$store.getters.getCategories
+        },
+        set: function (value) {
+          this.$store.commit('saveCategories', value)
+        }
+      },
 
     },
     data: () => ({
       vat_rates: [],
-      selectedRate: '',
-      selectedVendor: '',
       vendors: [],
-      selectedCategories: [],
       options: [],
       categories: []
     }),
+
     watch: {
       selectedRate: function (value) {
         this.product.vat_rate = value.id
@@ -223,6 +233,7 @@
         this.categories = value
       }
     },
+
     methods: {
       nameWithRate ({name, rate}) {
         return `${name} — [${rate}%] `

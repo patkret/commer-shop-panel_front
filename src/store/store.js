@@ -29,7 +29,7 @@ export const store = new Vuex.Store({
       metaKeywords: '',
       addressUrl: '',
       selectedVariantSet: '',
-      variantSets: []
+      variantSets: [],
     },
 
     sets: [],
@@ -37,7 +37,10 @@ export const store = new Vuex.Store({
     selectedSet: '',
     selectedVariants: [],
     otherVariants: [],
-    selectedVariantSet: ''
+    selectedVariantSet: '',
+    selectedRate: '',
+    selectedVendor: '',
+    selectedCategories: [],
   },
 
   getters: {
@@ -63,6 +66,9 @@ export const store = new Vuex.Store({
       })
       return state.sets
     },
+    getVendor: state => state.selectedVendor,
+    getVatRate: state => state.selectedRate,
+    getCategories: state => state.selectedCategories,
   },
 
   mutations: {
@@ -137,8 +143,8 @@ export const store = new Vuex.Store({
         metaDescription: '',
         metaKeywords: '',
         addressUrl: '',
-        variantSets: []
-
+        variantSets: [],
+        categories: [],
       }
     },
 
@@ -151,7 +157,20 @@ export const store = new Vuex.Store({
     },
     clearOtherSets: state => {
       state.otherVariants = []
+    },
+    saveVatRate: (state,payload) => {
+      state.selectedRate = payload
+      state.product.vat_rate = payload.id
+    },
+    saveVendor: (state,payload) => {
+      state.selectedVendor = payload
+      state.product.vendor = payload.id
+    },
+    saveCategories: (state,payload) => {
+      state.selectedCategories = payload
+      state.product.category = payload.id
     }
+
 
   },
 
@@ -161,6 +180,15 @@ export const store = new Vuex.Store({
       axios('products/' + payload).then(result => {
           result.data.attributeSets = JSON.parse(result.data.attributeSets)
           result.data.variantSets = JSON.parse(result.data.variantSets)
+
+        axios('vendors').then(response => {
+          let ven = response.data.find(el => el.id === result.data.vendor)
+          context.commit('saveVendor', ven)
+        })
+        axios('vat-rates').then(response => {
+          let rate = response.data.find(el => el.id === result.data.vat_rate)
+          context.commit('saveVatRate', rate)
+        })
           context.commit('addProduct', result.data)
 
         },

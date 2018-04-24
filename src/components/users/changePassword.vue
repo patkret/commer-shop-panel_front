@@ -7,39 +7,41 @@
             <p>Hasło niepoprawne!</p>
         </div>
         <form @submit.prevent="updatePassword()">
-        <div class="form-row">
-            <label class="form-label col-1">Stare Hasło</label>
-            <div class="form-data col-2">
-                <input v-model="user.oldPassword" v-validate="'required|confirmed:password'"
-                       :class="{'input': true, 'is-danger input-border': errors.has('password') }" class="form-input "
-                       type="password" name="password">
-                <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
+            <div class="form-row">
+                <label class="form-label col-1">Stare Hasło</label>
+                <div class="form-data col-2">
+                    <input v-model="user.oldPassword" v-validate="'required|confirmed:password'"
+                           :class="{'input': true, 'is-danger input-border': errors.has('password') }"
+                           class="form-input "
+                           type="password" name="password">
+                    <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
+                </div>
             </div>
-        </div>
 
-        <div class="form-row">
-            <label class="form-label col-1">Hasło</label>
-            <div class="form-data col-2">
-                <input v-model="user.newPassword" v-validate="'required'"
-                       :class="{'input': true, 'is-danger input-border': errors.has('newPassword') }"
-                       class="form-input " type="password" name="newPassword">
-                <span v-show="errors.has('newPassword')" class="help is-danger">{{ errors.first('newPassword') }}</span>
+            <div class="form-row">
+                <label class="form-label col-1">Hasło</label>
+                <div class="form-data col-2">
+                    <input v-model="user.newPassword" v-validate="'required'"
+                           :class="{'input': true, 'is-danger input-border': errors.has('newPassword') }"
+                           class="form-input " type="password" name="newPassword">
+                    <span v-show="errors.has('newPassword')"
+                          class="help is-danger">{{ errors.first('newPassword') }}</span>
+                </div>
             </div>
-        </div>
 
-        <div class="form-row">
-            <label class="form-label col-1">Powtórz hasło</label>
-            <div class="form-data col-2">
-                <input v-model="user.newPasswordConfirmation" v-validate="'required|confirmed:newPassword'"
-                       :class="{'input': true, 'is-danger input-border': errors.has('newPasswordConfirmation') }"
-                       class="form-input " type="password" name="newPasswordConfirmation">
-                <span v-show="errors.has('newPasswordConfirmation')" class="help is-danger">{{ errors.first('newPasswordConfirmation') }}</span>
+            <div class="form-row">
+                <label class="form-label col-1">Powtórz hasło</label>
+                <div class="form-data col-2">
+                    <input v-model="user.newPasswordConfirmation" v-validate="'required|confirmed:newPassword'"
+                           :class="{'input': true, 'is-danger input-border': errors.has('newPasswordConfirmation') }"
+                           class="form-input " type="password" name="newPasswordConfirmation">
+                    <span v-show="errors.has('newPasswordConfirmation')" class="help is-danger">{{ errors.first('newPasswordConfirmation') }}</span>
+                </div>
             </div>
-        </div>
-         <div class="form-row">
-             <label class="form-label"></label>
-            <button type="submit" class="custom-button">Zapisz hasło</button>
-        </div>
+            <div class="form-row">
+                <label class="form-label"></label>
+                <button type="submit" class="custom-button">Zapisz hasło</button>
+            </div>
         </form>
     </div>
 </template>
@@ -62,33 +64,33 @@
     methods: {
       updatePassword: function () {
         this.$validator.validateAll().then((result) => {
-        if (result) {
-          axios.put('/users/'+ this.userId + '/change-password', {
-            user: this.user
-          }).then(response => {
 
-            if(response.status === 200){
-              this.showInfo = true
-              setTimeout(() => {
-                this.showInfo = false
-                console.log(this.$router.path)
-                this.$parent.$data.type = 3
-            }, 3000)
-            }
-            else{
-              this.infoError = true
-            }
-          })
-        }
-      });
-      }
+          if (result) {
+            axios.put('/users/' + this.userId + '/change-password', {
+              user: this.user,
+            }).then(response => {
+
+              if (response.status === 200) {
+                this.showInfo = true
+                setTimeout(() => {
+                  this.showInfo = false
+                  console.log(this.$router.path)
+                  this.$parent.$data.type = 3
+                }, 3000)
+              }
+              else {
+                this.infoError = true
+              }
+            })
+          }
+        })
+      },
     },
     created: function () {
       axios('users').then(result => {
         this.items = result.data
       })
     },
-
 
   }
 </script>
@@ -181,11 +183,12 @@
         justify-content: center;
         align-items: center;
     }
-    .button-row{
+
+    .button-row {
         justify-self: end;
     }
 
-    .custom-button{
+    .custom-button {
         justify-self: center;
     }
 </style>

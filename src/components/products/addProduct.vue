@@ -2,7 +2,7 @@
 
     <div class="top-menu-container">
         <div v-if="product.id" class="edit-header form-name">
-            <h2>{{productName}}</h2>
+            <h2 class="edit-heading">{{productName}}</h2>
             <router-link :to="'/products'" tag="button" class="link-button">wróć do listy produktów</router-link>
         </div>
 
@@ -75,6 +75,8 @@
         if(newPath === '/product-add'){
           this.$store.commit('clearProduct')
           this.$store.commit('clearOtherSets')
+          this.$store.state.selectedRate = ''
+          this.$store.state.selectedVendor = ''
         }
       }
 
@@ -96,14 +98,15 @@
 
     beforeDestroy: function () {
       this.$store.commit('clearProduct')
-
     }
   }
 </script>
 
 <style scoped>
 
-
+    .edit-heading {
+        text-transform: uppercase;
+    }
     .top-menu-container {
         display: grid;
         grid-template-columns: 97% 3%;
