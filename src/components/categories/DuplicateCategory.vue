@@ -1,11 +1,12 @@
 <template>
-    <form @submit.prevent="saveCategory">
+    <form @submit.prevent="duplicateCategory()">
+        <div class="info" v-if="showInfoDuplicate == true">
+            <p>Kategoria została zduplikowana!</p>
+        </div>
         <div class="form-row">
-            <label class="form-label col-1" for="name">Nazwa kategorii</label>
+            <label class="form-label col-1" for="">Nazwa kategorii</label>
             <div class="form-data col-2">
-                <input v-model="name" v-validate="'required'"
-                       :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input "
-                       type="text" name="name">
+                <input  v-model="duplicatingCategory.name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input " type="text" name="name">
                 <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
             </div>
         </div>
@@ -13,7 +14,7 @@
             <label for="" class="form-label col-1">Przypisz do</label>
             <multiselect
                     class="shop-select categories-form-field"
-                    v-model="selectedCategory"
+                    v-model="duplicatingCategory.selectedCategory"
                     :options="items"
                     :allow-empty="false"
                     :searchable="false"
@@ -28,24 +29,21 @@
         <div class="form-row">
             <label class="form-label col-1" for="">Aktywność</label>
             <div class="checkbox-square form-group">
-                <input v-model="visibility" class="visibility-hidden" type="checkbox" id="checkbox">
+                <input v-model="duplicatingCategory.visibility" class="visibility-hidden" type="checkbox" id="checkbox">
                 <label for="checkbox" class="square"></label>
             </div>
         </div>
         <div class="form-row">
             <label class="form-label col-1" for="">Opis kategorii</label>
             <div class="form-data col-2">
-                <textarea v-model="description" class="form-textarea" name="description" id=""></textarea>
-
+                <textarea v-model="duplicatingCategory.description" class="form-textarea" name="description" id=""></textarea>
             </div>
             <div class="col-3"></div>
         </div>
         <div class="form-row">
             <label class="form-label col-1" for="">Tytuł strony</label>
             <div class="form-data col-2">
-                <input v-model="page_title" v-validate="'required'"
-                       :class="{'input': true, 'is-danger input-border': errors.has('title') }" class="form-input "
-                       type="text" name="title">
+                <input  v-model="duplicatingCategory.title" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('title') }" class="form-input " type="text" name="title">
                 <span v-show="errors.has('title')" class="help is-danger">{{ errors.first('title') }}</span>
             </div>
             <div class="form-help col-3">
@@ -56,7 +54,7 @@
         <div class="form-row">
             <label class="form-label col-1" for="">Meta description</label>
             <div class="form-data col-2">
-                <input v-model="metaDescription" class="form-input " type="text" name="metaDescription">
+                <input  v-model="duplicatingCategory.metaDescription" class="form-input " type="text" name="metaDescription">
             </div>
             <div class="form-help col-3">
                 <div class="form-help-square"></div>
@@ -66,7 +64,7 @@
         <div class="form-row">
             <label class="form-label col-1" for="">Meta Keywords</label>
             <div class="form-data col-2">
-                <input v-model="metaKeywords" class="form-input" type="text" name="metaKeywords">
+                <input  v-model="duplicatingCategory.metaKeywords" class="form-input" type="text" name="metaKeywords">
             </div>
             <div class="form-help col-3">
                 <div class="form-help-square"></div>
@@ -76,7 +74,7 @@
         <div class="form-row">
             <label class="form-label col-1" for="">Url</label>
             <div class="form-data col-2">
-                <input v-model="addressUrl" class="form-input " type="text" name="addressUrl">
+                <input  v-model="duplicatingCategory.addressUrl" class="form-input " type="text" name="addressUrl">
 
             </div>
             <div class="form-help col-3">
@@ -85,64 +83,64 @@
             </div>
         </div>
         <div class="form-row">
-            <button type="submit" class="custom-button col-2">Zapisz</button>
+            <button type="submit" class="custom-button col-2">Duplikuj</button>
         </div>
     </form>
 </template>
 
 <script>
   export default {
-    name: 'add-category',
-    data () {
+    name: "duplicate-category",
+    props: ['category', 'childCategory'],
+    data: () => {
       return {
-        name: '',
-        description: '',
-        page_title: '',
-        metaDescription: '',
-        metaKeywords: '',
-        addressUrl: '',
+        duplicatingCategory: {
+          name: '',
+          items: [],
+          description: '',
+          title: '',
+          metaDescription: '',
+          metaKeywords: '',
+          addressUrl: '',
+          selectedCategory: '',
+        },
+        showInfoDuplicate: false,
         items: [],
-        selectedCategory: '',
-        visibility: '',
-        parent_id: '',
       }
     },
-
-    methods: {
-      saveCategory () {
-          this.$validator.validateAll().then((result) => {
-            let parent_id = this.selectedCategory.id
-            if (parent_id > 0) {
-              axios.post('/categories', {
-                name: this.name,
-                visibility: this.visibility,
-                page_title: this.page_title,
-                description: this.description,
-                parent_id: this.selectedCategory.id,
-              }).then(() => {
-                this.$parent.$data.type = 2
-              })
-            } else {
-              axios.post('/categories', {
-                name: this.name,
-                visibility: this.visibility,
-                page_title: this.page_title,
-                description: this.description,
-                parent_id: 0,
-              }).then(() => {
-                this.$parent.$data.type = 2
-              })
-
-            }
-          })
-        },
+    watch: {
+      showInfoDuplicate: function () {
+        setTimeout(() => {
+          this.showInfoDuplicate = false
+          this.$parent.$data.type = 2
+        }, 3000)
       },
-    created: function () {
-      axios('all-categories').then(result => {
-        this.items = result.data
-      })
     },
+    methods: {
 
+      duplicateCategory() {
+          axios.post('/categories/' + this.duplicatingCategory.id + '/duplicate').then(() => {
+          });
+        this.showInfoDuplicate = true
+        setTimeout(() => {
+          this.$parent.$data.type = 2
+        }, 1000)
+        }
+    },
+    created: function () {
+      axios('all-categories')
+        .then(result => {
+          this.items = result.data
+        });
+
+      this.duplicatingCategory = this.category;
+
+      if(this.childCategory){
+        this.duplicatingCategory = this.childCategory
+      }
+
+
+    },
   }
 </script>
 
@@ -153,19 +151,15 @@
         grid-template-areas: 'col-1 col-2 col-3';
         grid-template-columns: 130px 520px 1fr;
     }
-
     .col-1 {
         grid-area: col-1;
     }
-
     .col-2 {
         grid-area: col-2;
     }
-
     .col-3 {
         grid-area: col-3;
     }
-
     .form-label {
         font-weight: 700;
         margin-top: 10px;
@@ -174,7 +168,6 @@
         text-align: right;
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
-
     .form-input {
         background-color: #ffffff;
         margin-left: 10px;
@@ -182,11 +175,10 @@
         height: 35px;
         line-height: 35px;
         padding-left: 10px;
-        border: none;
+        border:none;
         font-size: 12px;
         font-weight: 700;
     }
-
     .form-textarea {
         resize: none;
         height: 250px;
@@ -198,17 +190,14 @@
         font-size: 12px;
         font-weight: 700;
     }
-
     .shop-select {
         width: auto;
         background-color: #ffffff;
         margin-left: 10px;
     }
-
     .form-help {
         display: flex;
     }
-
     .form-help-square {
         height: 25px;
         width: 30px;
@@ -216,13 +205,12 @@
         margin: 5px 0 0 10px;
         background: #30c8c9 url('../../assets/img/icons/question-mark.png') no-repeat center center;
     }
-
     .form-help-cloud {
         display: none;
         background: #30c8c9;
         width: 120px;
         height: 35px;
-        margin-left: 10px;
+        margin-left:  10px;
         font-size: 10px;
         text-align: center;
         color: #ffffff;
@@ -230,7 +218,6 @@
         transition: 1s;
         position: relative;
     }
-
     .form-help-cloud:before {
         right: 100%;
         top: calc(50% - 6px);
@@ -243,27 +230,22 @@
         border-right-color: #30c8c9;
         border-width: 6px;
     }
-
     .form-help-square:hover ~ .form-help-cloud {
         display: block;
         transition: 1s;
     }
-
     .form-help-square:hover ~ .form-help-cloud::before {
         display: block;
     }
-
     .form-data {
         display: flex;
         flex-direction: column;
     }
-
     .input-border {
         border: 2px solid red;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
-
     .form-data span {
         background-color: red;
         border-radius: 5px;
@@ -276,11 +258,9 @@
         border-top-right-radius: 0;
         border-top-left-radius: 0;
     }
-
     .shop-select {
         background-color: #ffffff;
     }
-
     .shop-select .multiselect__tags {
         background-color: #f5f7fa;
         border: none;
@@ -289,43 +269,47 @@
         color: #000;
         border-radius: 5px;
     }
-
     .shop-select .multiselect__single {
         background-color: #ffffff;
         font-size: 12px;
         font-weight: 700;
     }
-
     .shop-select .multiselect__content-wrapper {
         border: 1px solid #ffffff;
         border-top: none;
         border-radius: 5px;
         width: 100%;
     }
-
     .multiselect .multiselect--active {
         background-color: #ffffff;
     }
-
     .multiselect .multiselect__option {
         border-top: 1px solid #dde0e5;
     }
-
     .multiselect .multiselect__option--highlight {
         background-color: #f5f7fa;
         color: #000000;
         border-top: 1px solid #dde0e5;
     }
-
     .mulitselect .multiselect__content:first-child {
         border-top: none;
     }
-
     .multiselect .multiselect__select::before {
-        /*border: none;*/
         height: 20px;
         border-color: #000 transparent transparent;
         border-width: 4px 4px 0;
         width: 20px;
+    }
+    .info {
+        width: 100%;
+        height: 50px;
+        background-color: #94C01E;
+        margin-bottom: 50px;
+        color: #FFFFFF;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        aling-items: center;
+        border-radius: 5px;
     }
 </style>

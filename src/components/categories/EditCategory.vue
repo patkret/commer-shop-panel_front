@@ -43,7 +43,7 @@
         <div class="form-row">
             <label class="form-label col-1" for="">Tytuł strony</label>
             <div class="form-data col-2">
-                <input  v-model="editingCategory.title" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('title') }" class="form-input " type="text" name="title">
+                <input  v-model="editingCategory.page_title" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('title') }" class="form-input " type="text" name="title">
                 <span v-show="errors.has('title')" class="help is-danger">{{ errors.first('title') }}</span>
             </div>
             <div class="form-help col-3">
@@ -96,12 +96,12 @@
       return {
         editingCategory: {
           name: '',
-          items: [],
           description: '',
-          title: '',
+          page_title: '',
           metaDescription: '',
           metaKeywords: '',
           addressUrl: '',
+          parent_id: '',
           selectedCategory: '',
         },
         items: [],
@@ -120,11 +120,9 @@
       updateCategory() {
         this.$validator.validateAll().then((result) => {
           if (result) {
-
               axios.put('categories/' + this.editingCategory.id , {
                 editedCategory: this.editingCategory
               });
-
             this.showInfoEdit = true
             setTimeout(() => {
               this.$parent.$data.type = 2
@@ -137,6 +135,7 @@
       axios('all-categories')
         .then(result => {
           this.items = result.data
+
         });
 
       this.editingCategory = this.category;

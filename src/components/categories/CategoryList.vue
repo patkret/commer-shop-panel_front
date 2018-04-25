@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                         </div>
-                            <drag class="list-item" v-if="item.children" :children="item.children" :item="item" @singleCategory="editChild"></drag>
+                            <drag class="list-item" v-if="item.children" :children="item.children" :item="item" @duplCategory="duplicateChild" @singleCategory="editChild"></drag>
                     </li>
                 </draggable>
             </div>
@@ -40,7 +40,7 @@
 
   export default {
     name: "Categories",
-    props: ['editingCategory'],
+    props: ['editingCategory', 'duplicatingCategory'],
     components: {
       draggable,
       drag,
@@ -53,7 +53,7 @@
         buttons: [],
         index: '',
         show : false,
-        child: ''
+        child: '',
       }
     },
     watch: {
@@ -78,6 +78,10 @@
        this.child = child
         this.$emit('child', this.child)
       },
+      duplicateChild(child){
+        this.child = child
+        this.$emit('child', this.child)
+      },
       showActions (key) {
         if(this.index === key){
           this.show = false
@@ -87,6 +91,9 @@
           this.show = true
           this.index = key
         }
+      },
+      duplicateCategory (item) {
+        this.$emit('duplCategory', item)
       },
       editCategory (item) {
         this.$emit('singleCategory', item)
@@ -119,36 +126,7 @@
           dismiss => {
           }).catch(this.$swal.noop)
       },
-      duplicateCategory (item) {
-        this.$swal({
-          title: 'Czy chcesz zduplikować kategorie?',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#00cc00',
-          cancelButtonColor: '#3085d6',
-          cancelButtonText: 'Anuluj',
-          confirmButtonText: 'Duplikuj',
-        }).then((result) => {
-            if (result.value) {
-              axios.post('/categories/' + item.id + '/duplicate').then(() => {
-                  })
-              axios('categories').
-                then(result => {
-                  this.items = Object.values(result.data)
-                })
-              this.$swal({
-                title: 'Zduplikowano!',
-                text: 'Kategoria została zduplikowana',
-                type: 'success',
-                confirmButtonText: 'OK'
-              })
-            } else {
-              this.$swal('Anulowane', 'Kategoria nie została usunięta', 'info')
-            }
-          },
-          dismiss => {
-          }).catch(this.$swal.noop)
-      },
+
     },
     created: function () {
       axios('categories')

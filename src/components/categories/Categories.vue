@@ -15,12 +15,16 @@
                     <div class="side-button side-menu-item active" v-if="type == 3">
                         <p>Edycja kategorii</p>
                     </div>
+                    <div class="side-button side-menu-item active" v-if="type == 4">
+                        <p>Duplikowanie kategorii</p>
+                    </div>
                 </div>
             </div>
             <div class="component-container">
                 <add-category v-if="type == 1"></add-category>
-                <category-list v-if="type == 2" @singleCategory="editCategory" @child="getChild"></category-list>
+                <category-list v-if="type == 2" @duplCategory="duplicateCategory" @singleCategory="editCategory" @child="getChild"></category-list>
                 <edit-category v-if="type == 3" :category="editingCategory" :childCategory="childCategory"></edit-category>
+                <duplicate-category v-if="type == 4" :category="duplicatingCategory" :childCategory="childCategory"></duplicate-category>
             </div>
         </div>
 
@@ -32,6 +36,7 @@
   import AddCategory from './AddCategory'
   import EditCategory from './EditCategory'
   import CategoryList from './CategoryList'
+  import DuplicateCategory from './DuplicateCategory'
 
   export default {
     name: 'Categories',
@@ -40,13 +45,15 @@
       CategoryList,
       EditCategory,
       AddCategory,
+      DuplicateCategory,
 
     },
     data: () => ({
       type: 2,
       categories: '',
       childCategory: '',
-      editingCategory: ''
+      editingCategory: '',
+      duplicatingCategory: '',
     }),
     methods: {
       getChild(item){
@@ -59,6 +66,10 @@
       editCategory(category){
         this.type = 3
         this.editingCategory = category
+      },
+      duplicateCategory(category) {
+        this.type = 4
+        this.duplicatingCategory = category
       }
     },
   }

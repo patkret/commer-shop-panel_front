@@ -41,6 +41,7 @@
     components: {
       draggable
     },
+
     methods: {
       showActions(key) {
         if (this.index === key) {
@@ -81,46 +82,21 @@
           }).catch(this.$swal.noop)
 
       },
-      editCategory(item) {
-        this.$emit('singleCategory', item)
-        console.log(item)
+      editCategory(el) {
+        this.$emit('singleCategory', el)
       },
+      duplicateCategory(item) {
+        this.$emit('duplCategory', item)
+      }
 
-      duplicateCategory (el) {
-        this.$swal({
-          title: 'Czy chcesz zduplikować kategorie?',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#00cc00',
-          cancelButtonColor: '#3085d6',
-          cancelButtonText: 'Anuluj',
-          confirmButtonText: 'Duplikuj',
-        }).then((result) => {
-            if (result.value) {
-              axios.post('/categories/' + el.id + '/duplicate').then(() => {
-              })
-              axios('/categories/' + el.id).
-              then(result => {
-                this.el = Object.values(result.data)
-              })
-              this.$swal({
-                title: 'Zduplikowano!',
-                text: 'Kategoria została zduplikowana',
-                type: 'success',
-                confirmButtonText: 'OK'
-              })
-            } else {
-              this.$swal('Anulowane', 'Kategoria nie została usunięta', 'info')
-            }
-          },
-          dismiss => {
-          }).catch(this.$swal.noop)
-      },
     },
   }
 </script>
 
 <style scoped>
+    .sortable-chosen {
+        border: 1px #000000 dashed;
+    }
     .drag-undercategory {
         display: flex;
         justify-content: space-between;
