@@ -3,12 +3,16 @@
         <div class="info" v-if="showInfo === true">
             <p>Hasło zostało zmienione!</p>
         </div>
+        <div class="error" v-if="infoError === true">
+            <p>Hasło niepoprawne!</p>
+        </div>
         <form @submit.prevent="updatePassword()">
             <div class="form-row">
                 <label class="form-label col-1">Stare Hasło</label>
                 <div class="form-data col-2">
                     <input v-model="user.oldPassword" v-validate="'required|confirmed:password'"
-                           :class="{'input': true, 'is-danger input-border': errors.has('password') }" class="form-input "
+                           :class="{'input': true, 'is-danger input-border': errors.has('password') }"
+                           class="form-input "
                            type="password" name="password">
                     <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
                 </div>
@@ -20,7 +24,8 @@
                     <input v-model="user.newPassword" v-validate="'required'"
                            :class="{'input': true, 'is-danger input-border': errors.has('newPassword') }"
                            class="form-input " type="password" name="newPassword">
-                    <span v-show="errors.has('newPassword')" class="help is-danger">{{ errors.first('newPassword') }}</span>
+                    <span v-show="errors.has('newPassword')"
+                          class="help is-danger">{{ errors.first('newPassword') }}</span>
                 </div>
             </div>
 
@@ -52,34 +57,39 @@
         newPasswordConfirmation: '',
       },
       showInfo: false,
+      infoError: false,
 
     }),
 
     methods: {
       updatePassword: function () {
         this.$validator.validateAll().then((result) => {
+
           if (result) {
-            axios.put('/users/'+ this.userId + '/change-password', {
-              password: this.newPassword,
+            axios.put('/users/' + this.userId + '/change-password', {
+              user: this.user,
             }).then(response => {
-              if(response.status === 200){
+              if (response.status === 200) {
                 this.showInfo = true
                 setTimeout(() => {
                   this.showInfo = false
+                  console.log(this.$router.path)
                   this.$parent.$data.type = 3
-                }, 2000)
+                }, 3000)
+              }
+              else {
+                this.infoError = true
               }
             })
           }
-        });
-      }
+        })
+      },
     },
     created: function () {
       axios('users').then(result => {
         this.items = result.data
       })
     },
-
 
   }
 </script>
@@ -166,17 +176,30 @@
         align-items: center;
         border-radius: 5px;
     }
+    .error {
+        width: 100%;
+        height: 50px;
+        background-color: red;
+        margin-bottom: 50px;
+        color: #FFFFFF;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+    }
 
     .showPass {
         display: flex;
         justify-content: center;
         align-items: center;
     }
-    .button-row{
+
+    .button-row {
         justify-self: end;
     }
 
-    .custom-button{
+    .custom-button {
         justify-self: center;
     }
 </style>

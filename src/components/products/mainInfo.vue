@@ -249,8 +249,25 @@
       vendors: [],
       options: [],
       stocks: [],
-
+      categories: []
     }),
+
+    watch: {
+      selectedRate: function (value) {
+        this.product.vat_rate = value.id
+      },
+      selectedVendor: function (value) {
+        this.product.vendor = value.id
+      },
+      selectedCategories: function (value) {
+        value = value.map(el =>{return  el.id })
+        this.categories = value
+      },
+      selectedStock: function (value) {
+        this.product.stock = value.id
+      }
+    },
+
     methods: {
       nameWithRate ({name, rate}) {
         return `${name} — [${rate}%] `
@@ -264,6 +281,7 @@
             if (this.product.id > 0) {
               axios.put('/products/'+ this.product.id, {
                 product: this.product,
+                categories: this.categories
               }).then(() => {
                 this.$router.push('/products')
                 this.$store.commit('clearProduct')
@@ -273,8 +291,10 @@
                 this.$store.state.selectedStock = ''
               })
             } else {
+
               axios.post('/products' , {
-                product: this.product
+                product: this.product,
+                categories: this.categories
               }).then(() => {
                 this.$router.push('/products')
                 this.$store.commit('clearProduct')

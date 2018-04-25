@@ -79,6 +79,7 @@
           dismiss => {
             console.log(result.dismiss)
           }).catch(this.$swal.noop)
+
       },
       editCategory(item) {
         this.$emit('singleCategory', item)
@@ -97,9 +98,8 @@
         }).then((result) => {
             if (result.value) {
               axios.post('/categories/' + el.id + '/duplicate').then(() => {
-                this.$forceUpdate()
               })
-              axios('categories').
+              axios('/categories/' + el.id).
               then(result => {
                 this.el = Object.values(result.data)
               })
