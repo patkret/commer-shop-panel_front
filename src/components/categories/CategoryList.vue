@@ -131,7 +131,6 @@
         }).then((result) => {
             if (result.value) {
               axios.post('/categories/' + item.id + '/duplicate').then(() => {
-                console.log('duplicated')
                   })
               axios('categories').
                 then(result => {
@@ -150,15 +149,6 @@
           dismiss => {
           }).catch(this.$swal.noop)
       },
-      // duplicateCategory: function (item) {
-      //   axios.post('/categories/' + item.id + '/duplicate').then(() => {
-      //     console.log('duplicated')
-      //   })
-      //   axios('categories').
-      //   then(result => {
-      //     this.items = Object.values(result.data)
-      //   })
-      // },
     },
     created: function () {
       axios('categories')

@@ -79,18 +79,42 @@
           dismiss => {
             console.log(result.dismiss)
           }).catch(this.$swal.noop)
+
       },
       editCategory(item) {
         this.$emit('singleCategory', item)
         console.log(item)
       },
-      duplicateCategory: function (el) {
-        axios.post('/categories/' + el.id + '/duplicate').then(() => {
-          console.log('duplicated')
-        })
-        axios('categories').then(result => {
-          this.items = Object.values(result.data)
-        })
+
+      duplicateCategory (el) {
+        this.$swal({
+          title: 'Czy chcesz zduplikować kategorie?',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#00cc00',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Duplikuj',
+        }).then((result) => {
+            if (result.value) {
+              axios.post('/categories/' + el.id + '/duplicate').then(() => {
+              })
+              axios('/categories/' + el.id).
+              then(result => {
+                this.el = Object.values(result.data)
+              })
+              this.$swal({
+                title: 'Zduplikowano!',
+                text: 'Kategoria została zduplikowana',
+                type: 'success',
+                confirmButtonText: 'OK'
+              })
+            } else {
+              this.$swal('Anulowane', 'Kategoria nie została usunięta', 'info')
+            }
+          },
+          dismiss => {
+          }).catch(this.$swal.noop)
       },
     },
   }

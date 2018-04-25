@@ -77,6 +77,7 @@
           this.$store.commit('clearOtherSets')
           this.$store.state.selectedRate = ''
           this.$store.state.selectedVendor = ''
+          this.$store.state.selectedStock = ''
         }
       }
 

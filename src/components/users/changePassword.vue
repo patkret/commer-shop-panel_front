@@ -3,7 +3,7 @@
         <div class="info" v-if="showInfo === true">
             <p>Hasło zostało zmienione!</p>
         </div>
-        <div class="info" v-if="infoError === true">
+        <div class="error" v-if="infoError === true">
             <p>Hasło niepoprawne!</p>
         </div>
         <form @submit.prevent="updatePassword()">
@@ -69,7 +69,6 @@
             axios.put('/users/' + this.userId + '/change-password', {
               user: this.user,
             }).then(response => {
-
               if (response.status === 200) {
                 this.showInfo = true
                 setTimeout(() => {
@@ -169,6 +168,18 @@
         width: 100%;
         height: 50px;
         background-color: #94C01E;
+        margin-bottom: 50px;
+        color: #FFFFFF;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+    }
+    .error {
+        width: 100%;
+        height: 50px;
+        background-color: red;
         margin-bottom: 50px;
         color: #FFFFFF;
         text-align: center;
