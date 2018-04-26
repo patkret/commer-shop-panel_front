@@ -168,10 +168,10 @@ export const store = new Vuex.Store({
       state.selectedVendor = payload
       state.product.vendor = payload.id
     },
-    // saveCategories: (state,payload) => {
-    //   state.selectedCategories = payload
-    //   state.product.category = payload.id
-    // },
+    saveCategories: (state,payload) => {
+      state.selectedCategories = payload
+      state.product.category = payload.id
+    },
     saveStock: (state,payload) => {
       state.selectedStock = payload
       state.product.stock = payload.id

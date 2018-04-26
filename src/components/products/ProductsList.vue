@@ -131,6 +131,15 @@
             id: 0,
             name: 'Usuń zaznaczone',
           },
+          {
+            id: 1,
+            name: 'Zmiana producenta',
+          },
+          {
+            id: 2,
+            name: 'Zmiana widoczności',
+          },
+
         ],
         value: '',
         selectedFilter: '',
