@@ -10,7 +10,7 @@
             <div class="form-row">
                 <label class="form-label col-1">Stare Hasło</label>
                 <div class="form-data col-2">
-                    <input v-model="user.oldPassword" v-validate="'required|confirmed:password'"
+                    <input v-model="user.oldPassword" v-validate="'required'"
                            :class="{'input': true, 'is-danger input-border': errors.has('password') }"
                            class="form-input "
                            type="password" name="password">

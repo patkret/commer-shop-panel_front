@@ -43,7 +43,7 @@
         <div class="form-row">
             <label class="form-label col-1" for="">Tytuł strony</label>
             <div class="form-data col-2">
-                <input  v-model="duplicatingCategory.title" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('title') }" class="form-input " type="text" name="title">
+                <input  v-model="duplicatingCategory.page_title" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('title') }" class="form-input " type="text" name="title">
                 <span v-show="errors.has('title')" class="help is-danger">{{ errors.first('title') }}</span>
             </div>
             <div class="form-help col-3">
@@ -98,7 +98,7 @@
           name: '',
           items: [],
           description: '',
-          title: '',
+          page_title: '',
           metaDescription: '',
           metaKeywords: '',
           addressUrl: '',
@@ -120,6 +120,10 @@
 
       duplicateCategory() {
           axios.post('/categories/' + this.duplicatingCategory.id + '/duplicate').then(() => {
+            axios('categories').
+            then(result => {
+              this.items = Object.values(result.data)
+            })
           });
         this.showInfoDuplicate = true
         setTimeout(() => {

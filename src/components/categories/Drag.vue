@@ -14,12 +14,12 @@
                         <div class="action-buttons">
                             <button @click="deleteCategory(el)" class="delete">Usuń</button>
                             <button @click="editCategory(el)" class="edit">Edytuj</button>
-                            <button @click="duplicateCategory(el)" class="edit">Duplikuj</button>
+                            <button @click="duplicateCategory(el)" class="duplicate">Duplikuj</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <drag class="list-item-drag" v-if="el.children" :children="el.children" :item="el"></drag>
+            <drag class="list-item-drag" v-if="el.children" :children="el.children" :item="el" @duplCategory="duplicateCategory" @singleCategory="editCategory" ></drag>
         </li>
     </draggable>
 </template>
@@ -32,16 +32,32 @@
     props: ['children', 'item', 'category'],
     data() {
       return {
-        items: [],
         buttons: [],
         index: '',
-        show: false
+        show: false,
+        items: [],
+        justCreated: false,
       }
     },
     components: {
-      draggable
+      draggable,
     },
-
+    watch: {
+      children: {
+        handler () {
+          if (this.justCreated) {
+            axios.patch('categories/save-orders', {
+              categories: this.children,
+            }).then(result => {
+              console.log(result.data)
+            })
+          } else {
+            this.justCreated = true
+          }
+        },
+        deep: true,
+      },
+    },
     methods: {
       showActions(key) {
         if (this.index === key) {
@@ -53,10 +69,10 @@
           this.index = key
         }
       },
-      deleteCategory(item) {
+      deleteCategory (el) {
         this.$swal({
           title: 'Czy chcesz usunąć kategorie?',
-          text: 'Ta akcja nieodwracalnie usunie kategorie',
+          text: 'Ta akcja nieodwracalnie usunie kategorię i wszystkie jej kategorie.',
           type: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#d33',
@@ -64,32 +80,32 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
-            this.items.splice(itemIndex, 1)
-            axios.delete('categories/' + item.id).then(result => {
-              let index = this.children.indexOf(this.children.find(el => el.id == item.id))
-              this.children.splice(index, 1)
-            })
-            this.$swal({
-              title: 'Usunięto!',
-              text: 'Kategoria została usunięta',
-              type: 'success',
-              confirmButtonText: 'OK'
-            })
+            if (result.value) {
+              let itemIndex = this.children.map(x => x.id).indexOf(el.id)
+              this.children.splice(itemIndex, 1)
+              axios.delete('categories/' + el.id)
+              this.$swal({
+                title: 'Usunięto!',
+                text: 'Kategoria została usunięta',
+                type: 'success',
+                confirmButtonText: 'OK'
+              })
+            } else {
+              this.$swal('Anulowane', 'Kategoria nie została usunięta', 'info')
+            }
           },
           dismiss => {
-            console.log(result.dismiss)
           }).catch(this.$swal.noop)
-
       },
       editCategory(el) {
         this.$emit('singleCategory', el)
       },
-      duplicateCategory(item) {
-        this.$emit('duplCategory', item)
-      }
-
+      duplicateCategory(el) {
+        this.$emit('duplCategory', el)
+      },
     },
+
+
   }
 </script>
 

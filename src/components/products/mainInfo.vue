@@ -40,7 +40,7 @@
                             track-by="name"
                             label="name"
                             id="ms-1"
-                            :custom-label="nameWithRate"
+                            :custom-label="nameOnly"
                             :deselectLabel="''"
                             :selectLabel="''"
                             :hideSelected="true"
@@ -271,6 +271,9 @@
     methods: {
       nameWithRate ({name, rate}) {
         return `${name} — [${rate}%] `
+      },
+      nameOnly ({name}) {
+        return `${name}`
       },
 
       saveProduct(){

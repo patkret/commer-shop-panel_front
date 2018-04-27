@@ -21,12 +21,12 @@
                                     <div class="action-buttons">
                                         <button @click="deleteCategory(item)" class="delete">Usuń</button>
                                         <button @click="editCategory(item)" class="edit">Edytuj</button>
-                                        <button @click="duplicateCategory(item)" class="edit">Duplikuj</button>
+                                        <button @click="duplicateCategory(item)" class="duplicate">Duplikuj</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                            <drag class="list-item" v-if="item.children" :children="item.children" :item="item" @duplCategory="duplicateChild" @singleCategory="editChild"></drag>
+                            <drag class="list-item" v-if="item.children" :children="item.children" :item="item" @duplCategory="duplicateCategory" @singleCategory="editCategory"></drag>
                     </li>
                 </draggable>
             </div>
@@ -166,6 +166,7 @@
         margin: 5px 0;
         text-align: left;
     }
+
     .top-category {
         display: flex;
         justify-content: space-between;

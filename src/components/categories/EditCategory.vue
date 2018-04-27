@@ -14,7 +14,7 @@
             <label for="" class="form-label col-1">Przypisz do</label>
             <multiselect
                     class="shop-select categories-form-field"
-                    v-model="editingCategory.selectedCategory"
+                    v-model="selectedCategory"
                     :options="items"
                     :allow-empty="false"
                     :searchable="false"
@@ -24,7 +24,7 @@
                     :deselectLabel="''"
                     :selectLabel="''"
                     :hideSelected="true"
-                    placeholder="Wybierz"></multiselect>
+                    placeholder="Wybierz"/>
         </div>
         <div class="form-row">
             <label class="form-label col-1" for="">Aktywność</label>
@@ -94,6 +94,7 @@
     props:['category', 'childCategory'],
     data: () => {
       return {
+        selectedCategory: null,
         editingCategory: {
           name: '',
           description: '',
@@ -102,7 +103,7 @@
           metaKeywords: '',
           addressUrl: '',
           parent_id: '',
-          selectedCategory: '',
+          // selectedCategory: '',
         },
         items: [],
         showInfoEdit: false,
@@ -115,6 +116,13 @@
           this.$parent.$data.type = 2
         }, 3000)
       },
+      selectedCategory: function(e) {
+        this.editingCategory.parent_id = this.selectedCategory.id
+      },
+      items: function (val){
+       this.selectedCategory = val.find(el => el.id === this.editingCategory.parent_id)
+      },
+
     },
     methods: {
       updateCategory() {
@@ -122,7 +130,9 @@
           if (result) {
               axios.put('categories/' + this.editingCategory.id , {
                 editedCategory: this.editingCategory
-              });
+              }).then(result => {
+                console.log(result.data)
+              });;
             this.showInfoEdit = true
             setTimeout(() => {
               this.$parent.$data.type = 2
@@ -131,19 +141,21 @@
         })
       },
     },
-    created: function () {
+    beforeCreate: function(){
       axios('all-categories')
         .then(result => {
           this.items = result.data
-
         });
+
+    },
+    created: function () {
 
       this.editingCategory = this.category;
 
       if(this.childCategory){
         this.editingCategory = this.childCategory
-      }
 
+      }
 
     },
   }
