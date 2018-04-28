@@ -39,12 +39,10 @@
                             :selectedLabel="''"
                             track-by="name"
                             label="name"
-                            id="ms-1"
-                            :custom-label="nameWithRate"
                             :deselectLabel="''"
                             :selectLabel="''"
                             :hideSelected="true"
-                            placeholder="Wybierz"></multiselect>
+                            placeholder="Wybierz"/>
                 </div>
             </div>
             <div class="form-row">
@@ -117,7 +115,7 @@
                             :deselectLabel="''"
                             :selectLabel="''"
                             :hideSelected="true"
-                            placeholder="Wybierz"></multiselect>
+                            placeholder="Wybierz"/>
                 </div>
             </div>
             <div class="form-row">
@@ -161,7 +159,7 @@
                             :deselectLabel="''"
                             :selectLabel="''"
                             :hideSelected="true"
-                            placeholder="Wybierz"></multiselect>
+                            placeholder="Wybierz"/>
                 </div>
             </div>
             <div class="form-row">
