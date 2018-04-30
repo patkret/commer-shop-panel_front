@@ -233,4 +233,12 @@ input:checked + .square:after {
     width: 250px;
 }
 
+ .price-select{
+    width: 200px;
+}
+
+ .price-select .multiselect__tags {
+    width: 200px;
+}
+
 

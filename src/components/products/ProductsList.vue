@@ -49,7 +49,7 @@
                             <tr class="table-row">
                                 <th class="col-1">
                                     <label class="check-container check-all">
-                                        <input type="checkbox" @click="selectAll">
+                                        <input type="checkbox" @change="selectAll" v-model="selectedAll" :value="true">
                                         <span class="checkmark"></span>
                                     </label>
                                 </th>
@@ -65,11 +65,11 @@
                                 :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
                                 <td class="table-td col-1">
                                     <label class="check-container">
-                                        <input type="checkbox" v-model="selectedProducts" :value="item.id">
+                                        <input type="checkbox" v-model="selectedProducts" :value="item">
                                         <span class="checkmark"></span>
                                     </label>
                                 </td>
-                                <td class="table-td col-2"><img class="ziemniak" src="../../assets/img/ziemniak.jpeg"
+                                <td class="table-td col-2"><img class="ziemniak" src="../../assets/img/bottle.png"
                                                                 alt=""></td>
                                 <td class="table-td col-3">{{item.symbol}}</td>
                                 <td class="table-td col-4 text-left">{{item.name}}</td>
@@ -111,7 +111,10 @@
                                         :selectLabel="''"
                                         :hideSelected="true"
                                         placeholder="Wybierz"/>
-                                <button @click="performAction(selectedAction.id)" class="use-button">Wykonaj</button>
+                                <button @click="performAction(selectedAction.id)"
+                                        :class="{'use-button' : true, 'use-button disabled' : selectedProducts.length === 0}"
+                                        :disabled="selectedProducts.length === 0">Wykonaj
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -123,10 +126,6 @@
                 <modal name="visibility"
                        width="800px">
                     <div class="modal-form">
-                        <div class="modal-info" v-if="selectedProducts.length === 0">
-                            <h1>WYBIERZ PRODUKTY DO ZMIANY WIDOCZNOŚCI</h1>
-                        </div>
-                        <template v-if="selectedProducts.length > 0">
                         <div class="modal-header">
                             <h2>Zmień widoczność dla wybranych produktów</h2>
                         </div>
@@ -140,9 +139,121 @@
                             </div>
                         </div>
                         <button type="button" class="custom-button" @click="saveVisbility">ZAPISZ</button>
-                        </template>
                     </div>
                 </modal>
+
+                <modal name="mainCategory"
+                       width="800px" height="500px">
+                    <div class="modal-form">
+                        <div class="modal-header">
+                            <h2>Zmień kategorię główną dla produktów</h2>
+                        </div>
+
+                        <div class="modal-body">
+                            <label>Kategoria główna</label>
+                            <multiselect
+                                    class="shop-select product-categories-select"
+                                    v-model="selectedMainCategory"
+                                    :options="categories"
+                                    :multiple="false"
+                                    :close-on-select="true"
+                                    :clear-on-select="false"
+                                    :hide-selected="true"
+                                    label="name"
+                                    track-by="name"
+                                    :selectLabel="''"
+                                    :deselectLabel="''"
+                                    placeholder="Wybierz"
+                            >
+                            </multiselect>
+                        </div>
+                        <button type="button" class="custom-button" @click="saveMainCategory" style="margin-top: 150px">
+                            ZAPISZ
+                        </button>
+                    </div>
+                </modal>
+                <modal name="vendor"
+                       width="800px" height="500px">
+                    <div class="modal-form">
+                        <div class="modal-header">
+                            <h2>Zmień producenta dla produktów</h2>
+                        </div>
+
+                        <div class="modal-body">
+                            <label>Producent</label>
+                            <multiselect
+                                    class="shop-select product-categories-select"
+                                    v-model="selectedVendor"
+                                    :options="vendors"
+                                    :multiple="false"
+                                    :close-on-select="true"
+                                    :clear-on-select="false"
+                                    :hide-selected="true"
+                                    label="name"
+                                    track-by="name"
+                                    :selectLabel="''"
+                                    :deselectLabel="''"
+                                    placeholder="Wybierz"
+                            >
+                            </multiselect>
+                        </div>
+                        <button type="button" class="custom-button" @click="saveVendor" style="margin-top: 150px">
+                            ZAPISZ
+                        </button>
+                    </div>
+                </modal>
+                <modal name="price"
+                       width="800px" height="600px">
+                    <div class="modal-form">
+                        <div class="modal-header">
+                            <h2>Zmień cenę dla produktów</h2>
+                        </div>
+
+                        <div class="modal-body row">
+                            <label>Cena</label>
+                            <multiselect
+                                    class="admin-select price-select"
+                                    v-model="selectedPriceOption"
+                                    :options="priceOptions"
+                                    :searchable="false"
+                                    :multiple="false"
+                                    :close-on-select="true"
+                                    :clear-on-select="false"
+                                    :hide-selected="true"
+                                    label="name"
+                                    track-by="name"
+                                    :selectLabel="''"
+                                    :deselectLabel="''"
+                                    placeholder="Wybierz"
+                                    style="margin-left: 40px"
+                            >
+                            </multiselect>
+                            <input type="text" class="products-input" v-model="priceValue"/>
+                            <multiselect
+                                    class="admin-select price-select"
+                                    v-model="selectedCurr"
+                                    :options="currOptions"
+                                    :searchable="false"
+                                    :multiple="false"
+                                    :close-on-select="true"
+                                    :clear-on-select="false"
+                                    :hide-selected="true"
+                                    label="name"
+                                    track-by="name"
+                                    :selectLabel="''"
+                                    :deselectLabel="''"
+                                    placeholder="Wybierz"
+                                    style="margin-left: 40px;"
+                            >
+                            </multiselect>
+                        </div>
+                        <button type="button" class="custom-button" @click="savePrice" style="margin-top: 50px">
+                            ZAPISZ
+                        </button>
+                    </div>
+                </modal>
+
+
             </div>
         </div>
     </div>
@@ -202,16 +313,54 @@
         selectedAction: '',
         showModal: false,
         visibility: 1,
+        selectedProductsIds: [],
+        selectedAll: false,
+        selectedMainCategory: '',
+        main_category: '',
+        categories: [],
+        vendors: [],
+        selectedVendor: '',
+        vendor_id: '',
+        priceOptions: [
+          {
+            id: 0,
+            name: 'zwiększ o',
+          },
+          {
+            id: 1,
+            name: 'zmniejsz o',
+          },
+        ],
+        currOptions: [
+          {
+            id: 0,
+            name: '%',
+          },
+          {
+            id: 1,
+            name: 'zł',
+          },
+        ],
+        selectedPriceOption: {
+          id: 0,
+          name: 'zwiększ o',
+        },
+        priceValue: '',
+        selectedCurr: {
+          id: 1,
+          name: 'zł',
+        },
       }
     },
     watch: {
-      selectedAction: function (val) {
-        // if(val.id === 2){
-        //   this.type = 6
-        // }
-        if (val.id === 0) {
-
-        }
+      selectedProducts: function (selected) {
+        this.selectedProductsIds = selected.map(el => el.id)
+      },
+      selectedMainCategory: function (value) {
+        this.main_category = value.id
+      },
+      selectedVendor: function (value) {
+        this.vendor_id = value.id
       },
     },
     methods: {
@@ -226,11 +375,13 @@
         }
       },
       selectAll () {
-        if (this.selectedProducts.length !== 0) {
+        if (this.selectedAll === false) {
           this.selectedProducts = []
+          this.selectedProductsIds = []
         }
         else {
           this.selectedProducts = this.items
+          this.selectedProductsIds = this.selectedProducts.filter(el => this.selectedProducts[el.id])
         }
 
       },
@@ -265,8 +416,16 @@
           dismiss => {
           }).catch(this.$swal.noop)
       },
-      deleteSelected (selectedProducts) {
-        if (this.selectedAction != 0) {
+
+      editProduct (item) {
+        this.$emit('singleProduct', item)
+      },
+      changeComponent (type) {
+        this.type = type
+      },
+
+      performAction (id) {
+        if (id === 0) {
           this.$swal({
             title: 'Czy chcesz usunąć produkty',
             text: 'Ta akcja nieodwracalnie usunie zaznaczone produkty',
@@ -278,15 +437,15 @@
             confirmButtonText: 'Usuń',
           }).then((result) => {
               if (result.value) {
-                axios.delete('/products/delete-all/' + this.selectedProducts,
+                axios.delete('/products/delete-all/' + JSON.stringify(this.selectedProductsIds),
                 ).then((result) => {
-                  console.log(result)
-                  console.log(this.selectedProducts)
+                  axios('products').then(result =>
+                    this.items = result.data)
                 })
 
                 this.$swal({
                   title: 'Usunięto!',
-                  text: 'Produkt został usunięty',
+                  text: 'Produkty zostały usunięte',
                   type: 'success',
                   confirmButtonText: 'OK',
                 })
@@ -297,26 +456,83 @@
             dismiss => {
             }).catch(this.$swal.noop)
         }
-      },
-      editProduct (item) {
-        this.$emit('singleProduct', item)
-      },
-      changeComponent (type) {
-        this.type = type
-      },
-
-      performAction (id) {
-        if (id === 1) {
-
+        else if (id === 1) {
+          this.$modal.show('vendor')
         }
         else if (id === 2) {
           this.$modal.show('visibility')
         }
+        else if (id === 3) {
+
+        }
+        else if (id === 4) {
+          this.$modal.show('mainCategory')
+        }
+        else {
+          this.$modal.show('price')
+        }
+      },
+
+      saveVisbility () {
+        axios.put('/products/change-visibility', {
+          visibility: ~~this.visibility,
+          ids: this.selectedProductsIds,
+
+        }).then(() => {
+          this.$modal.hide('visibility')
+          this.selectedAction = []
+
+        })
+      },
+      saveMainCategory () {
+        axios.put('products/change-main-category', {
+            main_category: this.main_category,
+            ids: this.selectedProductsIds,
+          }.then(() => {
+            this.$modal.hide('mainCategory')
+            this.selectedAction = []
+          }),
+        )
+      },
+      saveVendor () {
+        axios.put('products/change-vendor', {
+          ids: this.selectedProductsIds,
+          vendor: this.vendor_id,
+        }).then(() => {
+          this.$modal.hide('vendor')
+          this.selectedAction = []
+        })
+      },
+      savePrice () {
+        axios.put('products/change-price', {
+          ids: this.selectedProductsIds,
+          selectedPriceOption: this.selectedPriceOption,
+          priceValue: this.priceValue,
+          selectedCurr: this.selectedCurr,
+
+        }).then(() => {
+          axios('products').then(result => {
+              this.items = result.data,
+                this.selectedProducts = result.data
+            },
+          )
+          this.priceValue = ''
+          this.$modal.hide('price')
+          this.selectedAction = ''
+        })
       },
     },
     created: function () {
       axios('products').then(result =>
         this.items = result.data)
+
+      axios('all-categories').then(result => {
+        this.categories = result.data
+      })
+
+      axios('vendors').then(result => {
+        this.vendors = result.data
+      })
     },
   }
 </script>
@@ -714,12 +930,31 @@
         background-color: rgba(0, 0, 0, 0.6);
     }
 
-    .modal-info{
+    .modal-info {
         font-size: 130%;
         color: #2595ec;
         text-align: center;
         opacity: 0.5;
         vertical-align: middle;
         line-height: 130px;
+    }
+
+    .disabled {
+        background: #DDE0E5;
+        color: black;
+    }
+
+    /*.row{*/
+    /*display: grid;*/
+    /*grid-template-columns: 100px 150px 100px;*/
+    /*}*/
+
+    .products-input {
+        margin-left: 50px;
+        width: 100px;
+    }
+
+    .products-input input {
+        border: 1px solid lightcoral;
     }
 </style>
