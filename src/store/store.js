@@ -42,7 +42,8 @@ export const store = new Vuex.Store({
     selectedVendor: '',
     selectedStock: '',
     selectedCategories: [],
-    selectedMainCategory: ''
+    selectedMainCategory: '',
+    test: []
   },
 
   getters: {
@@ -182,6 +183,9 @@ export const store = new Vuex.Store({
     saveMainCategory: (state,payload) => {
       state.selectedMainCategory = payload
       state.product.main_category = payload.id
+    },
+    getAttrSets: (state, payload) => {
+      state.test = payload
     }
 
 
@@ -224,6 +228,15 @@ export const store = new Vuex.Store({
         }
         context.commit('getSets', sets)
       })
+    },
+
+    getAttributeSets: (context, state) => {
+
+      axios('attribute-sets-categories/' + state.product.main_category).then(result => {
+
+        context.commit('getAttrSets', result.data)
+        }
+      )
     },
 
     getVariantSets: context => {

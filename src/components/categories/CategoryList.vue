@@ -7,7 +7,7 @@
                            class="dragArea list-group lista-dziecko"
                            :options="{group:{name: 'g1'}}">
                     <li v-for="(item, key) in items">
-                        <div class="top-category" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
+                        <div class="top-category attr-list-item" :class="{'attr-list-item active': index === key}">
                             <div>
                             {{item.name}}
                             </div>

@@ -18,6 +18,7 @@ import OrdersList from '../components/orders/OrdersList'
 import AddOrder from '../components/orders/AddOrder'
 import Integrations from '../components/integrations/Integrations'
 import permissionList from '../components/users/permissionList'
+import select from '../components/custom-select'
 
 
 Vue.use(Router)
@@ -29,6 +30,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login,
+    },
+    {
+      path: '/select',
+      name: 'select',
+      component: select,
     },
     {
       path: '/admin',

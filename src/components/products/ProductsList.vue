@@ -1,6 +1,11 @@
 <template>
     <div>
         <div>
+            <transition name="fade">
+                <div class="info-bar" v-if="info === true">
+                    <p>Akcja została wykonana!</p>
+                </div>
+            </transition>
             <h1 class="card-name">Lista Produktów</h1>
             <ul class="products-list">
                 <li :class="{'products-list-item': true, 'products-list-item active-blue': type == 1}"
@@ -26,7 +31,7 @@
                         <div class="products-row">
                             <div class="filter-container">
                                 <div class="filter-status">
-                                    <label class="filter-label">Filtruj</label>
+                                    <label class="filter-label">Sortuj wg</label>
                                     <multiselect
                                             class="admin-select"
                                             v-model="selectedFilter"
@@ -42,8 +47,70 @@
                                             placeholder="Wybierz"/>
                                 </div>
                             </div>
+                            <div class="filter-button">
+                                <button type="button" @click="showFilters = !showFilters">Filtrowanie</button>
+                                <!--<button type="button" @click="clearFilters">wyczyść filtry</button>-->
+                            </div>
+
                             <div class="search-container"></div>
                         </div>
+                        <transition name="fade">
+                            <div class="products-row" v-if="showFilters">
+                                <div class="filter-container filters">
+                                    <div class="filter-row">
+                                        <label class="label-name">Cena</label>
+                                        <input type="text" v-model="price_from" class="form-input" id="price-from"
+                                               style="width: 100px" placeholder="Od">
+                                        <label> - </label>
+                                        <input type="text" v-model="price_to" class="form-input" id="price-to"
+                                               style="width: 100px" placeholder="Do">
+                                    </div>
+                                    <div class="filter-row">
+                                        <label class="label-name">Producent</label>
+                                        <multiselect
+                                                class="admin-select vendor-select"
+                                                v-model="selectedVendor"
+                                                :allow-empty="false"
+                                                :searchable="false"
+                                                :selectedLabel="''"
+                                                track-by="name"
+                                                :options="vendors"
+                                                label="name"
+                                                :deselectLabel="''"
+                                                :selectLabel="''"
+                                                :hideSelected="true"
+                                                placeholder="Wybierz" style="margin-left: 10px"/>
+                                    </div>
+                                    <div class="filter-row">
+                                        <label class="label-name">Kategoria główna</label>
+                                        <multiselect
+                                                class="admin-select vendor-select"
+                                                v-model="selectedMainCategory"
+                                                :allow-empty="false"
+                                                :searchable="false"
+                                                :selectedLabel="''"
+                                                track-by="name"
+                                                :options="categories"
+                                                label="name"
+                                                :deselectLabel="''"
+                                                :selectLabel="''"
+                                                :hideSelected="true"
+                                                placeholder="Wybierz" style="margin-left: 10px"/>
+                                    </div>
+                                    <div class="filter-row">
+                                        <label class="label-name">Widoczność</label>
+                                        <div class="checkbox-square form-group">
+                                            <input type="checkbox" id="visibility" class="visibility-hidden"
+                                                   v-model="visibility">
+                                            <label for="visibility" class="square"></label>
+                                        </div>
+                                    </div>
+                                    <div class="filter-row">
+                                        <button type="button" class="custom-button" @click="filter()">Filtruj</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </transition>
                         <table class="products-table">
                             <thead class="table-heading">
                             <tr class="table-row">
@@ -115,6 +182,52 @@
                                         :class="{'use-button' : true, 'use-button disabled' : selectedProducts.length === 0}"
                                         :disabled="selectedProducts.length === 0">Wykonaj
                                 </button>
+                            </div>
+                        </div>
+                        <div class="paginator-container">
+                            <div class="pagination-buttons">
+                                <button type="button" class="icon-button" @click="changePage(1)"
+                                        :disabled="current_page < 2"><i class="fa fa-chevron-left"></i><i
+                                        class="fa fa-chevron-left"></i></button>
+                                <button type="button" class="icon-button" @click="changePage(current_page - 1)"
+                                        :disabled=" current_page === 1 "><i class="fa fa-chevron-left"></i></button>
+                                <button class="page" @click="changePage(current_page -4)"
+                                        v-if="current_page === last_page && current_page !== 1">{{current_page - 4}}
+                                </button>
+                                <button class="page" @click="changePage(current_page -3)"
+                                        v-if="current_page === last_page - 1 || current_page === last_page && current_page !== 1">
+                                    {{current_page - 3}}
+                                </button>
+                                <button class="page" @click="changePage(current_page -2)" v-if="current_page > 2 ">
+                                    {{current_page - 2}}
+                                </button>
+                                <button class="page" @click="changePage(current_page -1)" v-if="current_page > 1">
+                                    {{current_page - 1}}
+                                </button>
+
+                                <button class="page active" disabled>{{current_page}}</button>
+                                <button class="page" @click="changePage(current_page + 1)"
+                                        v-if="current_page < last_page">{{current_page +1 }}
+                                </button>
+                                <button class="page" @click="changePage(current_page + 2)"
+                                        v-if="current_page <= last_page -2">{{current_page + 2}}
+                                </button>
+                                <button class="page" @click="changePage(current_page + 3)"
+                                        v-if="current_page === 1 && last_page !== 1">{{current_page + 3}}
+                                </button>
+                                <template v-if="current_page < last_page - 3">
+                                    <span>.</span>
+                                    <span>.</span>
+                                    <span>.</span>
+                                    <button class="page" @click="changePage(last_page)">{{last_page}}</button>
+                                </template>
+
+                                <button type="button" class="icon-button" :disabled="current_page === last_page"
+                                        @click="changePage(current_page +1 )"><i class="fa fa-chevron-right"></i>
+                                </button>
+                                <button type="button" class="icon-button" :disabled="current_page === last_page"
+                                        @click="changePage(last_page)"><i class="fa fa-chevron-right"></i><i
+                                        class="fa fa-chevron-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -252,8 +365,47 @@
                         </button>
                     </div>
                 </modal>
-
-
+                <modal name="addToStock" height="400px">
+                    <form action="" @submit.prevent="addToStock" class="stock-cont">
+                        <div class="form-row header">
+                            <label class="form-label col-1"></label>
+                            <h3 class="stock-name">Dodaj stan magazynowy</h3>
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label column-1">Ilość</label>
+                            <div class="form-data column-2">
+                                <input v-model="quantity" v-validate="'required|numeric'"
+                                       :class="{'input': true, 'is-danger input-border': errors.has('quantity') }"
+                                       class="form-input "
+                                       type="text" name="quantity" placeholder="szt">
+                                <span v-show="errors.has('quantity')" class="help is-danger">{{ errors.first('quantity') }}</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label column-1">Cena (netto)</label>
+                            <div class="form-data column-2" style="width: 150px">
+                                <input v-model="price_zl" v-validate="'required|numeric'"
+                                       :class="{'input': true, 'is-danger input-border': errors.has('price_zl') }"
+                                       class="form-input "
+                                       type="text" name="price_zl" placeholder="zł">
+                                <span v-show="errors.has('price_zl')" class="help is-danger">{{ errors.first('price_zl') }}</span>
+                            </div>
+                            <div class="form-data column-3">
+                                <input v-model="price_gr" v-validate="'numeric|max_value:99'"
+                                       :class="{'input': true, 'is-danger input-border': errors.has('price') }"
+                                       class="form-input "
+                                       type="text" name="price" placeholder="gr">
+                                <span v-show="errors.has('price')"
+                                      class="help is-danger">{{ errors.first('price') }}</span>
+                                <p>.</p>
+                            </div>
+                        </div>
+                        <div class="form-row column-2">
+                            <button type="submit" class="custom-button col-2" style="margin-left: -320px">ZAPISZ
+                            </button>
+                        </div>
+                    </form>
+                </modal>
             </div>
         </div>
     </div>
@@ -276,10 +428,22 @@
         type: 1,
         editingProduct: '',
         filters: [
-          {name: 'Po ID'},
-          {name: 'Po nazwie'},
-          {name: 'Po dacie'},
-          {name: 'Po swojemu :0'},
+          {
+            id: 0,
+            name: 'Ostatnio dodane',
+          },
+          {
+            id: 1,
+            name: 'Od najniższa cena',
+          },
+          {
+            id: 2,
+            name: 'Od najwyższa cena',
+          },
+          {
+            id: 3,
+            name: 'Nazwa',
+          },
         ],
         actions: [
           {
@@ -350,6 +514,16 @@
           id: 1,
           name: 'zł',
         },
+        quantity: '',
+        price_zl: '',
+        price_gr: '',
+        showFilters: false,
+        price_from: '',
+        price_to: '',
+        current_page: '',
+        last_page: '',
+        info: false,
+        filtered: false,
       }
     },
     watch: {
@@ -361,6 +535,31 @@
       },
       selectedVendor: function (value) {
         this.vendor_id = value.id
+      },
+      selectedFilter: function (value) {
+        if (value.id === 0) {
+          axios('products-sort-recently-added').then(result => {
+            this.items = result.data
+          })
+        }
+        else if (value.id === 1) {
+          axios('products-sort-price-asc').then(result => {
+            this.items = result.data
+          })
+        }
+        else if (value.id === 2) {
+          axios('products-sort-price-desc').then(result => {
+            this.items = result.data
+          })
+        }
+        else {
+          axios('products-sort-name').then(result => {
+            this.items = result.data
+          })
+        }
+      },
+      current_page: function (page) {
+
       },
     },
     methods: {
@@ -436,11 +635,16 @@
             cancelButtonText: 'Anuluj',
             confirmButtonText: 'Usuń',
           }).then((result) => {
+              this.info = true
               if (result.value) {
                 axios.delete('/products/delete-all/' + JSON.stringify(this.selectedProductsIds),
                 ).then((result) => {
+                  this.selectedProducts = []
+                  setTimeout(() => {
+                    this.info = false
+                  }, 300)
                   axios('products').then(result =>
-                    this.items = result.data)
+                    this.items = result.data.data)
                 })
 
                 this.$swal({
@@ -463,7 +667,7 @@
           this.$modal.show('visibility')
         }
         else if (id === 3) {
-
+          this.$modal.show('addToStock')
         }
         else if (id === 4) {
           this.$modal.show('mainCategory')
@@ -486,12 +690,12 @@
       },
       saveMainCategory () {
         axios.put('products/change-main-category', {
-            main_category: this.main_category,
-            ids: this.selectedProductsIds,
-          }.then(() => {
+          main_category: this.main_category,
+          ids: this.selectedProductsIds,
+        }).then(() => {
             this.$modal.hide('mainCategory')
             this.selectedAction = []
-          }),
+          },
         )
       },
       saveVendor () {
@@ -512,7 +716,7 @@
 
         }).then(() => {
           axios('products').then(result => {
-              this.items = result.data,
+              this.items = result.data.data,
                 this.selectedProducts = result.data
             },
           )
@@ -521,10 +725,71 @@
           this.selectedAction = ''
         })
       },
+      addToStock () {
+        if (this.price_gr == '') {
+          this.price_gr = '00'
+        }
+        axios('products/add-to-stock', {
+          quantity: this.quantity,
+          ids: this.selectedProductsIds,
+          price: this.price_zl + '.' + this.price_gr,
+        }).then(() => {
+
+        })
+      },
+      filter () {
+        this.filtered = true
+        if (this.price_from === '') {
+          this.price_from = 1
+        }
+
+        if (this.price_to === '') {
+          axios('products-max-price').then(result => {
+            this.price_to = result.data
+          })
+        }
+        if (this.vendor_id === '') {
+          this.vendor_id = '_'
+        }
+        axios.post('/products-filter', {
+          price_from: this.price_from,
+          price_to: this.price_to,
+          vendor: this.vendor_id,
+          category: this.main_category,
+          visibility: this.visibility,
+        }).then(result => {
+          this.items = result.data.data
+          this.current_page = result.data.current_page
+          this.last_page = result.data.last_page
+          console.log(result.data)
+
+        })
+      },
+      changePage (page) {
+        this.current_page = page
+        if (this.filtered === true) {
+          axios('/products-filter?page=' + page).then(result => {
+            this.items = result.data.data
+          })
+        }
+        else {
+          axios('/products?page=' + page).then(result => {
+            this.items = result.data.data
+          })
+        }
+
+      },
+
+      clearFilters(){
+
+      }
     },
     created: function () {
-      axios('products').then(result =>
-        this.items = result.data)
+      axios('products').then(result => {
+        this.items = result.data.data
+        this.current_page = result.data.current_page
+        this.last_page = result.data.last_page
+      })
 
       axios('all-categories').then(result => {
         this.categories = result.data
@@ -613,7 +878,7 @@
 
     thead .table-row {
         display: grid;
-        grid-template-columns: 35px 100px 150px 350px 65px 300px;
+        grid-template-columns: 35px 250px 250px 350px 250px 300px;
         grid-template-areas: 'col-1 col-2 col-3 col-4 col-5 col-6';
         text-align: center;
         padding: 20px 0 0 0;
@@ -628,7 +893,7 @@
 
     .table-row {
         display: grid;
-        grid-template-columns: 35px 100px 150px 350px 65px 300px;
+        grid-template-columns: 35px 250px 250px 350px 250px 300px;
         grid-template-areas: 'col-1 col-2 col-3 col-4 col-5 col-6';
         text-align: center;
         margin: 40px 0;
@@ -944,11 +1209,6 @@
         color: black;
     }
 
-    /*.row{*/
-    /*display: grid;*/
-    /*grid-template-columns: 100px 150px 100px;*/
-    /*}*/
-
     .products-input {
         margin-left: 50px;
         width: 100px;
@@ -957,4 +1217,182 @@
     .products-input input {
         border: 1px solid lightcoral;
     }
+
+    .stock-cont {
+        margin-left: 55px;
+    }
+
+    .form-row {
+        display: grid;
+        margin: 20px 0;
+        grid-template-areas: 'column-1 column-2 column-3';
+        grid-template-columns: 130px 320px;
+    }
+
+    .column-1 {
+        grid-area: column-1;
+    }
+
+    .column-2 {
+        grid-area: column-2;
+
+    }
+
+    .column-3 {
+        grid-area: column-3;
+        width: 150px;
+        margin-left: -150px;
+    }
+
+    .column-3 p {
+        margin-top: -25px;
+        margin-left: 2px;
+        font-size: 150%;
+        width: 5px;
+    }
+
+    .form-data {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    .form-label {
+        font-weight: 700;
+        margin-top: 10px;
+        margin-right: 15px;
+        font-size: 12px;
+        text-align: right;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .form-input {
+        background-color: #ffffff;
+        margin-left: 10px;
+        margin-right: 10px;
+        border-radius: 5px;
+        height: 35px;
+        line-height: 35px;
+        padding-left: 10px;
+        border: none;
+        font-size: 12px;
+        font-weight: 700;
+        width: 100%;
+    }
+
+    .input-border {
+        border: 2px solid red;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .form-data span {
+        background-color: red;
+        border-radius: 5px;
+        color: #fff;
+        padding: 10px 0 10px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-left: 10px;
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        width: 100%;
+    }
+
+    .header {
+        display: inline-flex;
+        margin-left: 130px;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
+
+    .filters {
+        height: 250px;
+        width: 100%;
+        margin: 45px 50px 45px 0;
+        display: flex;
+        flex-direction: column;
+        border-radius: 5px;
+    }
+
+    .filter-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .filter-row input {
+        background-color: #F5F7FA;
+    }
+
+    .label-name {
+        margin-right: 80px;
+        width: 80px;
+    }
+
+    .square {
+        margin-left: -3px;
+    }
+
+    .filter-button {
+        background: linear-gradient(to right, #21c8cc, #2595ec);
+        border-radius: 5px;
+        margin-top: 25px;
+        width: 128px;
+        height: 42px;
+    }
+
+    .filter-button button {
+        background-color: #FFFFFF;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        width: 124px;
+        height: 38px;
+        margin: 2px 0 0 2px;
+
+    }
+
+    .info-bar {
+        margin: 0 45px 0 45px;
+        background-color: red;
+    }
+
+    /*PAGINATOR*/
+
+    .paginator-container {
+        margin-right: 45px;
+        height: 45px;
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        grid-template-areas: ". pagination-buttons .";
+
+    }
+
+    .pagination-buttons {
+        grid-area: pagination-buttons;
+        justify-self: center;
+    }
+
+    .page {
+        margin: 0 10px 0 10px;
+        background-color: transparent;
+        border: none;
+        font-size: 120%;
+    }
+
+    .icon-button {
+        background-color: transparent;
+        border: none;
+    }
+
+
+
 </style>

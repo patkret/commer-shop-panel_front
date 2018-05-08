@@ -83,7 +83,6 @@
       },
       editCategory(item) {
         this.$emit('singleCategory', item)
-        console.log(item)
       },
 
       duplicateCategory (el) {
