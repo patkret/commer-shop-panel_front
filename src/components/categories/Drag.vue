@@ -80,6 +80,38 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
+            let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+            this.items.splice(itemIndex, 1)
+            axios.delete('categories/' + item.id).then(result => {
+              let index = this.children.indexOf(this.children.find(el => el.id == item.id))
+              this.children.splice(index, 1)
+            })
+            this.$swal({
+              title: 'Usunięto!',
+              text: 'Kategoria została usunięta',
+              type: 'success',
+              confirmButtonText: 'OK'
+            })
+          },
+          dismiss => {
+            console.log(result.dismiss)
+          }).catch(this.$swal.noop)
+
+      },
+      editCategory(item) {
+        this.$emit('singleCategory', item)
+      },
+
+      duplicateCategory (el) {
+        this.$swal({
+          title: 'Czy chcesz zduplikować kategorie?',
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#00cc00',
+          cancelButtonColor: '#3085d6',
+          cancelButtonText: 'Anuluj',
+          confirmButtonText: 'Duplikuj',
+        }).then((result) => {
             if (result.value) {
               let itemIndex = this.children.map(x => x.id).indexOf(el.id)
               this.children.splice(itemIndex, 1)
@@ -100,9 +132,9 @@
       editCategory(el) {
         this.$emit('singleCategory', el)
       },
-      duplicateCategory(el) {
-        this.$emit('duplCategory', el)
-      },
+      // duplicateCategory(el) {
+      //   this.$emit('duplCategory', el)
+      // },
     },
 
 

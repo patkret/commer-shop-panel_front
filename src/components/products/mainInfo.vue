@@ -39,12 +39,15 @@
                             :selectedLabel="''"
                             track-by="name"
                             label="name"
+<<<<<<< HEAD
                             id="ms-1"
                             :custom-label="nameOnly"
+=======
+>>>>>>> product-mass-actions
                             :deselectLabel="''"
                             :selectLabel="''"
                             :hideSelected="true"
-                            placeholder="Wybierz"></multiselect>
+                            placeholder="Wybierz"/>
                 </div>
             </div>
             <div class="form-row">
@@ -58,19 +61,6 @@
                     </div>
                     <span v-show="errors.has('stockAvail')"
                           class="validator-help">{{ errors.first('stockAvail') }}</span>
-                </div>
-            </div>
-            <div class="form-row">
-                <label class="form-label">
-                    Cena wejścia
-                </label>
-                <div class="input-container" style="width: 30%">
-                    <div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('intoStockPrice')}">
-                        <input type="text" v-validate="'required|numeric'"
-                               placeholder="Cena..." name="intoStockPrice" v-model="product.intoStockPrice">
-                    </div>
-                    <p>zł</p>
-                    <span v-show="errors.has('intoStockPrice')" class="validator-help">{{ errors.first('intoStockPrice') }}</span>
                 </div>
             </div>
             <div class="form-row">
@@ -117,7 +107,7 @@
                             :deselectLabel="''"
                             :selectLabel="''"
                             :hideSelected="true"
-                            placeholder="Wybierz"></multiselect>
+                            placeholder="Wybierz"/>
                 </div>
             </div>
             <div class="form-row">
@@ -161,7 +151,29 @@
                             :deselectLabel="''"
                             :selectLabel="''"
                             :hideSelected="true"
-                            placeholder="Wybierz"></multiselect>
+                            placeholder="Wybierz"/>
+                </div>
+            </div>
+            <div class="form-row">
+                <label class="form-label">
+                    Kategoria główna
+                </label>
+                <div class="input-container" style="justify-self: start">
+                    <multiselect
+                            class="shop-select product-categories-select"
+                            v-model="selectedMainCategory"
+                            :options="options"
+                            :multiple="false"
+                            :close-on-select="true"
+                            :clear-on-select="false"
+                            :hide-selected="true"
+                            label="name"
+                            track-by="name"
+                            :selectLabel="''"
+                            :deselectLabel="''"
+                            placeholder="Wybierz"
+                    >
+                    </multiselect>
                 </div>
             </div>
             <div class="form-row">
@@ -241,6 +253,14 @@
         set: function (value) {
           this.$store.commit('saveStock', value)
         }
+      },
+      selectedMainCategory: {
+        get: function () {
+          return this.$store.getters.getMainCategory
+        },
+        set: function (value) {
+          this.$store.commit('saveMainCategory', value)
+        }
       }
 
     },
@@ -265,6 +285,9 @@
       },
       selectedStock: function (value) {
         this.product.stock = value.id
+      },
+      main_category: function (value) {
+        this.product.main_category = value.id
       }
     },
 

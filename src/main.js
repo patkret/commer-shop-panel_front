@@ -13,6 +13,7 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import Vuex from 'vuex'
 import axios from 'axios'
 import { store } from './store/store'
+import VModal from 'vue-js-modal'
 
 import './assets/css/main.css'
 import './assets/css/custom-buttons.css'
@@ -25,6 +26,7 @@ Vue.use(multiselectStyle)
 Vue.component('multiselect', Multiselect)
 Vue.use(VueSweetalert2)
 Vue.use(Vuex)
+Vue.use(VModal)
 
 
 window.axios = axios

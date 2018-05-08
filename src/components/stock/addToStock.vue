@@ -60,14 +60,18 @@
 
     methods: {
       addToStock () {
+        if(this.price_gr == ''){
+          this.warehouse_item.price = this.price_zl + '.' + '00'
+        }
+        else {
+          this.warehouse_item.price = this.price_zl + '.' + this.price_gr
+        }
         let date = new Date() + ''
         const date_arr = date.split(' ')
         this.warehouse_item.added_at = date_arr[2] + ' ' + date_arr [1] + ' ' + date_arr[3] + ' ' + date_arr[4]
 
         this.$validator.validateAll().then((result) => {
-          if(this.price_gr === ''){
-            this.warehouse_item.price = this.price_zl + '.' + '00'
-          }
+
           if (result) {
             axios.post('warehouse-items', {
               warehouse_item: this.warehouse_item,

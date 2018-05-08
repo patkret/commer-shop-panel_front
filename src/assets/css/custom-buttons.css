@@ -233,4 +233,20 @@ input:checked + .square:after {
     width: 250px;
 }
 
+ .price-select{
+    width: 200px;
+}
+
+ .price-select .multiselect__tags {
+    width: 200px;
+}
+
+ .vendor-select{
+     width: 245px;
+ }
+ .vendor-select .multiselect__tags{
+     width: 245px;
+ }
+
+
 

@@ -21,10 +21,22 @@
                 </div>
             </div>
             <div class="component-container">
-                <add-category v-if="type == 1"></add-category>
-                <category-list v-if="type == 2" @duplCategory="duplicateCategory" @singleCategory="editCategory" @child="getChild"></category-list>
-                <edit-category v-if="type == 3" :category="editingCategory" :childCategory="childCategory"></edit-category>
-                <duplicate-category v-if="type == 4" :category="duplicatingCategory" :childCategory="childCategory"></duplicate-category>
+
+                <!--<add-category v-if="type == 1"></add-category>-->
+                <!--<category-list v-if="type == 2" @duplCategory="duplicateCategory" @singleCategory="editCategory" @child="getChild"></category-list>-->
+                <!--<edit-category v-if="type == 3" :category="editingCategory" :childCategory="childCategory"></edit-category>-->
+                <!--<duplicate-category v-if="type == 4" :category="duplicatingCategory" :childCategory="childCategory"></duplicate-category>-->
+
+                <transition name="slide-fade">
+                    <add-category v-if="type === 1"/>
+                </transition>
+                <transition name="slide-fade">
+                    <category-list v-if="type === 2" @singleCategory="editCategory" @child="getChild"/>
+                </transition>
+                <transition name="slide-fade">
+                    <edit-category v-if="type === 3" :category="editingCategory" :childCategory="childCategory"/>
+                </transition>
+
             </div>
         </div>
 
@@ -79,6 +91,18 @@
     .active {
         background-color: #F3F4F8;
         border-radius: 5px;
+    }
+    .slide-fade-enter-active {
+        transition: all 1.3s ease;
+        transform: translateY(-5px) ;
+    }
+    .slide-fade-leave-active {
+        transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+    {
+        transform: translateY(5px);
+        opacity: 0;
     }
 
 </style>

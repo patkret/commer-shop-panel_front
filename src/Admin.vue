@@ -56,7 +56,9 @@
 
                         <transition name="slide-fade">
                             <ul class="child-items" v-if="openedItems[index]">
-                                <li v-for="child in item.children" :class="{'child-item' : current_path != child.path, 'child-item child-active': current_path == child.path}"  @click.stop="selectChild">
+                                <li v-for="child in item.children"
+                                    :class="{'child-item' : current_path != child.path, 'child-item child-active': current_path == child.path}"
+                                    @click.stop="selectChild">
                                     <router-link :to="child.path">
                                         <p class="child-name">{{child.text}}</p>
                                     </router-link>
@@ -91,33 +93,42 @@
         item: '',
         items: [
           {icon: icons.dashboard, text: 'Dashboard', path: '/dashboard'},
-          {icon: icons.orders, text: 'Sprzedaż', path: '#2'},
-          {icon: icons.products, text: 'Produkty', path: '', children:
-            [
-              {text: 'Lista produktów', path: '/products'},
-              {text: 'Dodaj produkt', path: '/product-add'},
-              {text: 'Kategorie', path: '/categories'},
-              {text: 'Zestawy atrybutów', path: '/attribute-sets'},
-              {text: 'Zestawy wariantów', path: '/variants'},
-              {text: 'Producenci', path: '/vendors'},
-              {text: 'Stawki VAT', path: '/vat-rates'},
-              {text:'Magazyn', path: '/stock'},
-            ],
+          {
+            icon: icons.orders, text: 'Sprzedaż', path: '', children:
+              [
+                {text: 'Lista zamówień', path: '/orders'},
+                {text: 'Dodaj zamówienie', path: '/order-add'},
+                {text: 'Dostawy', path: '/'},
+              ],
+          },
+          {
+            icon: icons.products, text: 'Produkty', path: '', children:
+              [
+                {text: 'Lista produktów', path: '/products'},
+                {text: 'Dodaj produkt', path: '/product-add'},
+                {text: 'Kategorie', path: '/categories'},
+                {text: 'Zestawy atrybutów', path: '/attribute-sets'},
+                {text: 'Zestawy wariantów', path: '/variants'},
+                {text: 'Producenci', path: '/vendors'},
+                {text: 'Stawki VAT', path: '/vat-rates'},
+                {text: 'Magazyn', path: '/stock'},
+              ],
           },
           {icon: icons.clients, text: 'Klienci', path: ''},
           {icon: icons.marketing, text: 'Marketing', path: ''},
           {icon: icons.reports, text: 'Raporty', path: '/permission'},
-          {icon: icons.settings, text: 'Ustawienia', path: '', children:
-            [
-              {text: 'Użytkownicy' , path: '/users'},
-              {text: 'Sklepu' , path:''},
-              {text: 'Styli' , path:''},
-              {text: 'Płatności' , path:''},
-              {text: 'Dostawy' , path:''},
-              {text: 'Rozliczenia' , path:''},
-            ],
+          {
+            icon: icons.settings, text: 'Ustawienia', path: '', children:
+              [
+                {text: 'Użytkownicy', path: '/users'},
+                {text: 'Sklepu', path: ''},
+                {text: 'Styli', path: ''},
+                {text: 'Płatności', path: ''},
+                {text: 'Dostawy', path: ''},
+                {text: 'Rozliczenia', path: '/buttons'},
+              ],
           },
-          {icon: icons.integrations, text: 'Integracje', path: '/buttons'},
+          {icon: icons.integrations, text: 'Integracje', path: '/integrations'},
         ],
         options: [
           {id: 1, name: 'SHOP 1'},
@@ -139,10 +150,10 @@
           this.openedItems[index] = !this.openedItems[index]
           this.$forceUpdate()
         }
-        this.item = item;
+        this.item = item
       },
 
-      selectChild(){
+      selectChild () {
         let thisRoute = this.$route.path
         this.current_path = thisRoute
       },

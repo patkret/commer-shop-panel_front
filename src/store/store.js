@@ -42,6 +42,8 @@ export const store = new Vuex.Store({
     selectedVendor: '',
     selectedStock: '',
     selectedCategories: [],
+    selectedMainCategory: '',
+    test: []
   },
 
   getters: {
@@ -71,6 +73,7 @@ export const store = new Vuex.Store({
     getVatRate: state => state.selectedRate,
     getStock: state => state.selectedStock,
     getCategory: state => state.selectedCategories,
+    getMainCategory: state => state.selectedMainCategory
   },
 
   mutations: {
@@ -147,6 +150,7 @@ export const store = new Vuex.Store({
         variantSets: [],
         categories: '',
         stock: '',
+        main_category: ''
       }
     },
 
@@ -168,13 +172,20 @@ export const store = new Vuex.Store({
       state.selectedVendor = payload
       state.product.vendor = payload.id
     },
-    // saveCategories: (state,payload) => {
-    //   state.selectedCategories = payload
-    //   state.product.category = payload.id
-    // },
+    saveCategories: (state,payload) => {
+      state.selectedCategories = payload
+      state.product.category = payload.id
+    },
     saveStock: (state,payload) => {
       state.selectedStock = payload
       state.product.stock = payload.id
+    },
+    saveMainCategory: (state,payload) => {
+      state.selectedMainCategory = payload
+      state.product.main_category = payload.id
+    },
+    getAttrSets: (state, payload) => {
+      state.test = payload
     }
 
 
@@ -195,6 +206,10 @@ export const store = new Vuex.Store({
           let rate = response.data.find(el => el.id === result.data.vat_rate)
           context.commit('saveVatRate', rate)
         })
+        axios('all-categories').then(response => {
+          let main_cat = response.data.find(el => el.id === result.data.main_category)
+          context.commit('saveMainCategory', main_cat)
+        })
         axios('warehouses').then(response => {
           let stoc = response.data.find(el => el.id === result.data.stock)
           context.commit('saveStock', stoc)
@@ -213,6 +228,15 @@ export const store = new Vuex.Store({
         }
         context.commit('getSets', sets)
       })
+    },
+
+    getAttributeSets: (context, state) => {
+
+      axios('attribute-sets-categories/' + state.product.main_category).then(result => {
+
+        context.commit('getAttrSets', result.data)
+        }
+      )
     },
 
     getVariantSets: context => {
