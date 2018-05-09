@@ -54,6 +54,9 @@ axios.interceptors.response.use(response => {
 })
 axios.defaults.baseURL = env.API_URL
 
+router.push({path: '/dashboard'})
+
+
 let token = localStorage.getItem('token')
 if (!token) {
   router.push({path: '/login'})
