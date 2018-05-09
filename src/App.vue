@@ -6,6 +6,12 @@
 
 <script>
   export default {
-    name: 'app'
+    name: 'app',
+    created: function () {
+
+      if(this.$route.path == '/') {
+        this.$router.push({path:'dashboard'})
+      }
+    },
   }
 </script>
