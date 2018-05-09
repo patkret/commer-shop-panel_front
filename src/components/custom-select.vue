@@ -1,15 +1,19 @@
 <template>
-    <div style="height: 1000px">
-        <div class="custom-input">
-            <h2>
-                <transition name="slide-fade">
-                    <span v-if="showCustLabel">Nazwa</span>
-                </transition>
+    <div class="box">
+    <div class="container">
+        <div class="row">
+            <div class="custom-input">
+                <h2>
+                    <transition name="slide-fade">
+                        <span v-if="showCustLabel">Nazwa</span>
+                    </transition>
 
-                <input type="text" placeholder="Nazwa" class="custom-input" v-model="name"/>
-            </h2>
+                    <input type="text" placeholder="Nazwa" class="custom-input" v-model="name"/>
+                </h2>
 
+            </div>
         </div>
+
 
         <div class="custom-select" @click="showList = !showList">
             <div class="search-input">
@@ -23,35 +27,29 @@
             <!--<div class="dropdown-menu" >-->
                 <ul class="items-list" v-if="showList">
                     <li @click.stop="showList = true">
-                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Nazwa 1'"/>  Nazwa 1</label>
+                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Producent 1'"/>  Producent 1</label>
                     </li>
-                    <li>
-                       <label class="cust-check"><input type="checkbox" v-model="selectedValues" :value="2"/>  Nazwa 2</label>
+                    <li @click.stop="showList = true">
+                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Nowy'"/>  Nowy</label>
                     </li>
-                    <li>
-                       <label class="cust-check"><input type="checkbox" v-model="selectedValues" :value="3"/>  Nazwa 3</label>
+                    <li @click.stop="showList = true">
+                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Dla win'"/>  Dla win</label>
                     </li>
-                    <li>
-                       <label class="cust-check"><input type="checkbox" v-model="selectedValues" :value="4"/>  Nazwa 4</label>
+                    <li @click.stop="showList = true">
+                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Producent 4'"/>  Producent 4</label>
                     </li>
-                    <li>
-                       <label class="cust-check"><input type="checkbox" v-model="selectedValues" :value="5"/>  Nazwa 5</label>
+                    <li @click.stop="showList = true">
+                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Producent 5'"/>  Producent 5</label>
                     </li>
-                    <li>
-                       <label class="cust-check"><input type="checkbox" v-model="selectedValues" :value="6"/>  Nazwa 6</label>
-                    </li>
-                    <li>
-                       <label class="cust-check"><input type="checkbox" v-model="selectedValues" :value="7"/>  Nazwa 7</label>
-                    </li>
-                    <li>
-                       <label class="cust-check"><input type="checkbox" v-model="selectedValues" :value="8"/>  Nazwa 8</label>
+                    <li @click.stop="showList = true">
+                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Producent 6'"/>  Producent 6</label>
                     </li>
 
                 </ul>
             <!--</div>-->
         </div>
     </div>
-
+    </div>
 </template>
 
 <script>
@@ -82,8 +80,22 @@
 </script>
 
 <style scoped>
-    *{
-        background-color: #FFFFFF;
+    .box{
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        margin: 50px 0 0 0;
+    }
+
+    .container{
+        background-color: white;
+        width: 90%;
+        height: 500px;
+        border-radius: 5px;
+        box-shadow: 3px 3px 3px #dddddd;
+    }
+    .row{
+        margin-left: 35px;
     }
     ::placeholder{
         opacity: 1;
@@ -91,7 +103,7 @@
     }
 
     h2 {
-        width: 250px;
+        width: 400px;
         border: 1px solid #dddddd;
         line-height:0.1em;
         margin:10px 0 20px;
@@ -107,11 +119,10 @@
 
     .custom-input{
         border: none;
-        width: 245px;
+        width: 350px;
         position: relative;
         background-color: transparent;
         padding: 15px;
-
 
     }
 
@@ -124,7 +135,7 @@
     }
 
     .search-input{
-        margin-left: 50px;
+        /*margin-left: 50px;*/
         background-color: #F6F7FB;
         border: 1px solid #dddddd;
         width: 400px;
@@ -137,7 +148,7 @@
 
     .arrow-down{
         background-color: inherit;
-        margin: 15px 10px 0 0;
+        margin: 18px 10px 0 25px;
 
     }
 
@@ -159,7 +170,7 @@
     .items-list{
         width: 400px;
         padding: 0;
-        margin: 0 0 0 50px;
+        margin: 0;
         max-height: 250px;
         overflow: auto;
         border: 1px solid #dddddd;
@@ -204,7 +215,7 @@
     .custom-select{
         width: 400px;
         padding: 0;
-        margin: 0;
+        margin: 0 0 0 50px;
         height: 250px;
     }
 
@@ -217,7 +228,7 @@
         flex-direction: row;
         flex-wrap: wrap;
         background-color: inherit;
-        width: 325px;
+        width: 335px;
         margin: 15px 0 0 15px;
         max-width: 325px;
     }

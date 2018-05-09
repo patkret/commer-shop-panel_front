@@ -39,11 +39,6 @@
                             :selectedLabel="''"
                             track-by="name"
                             label="name"
-<<<<<<< HEAD
-                            id="ms-1"
-                            :custom-label="nameOnly"
-=======
->>>>>>> product-mass-actions
                             :deselectLabel="''"
                             :selectLabel="''"
                             :hideSelected="true"

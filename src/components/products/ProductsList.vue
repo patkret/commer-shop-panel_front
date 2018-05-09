@@ -23,6 +23,9 @@
                 <li :class="{'products-list-item': true, 'products-list-item active-blue': type == 5}"
                     @click.prevent="changeComponent(5)">Szkice produktów
                 </li>
+                <li :class="{'products-list-item': true, 'products-list-item active-blue': type == 6}"
+                    @click.prevent="changeComponent(6)">Produkty powiązane
+                </li>
             </ul>
             <div class="component-container">
                 <div v-if="type == 1" @singleProduct="editProduct">
