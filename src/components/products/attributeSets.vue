@@ -119,14 +119,18 @@
 
     created: function () {
 
-      if (this.$store.state.sets.length === 0 && this.$store.state.product.attributeSets.length === 0) {
-        this.$store.dispatch('getSets')
+      if(this.$store.state.product.main_category !== ''){
+        this.$store.dispatch('getAttributeSets')
       }
-      else if (this.$store.state.sets.length === 0 && this.$store.state.product.attributeSets.length !== 0) {
-        this.$store.dispatch('getSets')
-      }
-      else {
-      }
+
+      // if (this.$store.state.sets.length === 0 && this.$store.state.product.attributeSets.length === 0) {
+      //   this.$store.dispatch('getSets')
+      // }
+      // else if (this.$store.state.sets.length === 0 && this.$store.state.product.attributeSets.length !== 0) {
+      //   this.$store.dispatch('getSets')
+      // }
+      // else {
+      // }
 
     },
 

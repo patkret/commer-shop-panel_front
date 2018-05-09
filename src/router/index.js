@@ -14,8 +14,14 @@ import Variants from '../components/variants/Variants'
 import Vendors from '../components/vendors/Vendors'
 import Users from '../components/users/Users'
 import Stock from '../components/stock/Stock'
+import OrdersList from '../components/orders/OrdersList'
+import AddOrder from '../components/orders/AddOrder'
+import Integrations from '../components/integrations/Integrations'
 import permissionList from '../components/users/permissionList'
 import Account from '../components/accounts/account'
+import select from '../components/custom-select'
+
+
 
 Vue.use(Router)
 
@@ -26,6 +32,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login,
+    },
+    {
+      path: '/select',
+      name: 'select',
+      component: select,
     },
     {
       path: '/admin',
@@ -98,11 +109,26 @@ export default new Router({
           component: Stock,
         },
         {
+
           path: '/account',
           name: 'Account',
           component: Account,
         },
-
+        {
+          path: '/orders',
+          name: 'OrdersList',
+          component: OrdersList,
+        },
+        {
+          path: '/order-add',
+          name: 'AddOrder',
+          component: AddOrder,
+        },
+        {
+          path: '/integrations',
+          name: 'Integrations',
+          component: Integrations,
+        },
       ],
     },
   ],

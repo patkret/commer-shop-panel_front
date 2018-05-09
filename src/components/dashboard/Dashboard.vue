@@ -385,7 +385,6 @@
 
     .stat-number {
         font-size: 250%;
-
         margin-bottom: 10px;
     }
 

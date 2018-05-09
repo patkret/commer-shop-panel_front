@@ -6,7 +6,8 @@
         </div>
 
         <add-to-stock v-if="type === 2" :stock="stock"/>
-        <table class="table-container" v-if="type === 1">
+        <div class="table-container" v-if="type === 1">
+        <table class="stock-table">
             <tr class="table-head">
                 <th>ID</th>
                 <th>Dodano</th>
@@ -21,7 +22,7 @@
                 <td>{{item.price}} zł</td>
                 <td>
                     <div class="buttons-container">
-                        <button @click="showActions(key)" class="more-button">
+                        <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': index === key}">
                             <span class="dot"></span>
                             <span class="dot"></span>
                             <span class="dot"></span>
@@ -33,6 +34,7 @@
                 </td>
             </tr>
         </table>
+        </div>
     </div>
 
 </template>
@@ -104,9 +106,14 @@
         width: 80%;
         background-color: #ffffff;
         margin-left: 20px;
-        padding: 20px;
+        padding: 40px;
         border-radius: 5px;
         box-shadow: 5px 5px 5px 2px #eff1f4;
+
+    }
+    .stock-table{
+        border-collapse: collapse;
+        width: 100%;
     }
 
     .attr-p {
@@ -125,6 +132,7 @@
 
     .buttons-container {
         position: relative;
+        border-radius: 5px;
     }
 
     .more-button {
@@ -189,10 +197,12 @@
 
     .single-item {
         height: 55px;
+        border-radius: 5px;
     }
 
     .active {
-        background-color: #cccccc;
+        background-color: #F4F4F9;
+        border-radius: 5px;
     }
 
     .custom-button {
@@ -204,4 +214,5 @@
         display: inline-flex;
         margin: 0 0 45px 20px;
     }
+
 </style>
