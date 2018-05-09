@@ -15,6 +15,7 @@ import Vendors from '../components/vendors/Vendors'
 import Users from '../components/users/Users'
 import Stock from '../components/stock/Stock'
 import permissionList from '../components/users/permissionList'
+import Account from '../components/accounts/account'
 
 Vue.use(Router)
 
@@ -95,6 +96,11 @@ export default new Router({
           path: '/stock',
           name: 'Stock',
           component: Stock,
+        },
+        {
+          path: '/account',
+          name: 'Account',
+          component: Account,
         },
 
       ],

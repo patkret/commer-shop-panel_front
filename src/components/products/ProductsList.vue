@@ -1,6 +1,10 @@
 <template>
     <div>
         <div>
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
             <h1 class="card-name">Lista Produktów</h1>
             <ul class="products-list">
                 <li  :class="{'products-list-item': true, 'products-list-item active-blue': type == 1}" @click.prevent="changeComponent(1)">Wszystkie produkty</li>
@@ -10,6 +14,41 @@
                 <li  :class="{'products-list-item': true, 'products-list-item active-blue': type == 5}" @click.prevent="changeComponent(5)">Szkice produktów</li>
             </ul>
             <div class="component-container">
+
+                <!--MODAL-->
+                <transition name="modal" v-if="modal">
+                    <div class="modal-mask">
+                        <div class="modal-wrapper">
+                            <div class="modal-container">
+                                <div class="modal-header">
+                                    <h3 class="modal-heading">Szczegóły Produktu</h3>
+                                </div>
+                                <div class="modal-body">
+                                   <div class="modal-row">
+                                       <p class="property-name">Nazwa produktu:</p>
+                                       <p class="property-data">Nazwa produktu</p>
+                                   </div>
+                                    <div class="modal-row">
+                                       <p class="property-name">SKU Produktu:</p>
+                                       <p class="property-data">Nazwa produktu</p>
+                                   </div>
+                                    <div class="modal-row">
+                                       <p class="property-name">Cena:</p>
+                                       <p class="property-data">Nazwa produktu</p>
+                                   </div>
+                                    <div class="modal-row">
+                                       <p class="property-name">Galeria</p>
+                                       <p class="property-data">Nazwa produktu</p>
+                                   </div>
+
+                                </div>
+                                    <button class="modal-close-button" @click="modal = false">X</button>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+
+                <!--KONIEC MODALA-->
                 <div v-if="type == 1" @singleProduct="editProduct">
                     <div class="products-container">
                         <h4 class="products-container-heading">Produkty</h4>
@@ -71,6 +110,7 @@
                                         </button>
                                         <div class="arrow-left"  v-if="index === key && show === true">
                                             <div class="action-buttons">
+                                                <button @click="showModal(item)" class="details">Szczegóły</button>
                                                 <button @click="deleteProduct(item)" class="delete">Usuń</button>
                                                 <router-link :to="'/products/edit/' +item.id" tag="button" class="edit">Edytuj</router-link>
                                             </div>
@@ -120,6 +160,7 @@
         show : false,
         type: 1,
         editingProduct: '',
+        modal: false,
         filters: [
           {name: 'Po ID'},
           {name: 'Po nazwie'},
@@ -154,6 +195,9 @@
           this.show = true
           this.index = key
         }
+      },
+      showModal () {
+       this.modal = true
       },
       selectAll () {
         if (this.selectedProducts.length !== 0) {
@@ -266,6 +310,11 @@
         border-bottom: 2px solid #2596eb;
         color: #000000;
     }
+    .products-table {
+        width: 90%;
+        margin: 0 auto;
+        margin-left: 0;
+    }
     /*KONIEC PRODUKTÓW*/
     .products-container {
         background-color: #ffffff;
@@ -273,7 +322,7 @@
         font-weight: 500;
     }
     .attr-list-item {
-     padding: 10px 0 10px 10px;
+     padding: 10px 0 10px 18px;
     }
     .products-select {
         width: 200px;
@@ -307,10 +356,10 @@
     }
     thead .table-row {
         display: grid;
-        grid-template-columns: 35px 100px 150px 350px 65px 300px;
+        grid-template-columns: 5% 15% 15% 35% 5% 25%;
         grid-template-areas: 'col-1 col-2 col-3 col-4 col-5 col-6';
         text-align: center;
-        padding: 20px 0 0 0;
+        padding: 10px 0 0 0;
         height: 20px;
         line-height: 20px;
     }
@@ -320,7 +369,7 @@
     }
     .table-row {
         display: grid;
-        grid-template-columns: 35px 100px 150px 350px 65px 300px;
+        grid-template-columns: 5% 15% 15% 35% 5% 25%;
         grid-template-areas: 'col-1 col-2 col-3 col-4 col-5 col-6';
         text-align: center;
         margin: 40px 0;
@@ -331,21 +380,33 @@
     }
     .col-1 {
         grid-area: col-1;
+        text-align: left;
     }
     .col-2 {
         grid-area: col-2;
+        text-align: left;
+        margin-left: 15px;
+    }
+    tbody .col-2 {
+       margin-left: 0;
     }
     .col-3 {
         grid-area: col-3;
+        text-align: left;
     }
     .col-4 {
         grid-area: col-4;
     }
     .col-5 {
         grid-area: col-5;
+        text-align: right;
+    }
+    tbody .col-5 {
+        text-align: center;
     }
     .col-6 {
         grid-area: col-6;
+        text-align: right;
     }
     .table-heading {
         padding-top: 40px;
@@ -376,13 +437,11 @@
         border: none;
         height: 40px;
         line-height: 40px;
-        /*margin-top: 10px;*/
         padding-right: 60px;
         padding-left: 10px;
         font-weight: 700;
     }
     .admin-select {
-        /*margin-top: 10px;*/
         font-size: 10px;
         border-radius: 5px;
     }
@@ -427,11 +486,12 @@
     }
     .action-buttons {
         position: absolute;
-        top: -22px;
+        top: -20px;
         display: flex;
         border: 1px solid #dde0e5;
         border-radius: 5px;
         z-index: -1;
+        margin-left: 10%;
     }
     .action-buttons button {
         background-color: #ffffff;
@@ -542,5 +602,123 @@
     .ziemniak {
         height: 62px;
         width: 62px;
+    }
+
+    /*MODAL*/
+
+    .modal-mask {
+        position: fixed;
+        z-index: 9998;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        display: table;
+        transition: opacity .3s ease;
+    }
+
+    .modal-wrapper {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .modal-container {
+        width: 50%;
+        height: 50%;
+        background-color: #ffffff;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        border-radius: 5px;
+        padding: 10px;
+    }
+    .modal-close-button {
+        border-radius: 100%;
+        height: 40px;
+        width: 40px;
+        background-color: #ffffff;
+        position: absolute;
+        top: -3%;
+        right: -2%;
+        text-transform: uppercase;
+        border: 1px solid #000000;
+    }
+    .modal-close-button:hover {
+        background-color: #eeeeee;
+    }
+    .modal-heading {
+        text-align: center;
+    }
+    .modal-row {
+        display: grid;
+        grid-template-areas: 'property-name property-data';
+        grid-template-columns: 50% 50%;
+    }
+    .property-name {
+        font-weight: bold;
+        font-size: 16px;
+        text-transform: uppercase;
+        padding-left: 20px;
+    }
+    /*SWITCh*/
+
+    /* The switch - the box around the slider */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {display:none;}
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #00DE01;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #00DE01;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
     }
 </style>
