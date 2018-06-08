@@ -9,9 +9,12 @@
         <h1 class="form-name" v-if="product.id == null">Dodaj produkt</h1>
         <div class="top-menu">
             <ul class="top-menu-items">
-                <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 1}">
-                    Dane podstawowe
-                </li>
+
+                <router-link to="/product-add/main-info">
+                    <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 1}">
+                        Dane podstawowe
+                    </li>
+                </router-link>
                 <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 2}">Dane dodatkowe
                 </li>
                 <li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 3}">
@@ -30,11 +33,12 @@
             </ul>
         </div>
         <div class="menu-tab">
-            <main-info v-if="type == 1"></main-info>
-            <additional-info v-if="type == 2"></additional-info>
-            <products-seo v-if="type==3"></products-seo>
-            <attribute-sets v-if="type == 5"></attribute-sets>
-            <variant-sets v-if="type == 6"></variant-sets>
+            <router-view></router-view>
+            <!--<main-info v-if="type == 1"></main-info>-->
+            <!--<additional-info v-if="type == 2"></additional-info>-->
+            <!--<products-seo v-if="type==3"></products-seo>-->
+            <!--<attribute-sets v-if="type == 5"></attribute-sets>-->
+            <!--<variant-sets v-if="type == 6"></variant-sets>-->
         </div>
     </div>
 </template>
@@ -62,7 +66,7 @@
     },
     name: 'add-product',
     data: () => ({
-      type: 1,
+      type: 2,
       attributeSets: [],
       productMainInfo: {},
       productName: '',

@@ -22,20 +22,20 @@
             </div>
             <div class="component-container">
 
-                <!--<add-category v-if="type == 1"></add-category>-->
-                <!--<category-list v-if="type == 2" @duplCategory="duplicateCategory" @singleCategory="editCategory" @child="getChild"></category-list>-->
-                <!--<edit-category v-if="type == 3" :category="editingCategory" :childCategory="childCategory"></edit-category>-->
-                <!--<duplicate-category v-if="type == 4" :category="duplicatingCategory" :childCategory="childCategory"></duplicate-category>-->
+                <add-category v-if="type == 1"></add-category>
+                <category-list v-if="type == 2" @duplCategory="duplicateCategory" @singleCategory="editCategory" @child="getChild"></category-list>
+                <edit-category v-if="type == 3" :category="editingCategory" :childCategory="childCategory"></edit-category>
+                <duplicate-category v-if="type == 4" :category="duplicatingCategory" :childCategory="childCategory"></duplicate-category>
 
-                <transition name="slide-fade">
-                    <add-category v-if="type === 1"/>
-                </transition>
-                <transition name="slide-fade">
-                    <category-list v-if="type === 2" @singleCategory="editCategory" @child="getChild"/>
-                </transition>
-                <transition name="slide-fade">
-                    <edit-category v-if="type === 3" :category="editingCategory" :childCategory="childCategory"/>
-                </transition>
+                <!--<transition name="slide-fade">-->
+                    <!--<add-category v-if="type === 1"/>-->
+                <!--</transition>-->
+                <!--<transition name="slide-fade">-->
+                    <!--<category-list v-if="type === 2" @singleCategory="editCategory" @child="getChild"/>-->
+                <!--</transition>-->
+                <!--<transition name="slide-fade">-->
+                    <!--<edit-category v-if="type === 3" :category="editingCategory" :childCategory="childCategory"/>-->
+                <!--</transition>-->
 
             </div>
         </div>

@@ -1,0 +1,44 @@
+/*.component__container {*/
+    /*display: grid;*/
+    /*grid-template-rows: 100px 100px 1fr;*/
+    /*grid-template-areas: "c-header" "c-navbar" "c-main"*/
+/*}*/
+
+/*.component__container .c-header {*/
+    /*grid-area: c-header;*/
+    /*align-self: center;*/
+    /*font-size: 1.3rem;*/
+/*}*/
+
+/*.component__container .c-navbar {*/
+    /*grid-area: c-navbar;*/
+    /*display: inline-flex;*/
+    /*flex-wrap: nowrap;*/
+    /*height: 45px;*/
+    /*align-items: center;*/
+    /*justify-content: flex-start;*/
+    /*!*width: 100%;*!*/
+    /*border-bottom: 1px solid #dddddd;*/
+/*}*/
+
+/*.component__container .c-main {*/
+    /*grid-area: c-main;*/
+/*}*/
+
+
+
+/*.component-nav__item {*/
+
+    /*height: 45px;*/
+    /*line-height: 45px;*/
+    /*font-size: 1rem;*/
+    /*white-space: nowrap;*/
+    /*!*margin-right: 25px;*!*/
+/*}*/
+
+/*.is-active {*/
+    /*border-bottom: 3px solid #2595ec;*/
+/*}*/
+td{
+    vertical-align: middle;
+}

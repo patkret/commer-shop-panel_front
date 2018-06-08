@@ -1,12 +1,17 @@
-import dashboard from './img/icons/dashboard.svg'
-import clients from './img/icons/clients.svg'
-import products from './img/icons/products.svg'
-import orders from './img/icons/orders.svg'
-import marketing from './img/icons/marketing.svg'
-import reports from './img/icons/reports.svg'
-import settings from './img/icons/settings.svg'
-import integrations from './img/icons/integrations.svg'
-import logo from './img/icons/logo.svg'
+import dashboard from './images/nav/dashboard.svg'
+import clients from './images/nav/klienci.svg'
+import products from './images/nav/asortyment.svg'
+import orders from './images/nav/sprzedaz.svg'
+import offers from './images/nav/oferty.svg'
+import marketing from './images/nav/marketing.svg'
+import reports from './images/nav/raporty.svg'
+import settings from './images/nav/ustawienia.svg'
+import integrations from './images/nav/integracje.svg'
+import logo from './images/ecommer.svg'
+import media  from './images/nav/media.svg'
+import data  from './images/nav/wymiana-danych.svg'
+import avatar  from './images/daniel.jpg'
+import wine  from './images/wine.png'
 
 
 export default {
@@ -18,6 +23,11 @@ export default {
   reports,
   settings,
   integrations,
-  logo
+  logo,
+  offers,
+  media,
+  data,
+  avatar,
+  wine
 
 }

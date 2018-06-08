@@ -6,7 +6,7 @@ import Dashboard from '../components/dashboard/Dashboard'
 import buttons from '../components/buttons'
 import AttributeSets from '../components/attribute-sets/AttributeSets'
 import Categories from '../components/categories/Categories'
-import AddProduct from '../components/products/addProduct'
+import AddProduct from '../components/products/Products'
 import EditProduct from '../components/products/addProduct'
 import ProductsList from '../components/products/ProductsList'
 import VatRates from '../components/vat-rates/VatRates'
@@ -20,6 +20,10 @@ import Integrations from '../components/integrations/Integrations'
 import permissionList from '../components/users/permissionList'
 import Account from '../components/accounts/account'
 import select from '../components/custom-select'
+import Logs from '../components/Logs'
+import Paginator from '../components/paginator'
+import MainInfo from '../components/products/mainInfo'
+import AdditionalInfo from '../components/products/additionalInfo'
 
 
 
@@ -66,7 +70,20 @@ export default new Router({
         {
           path: '/product-add',
           name: 'AddProduct',
-          component: AddProduct
+          component: AddProduct,
+          children: [
+            {
+              path: 'main-info',
+              name: 'MainInfo',
+              component: MainInfo,
+            },
+
+            {
+              path: 'additional-info',
+              name: 'AdditionalInfo',
+              component: AdditionalInfo,
+            },
+          ]
         },
         {
           path: '/products',
@@ -128,6 +145,16 @@ export default new Router({
           path: '/integrations',
           name: 'Integrations',
           component: Integrations,
+        },
+        {
+          path: '/logs',
+          name: 'Logs',
+          component: Logs,
+        },
+        {
+          path: '/paginator',
+          name: 'Paginator',
+          component: Paginator,
         },
       ],
     },

@@ -1,428 +1,642 @@
+<!--<template>-->
+    <!--<div>-->
+        <!--<div>-->
+            <!--<transition name="fade">-->
+                <!--<div class="info-bar" v-if="info === true">-->
+                    <!--<p>Akcja została wykonana!</p>-->
+                <!--</div>-->
+            <!--</transition>-->
+            <!--<h1 class="card-name">Lista Produktów</h1>-->
+            <!--<ul class="products-list">-->
+                <!--<li :class="{'products-list-item': true, 'products-list-item active-blue': type == 1}"-->
+                    <!--@click.prevent="changeComponent(1)">Wszystkie produkty-->
+                <!--</li>-->
+                <!--<li :class="{'products-list-item': true, 'products-list-item active-blue': type == 2}"-->
+                    <!--@click.prevent="changeComponent(2)">Wyróżnione produkty-->
+                <!--</li>-->
+                <!--<li :class="{'products-list-item': true, 'products-list-item active-blue': type == 3}"-->
+                    <!--@click.prevent="changeComponent(3)">Zaimportowane-->
+                <!--</li>-->
+                <!--<li :class="{'products-list-item': true, 'products-list-item active-blue': type == 4}"-->
+                    <!--@click.prevent="changeComponent(4)">Brak na magazynie-->
+                <!--</li>-->
+                <!--<li :class="{'products-list-item': true, 'products-list-item active-blue': type == 5}"-->
+                    <!--@click.prevent="changeComponent(5)">Szkice produktów-->
+                <!--</li>-->
+                <!--<li :class="{'products-list-item': true, 'products-list-item active-blue': type == 6}"-->
+                    <!--@click.prevent="changeComponent(6)">Produkty powiązane-->
+                <!--</li>-->
+            <!--</ul>-->
+            <!--<div class="component-container">-->
+                <!--<div v-if="type == 1" @singleProduct="editProduct">-->
+                    <!--<div class="products-container">-->
+                        <!--<h4 class="products-container-heading">Produkty</h4>-->
+                        <!--<div class="products-row">-->
+                            <!--<div class="filter-container">-->
+                                <!--<div class="filter-status">-->
+                                    <!--<label class="filter-label">Sortuj wg</label>-->
+                                    <!--<multiselect-->
+                                            <!--class="admin-select"-->
+                                            <!--v-model="selectedFilter"-->
+                                            <!--:allow-empty="false"-->
+                                            <!--:searchable="false"-->
+                                            <!--:selectedLabel="''"-->
+                                            <!--track-by="name"-->
+                                            <!--:options="filters"-->
+                                            <!--label="name"-->
+                                            <!--:deselectLabel="''"-->
+                                            <!--:selectLabel="''"-->
+                                            <!--:hideSelected="true"-->
+                                            <!--placeholder="Wybierz"/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="filter-button">-->
+                                <!--<button type="button" @click="showFilters = !showFilters">Filtrowanie</button>-->
+                                <!--&lt;!&ndash;<button type="button" @click="clearFilters">wyczyść filtry</button>&ndash;&gt;-->
+                            <!--</div>-->
+
+                            <!--<div class="search-container"></div>-->
+                        <!--</div>-->
+                        <!--<transition name="fade">-->
+                            <!--<div class="products-row" v-if="showFilters">-->
+                                <!--<div class="filter-container filters">-->
+                                    <!--<div class="filter-row">-->
+                                        <!--<label class="label-name">Cena</label>-->
+                                        <!--<input type="text" v-model="price_from" class="form-input" id="price-from"-->
+                                               <!--style="width: 100px" placeholder="Od">-->
+                                        <!--<label> - </label>-->
+                                        <!--<input type="text" v-model="price_to" class="form-input" id="price-to"-->
+                                               <!--style="width: 100px" placeholder="Do">-->
+                                    <!--</div>-->
+                                    <!--<div class="filter-row">-->
+                                        <!--<label class="label-name">Producent</label>-->
+                                        <!--<multiselect-->
+                                                <!--class="admin-select vendor-select"-->
+                                                <!--v-model="selectedVendor"-->
+                                                <!--:allow-empty="false"-->
+                                                <!--:searchable="false"-->
+                                                <!--:selectedLabel="''"-->
+                                                <!--track-by="name"-->
+                                                <!--:options="vendors"-->
+                                                <!--label="name"-->
+                                                <!--:deselectLabel="''"-->
+                                                <!--:selectLabel="''"-->
+                                                <!--:hideSelected="true"-->
+                                                <!--placeholder="Wybierz" style="margin-left: 10px"/>-->
+                                    <!--</div>-->
+                                    <!--<div class="filter-row">-->
+                                        <!--<label class="label-name">Kategoria główna</label>-->
+                                        <!--<multiselect-->
+                                                <!--class="admin-select vendor-select"-->
+                                                <!--v-model="selectedMainCategory"-->
+                                                <!--:allow-empty="false"-->
+                                                <!--:searchable="false"-->
+                                                <!--:selectedLabel="''"-->
+                                                <!--track-by="name"-->
+                                                <!--:options="categories"-->
+                                                <!--label="name"-->
+                                                <!--:deselectLabel="''"-->
+                                                <!--:selectLabel="''"-->
+                                                <!--:hideSelected="true"-->
+                                                <!--placeholder="Wybierz" style="margin-left: 10px"/>-->
+                                    <!--</div>-->
+                                    <!--<div class="filter-row">-->
+                                        <!--<label class="label-name">Widoczność</label>-->
+                                        <!--<div class="checkbox-square form-group">-->
+                                            <!--<input type="checkbox" id="visibility" class="visibility-hidden"-->
+                                                   <!--v-model="visibility">-->
+                                            <!--<label for="visibility" class="square"></label>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="filter-row">-->
+                                        <!--<button type="button" class="custom-button" @click="filter()">Filtruj</button>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</transition>-->
+                        <!--<table class="products-table">-->
+                            <!--<thead class="table-heading">-->
+                            <!--<tr class="table-row">-->
+                                <!--<th class="col-1">-->
+                                    <!--<label class="check-container check-all">-->
+                                        <!--<input type="checkbox" @change="selectAll" v-model="selectedAll" :value="true">-->
+                                        <!--<span class="checkmark"></span>-->
+                                    <!--</label>-->
+                                <!--</th>-->
+                                <!--<th class="col-2">Obraz</th>-->
+                                <!--<th class="col-3">Kod Produktu</th>-->
+                                <!--<th class="col-4 text-left">Nazwa produktu</th>-->
+                                <!--<th class="col-5">Cena</th>-->
+                                <!--<th class="col-6">Akcja</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody>-->
+                            <!--<tr class="table-row" v-for="(item,key) in items"-->
+                                <!--:class="{'attr-list-item': true, 'attr-list-item active': index === key}">-->
+                                <!--<td class="table-td col-1">-->
+                                    <!--<label class="check-container">-->
+                                        <!--<input type="checkbox" v-model="selectedProducts" :value="item">-->
+                                        <!--<span class="checkmark"></span>-->
+                                    <!--</label>-->
+                                <!--</td>-->
+                                <!--<td class="table-td col-2"><img class="ziemniak" src="../../assets/img/bottle.png"-->
+                                                                <!--alt=""></td>-->
+                                <!--<td class="table-td col-3">{{item.barcode}}</td>-->
+                                <!--<td class="table-td col-4 text-left">{{item.name}}</td>-->
+                                <!--<td class="table-td col-5">{{item.price}}</td>-->
+                                <!--<td class="table-td col-6">-->
+                                    <!--<div class="buttons-container">-->
+                                        <!--<button @click="showActions(key)"-->
+                                                <!--:class="{'more-button': true, 'more-button active': show === true && index === key}">-->
+                                            <!--<span class="dot"></span>-->
+                                            <!--<span class="dot"></span>-->
+                                            <!--<span class="dot"></span>-->
+                                        <!--</button>-->
+                                        <!--<div class="arrow-left" v-if="index === key && show === true">-->
+                                            <!--<div class="action-buttons">-->
+                                                <!--<button @click="deleteProduct(item)" class="delete">Usuń</button>-->
+                                                <!--<router-link :to="'/products/edit/' +item.id" tag="button" class="edit">-->
+                                                    <!--Edytuj-->
+                                                <!--</router-link>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                        <!--<div class="action-select-container">-->
+                            <!--<p class="action-select-p">Wybierz akcję</p>-->
+                            <!--<div class="action-select">-->
+                                <!--<multiselect-->
+                                        <!--class=" admin-select products-select"-->
+                                        <!--v-model="selectedAction"-->
+                                        <!--:allow-empty="false"-->
+                                        <!--:searchable="false"-->
+                                        <!--:selectedLabel="''"-->
+                                        <!--track-by="name"-->
+                                        <!--:options="actions"-->
+                                        <!--label="name"-->
+                                        <!--:deselectLabel="''"-->
+                                        <!--:selectLabel="''"-->
+                                        <!--:hideSelected="true"-->
+                                        <!--placeholder="Wybierz"/>-->
+                                <!--<button @click="performAction(selectedAction.id)"-->
+                                        <!--:class="{'use-button' : true, 'use-button disabled' : selectedProducts.length === 0}"-->
+                                        <!--:disabled="selectedProducts.length === 0">Wykonaj-->
+                                <!--</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="paginator-container">-->
+                            <!--&lt;!&ndash;<paginator></paginator>&ndash;&gt;-->
+                            <!--<div class="pagination-buttons">-->
+                                <!--&lt;!&ndash;<button type="button" class="icon-button" @click="changePage(1)"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;:disabled="current_page < 2"><i class="fa fa-chevron-left"></i><i&ndash;&gt;-->
+                                        <!--&lt;!&ndash;class="fa fa-chevron-left"></i></button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<button type="button" class="icon-button" @click="changePage(current_page - 1)"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;:disabled=" current_page === 1 "><i class="fa fa-chevron-left"></i></button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<button class="page" @click="changePage(current_page -4)"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;v-if="current_page === last_page && current_page !== 1">{{current_page - 4}}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<button class="page" @click="changePage(current_page -3)"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;v-if="current_page === last_page - 1 || current_page === last_page && current_page !== 1">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;{{current_page - 3}}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<button class="page" @click="changePage(current_page -2)" v-if="current_page > 2 ">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;{{current_page - 2}}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<button class="page" @click="changePage(current_page -1)" v-if="current_page > 1">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;{{current_page - 1}}&ndash;&gt;-->
+                                <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                <!--<template v-if="current_page > 1">-->
+                                    <!--<button class="page" @click="changePage(current_page - 3)"-->
+                                            <!--v-if="current_page > 3">{{current_page - 3 }}-->
+                                    <!--</button>-->
+                                    <!--<button class="page" @click="changePage(current_page - 2)"-->
+                                    <!--v-if="current_page > 2">{{current_page - 2 }}-->
+                                    <!--</button>-->
+                                    <!--<button class="page" @click="changePage(current_page - 1)"-->
+                                            <!--&gt;{{current_page - 1 }}-->
+                                    <!--</button>-->
+                                <!--</template>-->
+
+                                <!--<button class="page active-page" disabled>{{current_page}}</button>-->
+                                <!--<template v-if="last_page > 1">-->
+                                    <!--<button class="page" @click="changePage(current_page + 1)"-->
+                                            <!--v-if="current_page + 1 <= last_page -1">{{current_page +1 }}-->
+                                    <!--</button>-->
+                                    <!--<button class="page" @click="changePage(current_page + 2)"-->
+                                    <!--v-if="current_page + 2 < last_page -1">{{current_page + 2}}-->
+                                    <!--</button>-->
+                                    <!--<button class="page" @click="changePage(current_page + 3)"-->
+                                            <!--v-if="current_page + 3 < last_page - 1 ">{{current_page + 3}}-->
+                                    <!--</button>-->
+                                <!--</template>-->
+
+                                <!--&lt;!&ndash;<template v-if="current_page < last_page - 3">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span>.</span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span>.</span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span>.</span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<button class="page" @click="changePage(last_page)">{{last_page}}</button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</template>&ndash;&gt;-->
+
+                                <!--<template v-if="last_page > 4 && current_page < last_page -1">-->
+                                <!--<button class="page" disabled>...</button>-->
+
+                                <!--<button class="page" @click="changePage(last_page)"-->
+                                        <!--&gt;{{last_page}}-->
+                                <!--</button>-->
+                                <!--</template>-->
+
+
+                                <!--&lt;!&ndash;<button type="button" class="icon-button" :disabled="current_page === last_page"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;@click="changePage(current_page +1 )"><i class="fa fa-chevron-right"></i>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<button type="button" class="icon-button" :disabled="current_page === last_page"&ndash;&gt;-->
+                                        <!--&lt;!&ndash;@click="changePage(last_page)"><i class="fa fa-chevron-right"></i><i&ndash;&gt;-->
+                                        <!--&lt;!&ndash;class="fa fa-chevron-right"></i></button>&ndash;&gt;-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<highlited-products v-if="type == 2"></highlited-products>-->
+                <!--<imported-products v-if="type == 3"></imported-products>-->
+                <!--<sketch-products v-if="type == 5"></sketch-products>-->
+
+                <!--<modal name="visibility"-->
+                       <!--width="800px">-->
+                    <!--<div class="modal-form">-->
+                        <!--<div class="modal-header">-->
+                            <!--<h2>Zmień widoczność dla wybranych produktów</h2>-->
+                        <!--</div>-->
+
+                        <!--<div class="modal-body">-->
+                            <!--<label>Widoczność</label>-->
+                            <!--<div class="checkbox-square form-group">-->
+                                <!--<input type="checkbox" id="attr-visibility" class="visibility-hidden"-->
+                                       <!--v-model="visibility">-->
+                                <!--<label for="attr-visibility" class="square"></label>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<button type="button" class="custom-button" @click="saveVisbility">ZAPISZ</button>-->
+                    <!--</div>-->
+                <!--</modal>-->
+
+                <!--<modal name="mainCategory"-->
+                       <!--width="800px" height="500px">-->
+                    <!--<div class="modal-form">-->
+                        <!--<div class="modal-header">-->
+                            <!--<h2>Zmień kategorię główną dla produktów</h2>-->
+                        <!--</div>-->
+
+                        <!--<div class="modal-body">-->
+                            <!--<label>Kategoria główna</label>-->
+                            <!--<multiselect-->
+                                    <!--class="shop-select product-categories-select"-->
+                                    <!--v-model="selectedMainCategory"-->
+                                    <!--:options="categories"-->
+                                    <!--:multiple="false"-->
+                                    <!--:close-on-select="true"-->
+                                    <!--:clear-on-select="false"-->
+                                    <!--:hide-selected="true"-->
+                                    <!--label="name"-->
+                                    <!--track-by="name"-->
+                                    <!--:selectLabel="''"-->
+                                    <!--:deselectLabel="''"-->
+                                    <!--placeholder="Wybierz"-->
+                            <!--&gt;-->
+                            <!--</multiselect>-->
+                        <!--</div>-->
+                        <!--<button type="button" class="custom-button" @click="saveMainCategory" style="margin-top: 150px">-->
+                            <!--ZAPISZ-->
+                        <!--</button>-->
+                    <!--</div>-->
+                <!--</modal>-->
+                <!--<modal name="vendor"-->
+                       <!--width="800px" height="500px">-->
+                    <!--<div class="modal-form">-->
+                        <!--<div class="modal-header">-->
+                            <!--<h2>Zmień producenta dla produktów</h2>-->
+                        <!--</div>-->
+
+                        <!--<div class="modal-body">-->
+                            <!--<label>Producent</label>-->
+                            <!--<multiselect-->
+                                    <!--class="shop-select product-categories-select"-->
+                                    <!--v-model="selectedVendor"-->
+                                    <!--:options="vendors"-->
+                                    <!--:multiple="false"-->
+                                    <!--:close-on-select="true"-->
+                                    <!--:clear-on-select="false"-->
+                                    <!--:hide-selected="true"-->
+                                    <!--label="name"-->
+                                    <!--track-by="name"-->
+                                    <!--:selectLabel="''"-->
+                                    <!--:deselectLabel="''"-->
+                                    <!--placeholder="Wybierz"-->
+                            <!--&gt;-->
+                            <!--</multiselect>-->
+                        <!--</div>-->
+                        <!--<button type="button" class="custom-button" @click="saveVendor" style="margin-top: 150px">-->
+                            <!--ZAPISZ-->
+                        <!--</button>-->
+                    <!--</div>-->
+                <!--</modal>-->
+                <!--<modal name="price"-->
+                       <!--width="800px" height="600px">-->
+                    <!--<div class="modal-form">-->
+                        <!--<div class="modal-header">-->
+                            <!--<h2>Zmień cenę dla produktów</h2>-->
+                        <!--</div>-->
+
+                        <!--<div class="modal-body row">-->
+                            <!--<label>Cena</label>-->
+                            <!--<multiselect-->
+                                    <!--class="admin-select price-select"-->
+                                    <!--v-model="selectedPriceOption"-->
+                                    <!--:options="priceOptions"-->
+                                    <!--:searchable="false"-->
+                                    <!--:multiple="false"-->
+                                    <!--:close-on-select="true"-->
+                                    <!--:clear-on-select="false"-->
+                                    <!--:hide-selected="true"-->
+                                    <!--label="name"-->
+                                    <!--track-by="name"-->
+                                    <!--:selectLabel="''"-->
+                                    <!--:deselectLabel="''"-->
+                                    <!--placeholder="Wybierz"-->
+                                    <!--style="margin-left: 40px"-->
+                            <!--&gt;-->
+                            <!--</multiselect>-->
+                            <!--<input type="text" class="products-input" v-model="priceValue"/>-->
+                            <!--<multiselect-->
+                                    <!--class="admin-select price-select"-->
+                                    <!--v-model="selectedCurr"-->
+                                    <!--:options="currOptions"-->
+                                    <!--:searchable="false"-->
+                                    <!--:multiple="false"-->
+                                    <!--:close-on-select="true"-->
+                                    <!--:clear-on-select="false"-->
+                                    <!--:hide-selected="true"-->
+                                    <!--label="name"-->
+                                    <!--track-by="name"-->
+                                    <!--:selectLabel="''"-->
+                                    <!--:deselectLabel="''"-->
+                                    <!--placeholder="Wybierz"-->
+                                    <!--style="margin-left: 40px;"-->
+                            <!--&gt;-->
+                            <!--</multiselect>-->
+                        <!--</div>-->
+                        <!--<button type="button" class="custom-button" @click="savePrice" style="margin-top: 50px">-->
+                            <!--ZAPISZ-->
+                        <!--</button>-->
+                    <!--</div>-->
+                <!--</modal>-->
+                <!--<modal name="addToStock" height="400px">-->
+                    <!--<form action="" @submit.prevent="addToStock" class="stock-cont">-->
+                        <!--<div class="form-row header">-->
+                            <!--<label class="form-label col-1"></label>-->
+                            <!--<h3 class="stock-name">Dodaj stan magazynowy</h3>-->
+                        <!--</div>-->
+                        <!--<div class="form-row">-->
+                            <!--<label class="form-label column-1">Ilość</label>-->
+                            <!--<div class="form-data column-2">-->
+                                <!--<input v-model="quantity" v-validate="'required|numeric'"-->
+                                       <!--:class="{'input': true, 'is-danger input-border': errors.has('quantity') }"-->
+                                       <!--class="form-input "-->
+                                       <!--type="text" name="quantity" placeholder="szt">-->
+                                <!--<span v-show="errors.has('quantity')" class="help is-danger">{{ errors.first('quantity') }}</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-row">-->
+                            <!--<label class="form-label column-1">Cena (netto)</label>-->
+                            <!--<div class="form-data column-2" style="width: 150px">-->
+                                <!--<input v-model="price_zl" v-validate="'required|numeric'"-->
+                                       <!--:class="{'input': true, 'is-danger input-border': errors.has('price_zl') }"-->
+                                       <!--class="form-input "-->
+                                       <!--type="text" name="price_zl" placeholder="zł">-->
+                                <!--<span v-show="errors.has('price_zl')" class="help is-danger">{{ errors.first('price_zl') }}</span>-->
+                            <!--</div>-->
+                            <!--<div class="form-data column-3">-->
+                                <!--<input v-model="price_gr" v-validate="'numeric|max_value:99'"-->
+                                       <!--:class="{'input': true, 'is-danger input-border': errors.has('price') }"-->
+                                       <!--class="form-input "-->
+                                       <!--type="text" name="price" placeholder="gr">-->
+                                <!--<span v-show="errors.has('price')"-->
+                                      <!--class="help is-danger">{{ errors.first('price') }}</span>-->
+                                <!--<p>.</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-row column-2">-->
+                            <!--<button type="submit" class="custom-button col-2" style="margin-left: -320px">ZAPISZ-->
+                            <!--</button>-->
+                        <!--</div>-->
+                    <!--</form>-->
+                <!--</modal>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</template>-->
+
+
+
 <template>
-    <div>
-        <div>
-            <transition name="fade">
-                <div class="info-bar" v-if="info === true">
-                    <p>Akcja została wykonana!</p>
-                </div>
-            </transition>
-            <h1 class="card-name">Lista Produktów</h1>
-            <ul class="products-list">
-                <li :class="{'products-list-item': true, 'products-list-item active-blue': type == 1}"
-                    @click.prevent="changeComponent(1)">Wszystkie produkty
-                </li>
-                <li :class="{'products-list-item': true, 'products-list-item active-blue': type == 2}"
-                    @click.prevent="changeComponent(2)">Wyróżnione produkty
-                </li>
-                <li :class="{'products-list-item': true, 'products-list-item active-blue': type == 3}"
-                    @click.prevent="changeComponent(3)">Zaimportowane
-                </li>
-                <li :class="{'products-list-item': true, 'products-list-item active-blue': type == 4}"
-                    @click.prevent="changeComponent(4)">Brak na magazynie
-                </li>
-                <li :class="{'products-list-item': true, 'products-list-item active-blue': type == 5}"
-                    @click.prevent="changeComponent(5)">Szkice produktów
-                </li>
-                <li :class="{'products-list-item': true, 'products-list-item active-blue': type == 6}"
-                    @click.prevent="changeComponent(6)">Produkty powiązane
-                </li>
-            </ul>
-            <div class="component-container">
-                <div v-if="type == 1" @singleProduct="editProduct">
-                    <div class="products-container">
-                        <h4 class="products-container-heading">Produkty</h4>
-                        <div class="products-row">
-                            <div class="filter-container">
-                                <div class="filter-status">
-                                    <label class="filter-label">Sortuj wg</label>
-                                    <multiselect
-                                            class="admin-select"
-                                            v-model="selectedFilter"
-                                            :allow-empty="false"
-                                            :searchable="false"
-                                            :selectedLabel="''"
-                                            track-by="name"
-                                            :options="filters"
-                                            label="name"
-                                            :deselectLabel="''"
-                                            :selectLabel="''"
-                                            :hideSelected="true"
-                                            placeholder="Wybierz"/>
-                                </div>
-                            </div>
-                            <div class="filter-button">
-                                <button type="button" @click="showFilters = !showFilters">Filtrowanie</button>
-                                <!--<button type="button" @click="clearFilters">wyczyść filtry</button>-->
-                            </div>
+    <div class="l-main__main">
+        <header class="l-main__header">
 
-                            <div class="search-container"></div>
-                        </div>
-                        <transition name="fade">
-                            <div class="products-row" v-if="showFilters">
-                                <div class="filter-container filters">
-                                    <div class="filter-row">
-                                        <label class="label-name">Cena</label>
-                                        <input type="text" v-model="price_from" class="form-input" id="price-from"
-                                               style="width: 100px" placeholder="Od">
-                                        <label> - </label>
-                                        <input type="text" v-model="price_to" class="form-input" id="price-to"
-                                               style="width: 100px" placeholder="Do">
-                                    </div>
-                                    <div class="filter-row">
-                                        <label class="label-name">Producent</label>
-                                        <multiselect
-                                                class="admin-select vendor-select"
-                                                v-model="selectedVendor"
-                                                :allow-empty="false"
-                                                :searchable="false"
-                                                :selectedLabel="''"
-                                                track-by="name"
-                                                :options="vendors"
-                                                label="name"
-                                                :deselectLabel="''"
-                                                :selectLabel="''"
-                                                :hideSelected="true"
-                                                placeholder="Wybierz" style="margin-left: 10px"/>
-                                    </div>
-                                    <div class="filter-row">
-                                        <label class="label-name">Kategoria główna</label>
-                                        <multiselect
-                                                class="admin-select vendor-select"
-                                                v-model="selectedMainCategory"
-                                                :allow-empty="false"
-                                                :searchable="false"
-                                                :selectedLabel="''"
-                                                track-by="name"
-                                                :options="categories"
-                                                label="name"
-                                                :deselectLabel="''"
-                                                :selectLabel="''"
-                                                :hideSelected="true"
-                                                placeholder="Wybierz" style="margin-left: 10px"/>
-                                    </div>
-                                    <div class="filter-row">
-                                        <label class="label-name">Widoczność</label>
-                                        <div class="checkbox-square form-group">
-                                            <input type="checkbox" id="visibility" class="visibility-hidden"
-                                                   v-model="visibility">
-                                            <label for="visibility" class="square"></label>
-                                        </div>
-                                    </div>
-                                    <div class="filter-row">
-                                        <button type="button" class="custom-button" @click="filter()">Filtruj</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </transition>
-                        <table class="products-table">
-                            <thead class="table-heading">
-                            <tr class="table-row">
-                                <th class="col-1">
-                                    <label class="check-container check-all">
-                                        <input type="checkbox" @change="selectAll" v-model="selectedAll" :value="true">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </th>
-                                <th class="col-2">Obraz</th>
-                                <th class="col-3">SKU Produktu</th>
-                                <th class="col-4 text-left">Nazwa produktu</th>
-                                <th class="col-5">Cena</th>
-                                <th class="col-6">Akcja</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="table-row" v-for="(item,key) in items"
-                                :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
-                                <td class="table-td col-1">
-                                    <label class="check-container">
-                                        <input type="checkbox" v-model="selectedProducts" :value="item">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </td>
-                                <td class="table-td col-2"><img class="ziemniak" src="../../assets/img/bottle.png"
-                                                                alt=""></td>
-                                <td class="table-td col-3">{{item.symbol}}</td>
-                                <td class="table-td col-4 text-left">{{item.name}}</td>
-                                <td class="table-td col-5">{{item.price}}</td>
-                                <td class="table-td col-6">
-                                    <div class="buttons-container">
-                                        <button @click="showActions(key)"
-                                                :class="{'more-button': true, 'more-button active': show === true && index === key}">
-                                            <span class="dot"></span>
-                                            <span class="dot"></span>
-                                            <span class="dot"></span>
-                                        </button>
-                                        <div class="arrow-left" v-if="index === key && show === true">
-                                            <div class="action-buttons">
-                                                <button @click="deleteProduct(item)" class="delete">Usuń</button>
-                                                <router-link :to="'/products/edit/' +item.id" tag="button" class="edit">
-                                                    Edytuj
-                                                </router-link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="action-select-container">
-                            <p class="action-select-p">Wybierz akcję</p>
-                            <div class="action-select">
-                                <multiselect
-                                        class=" admin-select products-select"
-                                        v-model="selectedAction"
-                                        :allow-empty="false"
-                                        :searchable="false"
-                                        :selectedLabel="''"
-                                        track-by="name"
-                                        :options="actions"
-                                        label="name"
-                                        :deselectLabel="''"
-                                        :selectLabel="''"
-                                        :hideSelected="true"
-                                        placeholder="Wybierz"/>
-                                <button @click="performAction(selectedAction.id)"
-                                        :class="{'use-button' : true, 'use-button disabled' : selectedProducts.length === 0}"
-                                        :disabled="selectedProducts.length === 0">Wykonaj
-                                </button>
-                            </div>
-                        </div>
-                        <div class="paginator-container">
-                            <div class="pagination-buttons">
-                                <button type="button" class="icon-button" @click="changePage(1)"
-                                        :disabled="current_page < 2"><i class="fa fa-chevron-left"></i><i
-                                        class="fa fa-chevron-left"></i></button>
-                                <button type="button" class="icon-button" @click="changePage(current_page - 1)"
-                                        :disabled=" current_page === 1 "><i class="fa fa-chevron-left"></i></button>
-                                <button class="page" @click="changePage(current_page -4)"
-                                        v-if="current_page === last_page && current_page !== 1">{{current_page - 4}}
-                                </button>
-                                <button class="page" @click="changePage(current_page -3)"
-                                        v-if="current_page === last_page - 1 || current_page === last_page && current_page !== 1">
-                                    {{current_page - 3}}
-                                </button>
-                                <button class="page" @click="changePage(current_page -2)" v-if="current_page > 2 ">
-                                    {{current_page - 2}}
-                                </button>
-                                <button class="page" @click="changePage(current_page -1)" v-if="current_page > 1">
-                                    {{current_page - 1}}
-                                </button>
-
-                                <button class="page active" disabled>{{current_page}}</button>
-                                <button class="page" @click="changePage(current_page + 1)"
-                                        v-if="current_page < last_page">{{current_page +1 }}
-                                </button>
-                                <button class="page" @click="changePage(current_page + 2)"
-                                        v-if="current_page <= last_page -2">{{current_page + 2}}
-                                </button>
-                                <button class="page" @click="changePage(current_page + 3)"
-                                        v-if="current_page === 1 && last_page !== 1">{{current_page + 3}}
-                                </button>
-                                <template v-if="current_page < last_page - 3">
-                                    <span>.</span>
-                                    <span>.</span>
-                                    <span>.</span>
-                                    <button class="page" @click="changePage(last_page)">{{last_page}}</button>
-                                </template>
-
-                                <button type="button" class="icon-button" :disabled="current_page === last_page"
-                                        @click="changePage(current_page +1 )"><i class="fa fa-chevron-right"></i>
-                                </button>
-                                <button type="button" class="icon-button" :disabled="current_page === last_page"
-                                        @click="changePage(last_page)"><i class="fa fa-chevron-right"></i><i
-                                        class="fa fa-chevron-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <highlited-products v-if="type == 2"></highlited-products>
-                <imported-products v-if="type == 3"></imported-products>
-                <sketch-products v-if="type == 5"></sketch-products>
-
-                <modal name="visibility"
-                       width="800px">
-                    <div class="modal-form">
-                        <div class="modal-header">
-                            <h2>Zmień widoczność dla wybranych produktów</h2>
-                        </div>
-
-                        <div class="modal-body">
-                            <label>Widoczność</label>
-                            <div class="checkbox-square form-group">
-                                <input type="checkbox" id="attr-visibility" class="visibility-hidden"
-                                       v-model="visibility">
-                                <label for="attr-visibility" class="square"></label>
-                            </div>
-                        </div>
-                        <button type="button" class="custom-button" @click="saveVisbility">ZAPISZ</button>
-                    </div>
-                </modal>
-
-                <modal name="mainCategory"
-                       width="800px" height="500px">
-                    <div class="modal-form">
-                        <div class="modal-header">
-                            <h2>Zmień kategorię główną dla produktów</h2>
-                        </div>
-
-                        <div class="modal-body">
-                            <label>Kategoria główna</label>
-                            <multiselect
-                                    class="shop-select product-categories-select"
-                                    v-model="selectedMainCategory"
-                                    :options="categories"
-                                    :multiple="false"
-                                    :close-on-select="true"
-                                    :clear-on-select="false"
-                                    :hide-selected="true"
-                                    label="name"
-                                    track-by="name"
-                                    :selectLabel="''"
-                                    :deselectLabel="''"
-                                    placeholder="Wybierz"
-                            >
-                            </multiselect>
-                        </div>
-                        <button type="button" class="custom-button" @click="saveMainCategory" style="margin-top: 150px">
-                            ZAPISZ
-                        </button>
-                    </div>
-                </modal>
-                <modal name="vendor"
-                       width="800px" height="500px">
-                    <div class="modal-form">
-                        <div class="modal-header">
-                            <h2>Zmień producenta dla produktów</h2>
-                        </div>
-
-                        <div class="modal-body">
-                            <label>Producent</label>
-                            <multiselect
-                                    class="shop-select product-categories-select"
-                                    v-model="selectedVendor"
-                                    :options="vendors"
-                                    :multiple="false"
-                                    :close-on-select="true"
-                                    :clear-on-select="false"
-                                    :hide-selected="true"
-                                    label="name"
-                                    track-by="name"
-                                    :selectLabel="''"
-                                    :deselectLabel="''"
-                                    placeholder="Wybierz"
-                            >
-                            </multiselect>
-                        </div>
-                        <button type="button" class="custom-button" @click="saveVendor" style="margin-top: 150px">
-                            ZAPISZ
-                        </button>
-                    </div>
-                </modal>
-                <modal name="price"
-                       width="800px" height="600px">
-                    <div class="modal-form">
-                        <div class="modal-header">
-                            <h2>Zmień cenę dla produktów</h2>
-                        </div>
-
-                        <div class="modal-body row">
-                            <label>Cena</label>
-                            <multiselect
-                                    class="admin-select price-select"
-                                    v-model="selectedPriceOption"
-                                    :options="priceOptions"
-                                    :searchable="false"
-                                    :multiple="false"
-                                    :close-on-select="true"
-                                    :clear-on-select="false"
-                                    :hide-selected="true"
-                                    label="name"
-                                    track-by="name"
-                                    :selectLabel="''"
-                                    :deselectLabel="''"
-                                    placeholder="Wybierz"
-                                    style="margin-left: 40px"
-                            >
-                            </multiselect>
-                            <input type="text" class="products-input" v-model="priceValue"/>
-                            <multiselect
-                                    class="admin-select price-select"
-                                    v-model="selectedCurr"
-                                    :options="currOptions"
-                                    :searchable="false"
-                                    :multiple="false"
-                                    :close-on-select="true"
-                                    :clear-on-select="false"
-                                    :hide-selected="true"
-                                    label="name"
-                                    track-by="name"
-                                    :selectLabel="''"
-                                    :deselectLabel="''"
-                                    placeholder="Wybierz"
-                                    style="margin-left: 40px;"
-                            >
-                            </multiselect>
-                        </div>
-                        <button type="button" class="custom-button" @click="savePrice" style="margin-top: 50px">
-                            ZAPISZ
-                        </button>
-                    </div>
-                </modal>
-                <modal name="addToStock" height="400px">
-                    <form action="" @submit.prevent="addToStock" class="stock-cont">
-                        <div class="form-row header">
-                            <label class="form-label col-1"></label>
-                            <h3 class="stock-name">Dodaj stan magazynowy</h3>
-                        </div>
-                        <div class="form-row">
-                            <label class="form-label column-1">Ilość</label>
-                            <div class="form-data column-2">
-                                <input v-model="quantity" v-validate="'required|numeric'"
-                                       :class="{'input': true, 'is-danger input-border': errors.has('quantity') }"
-                                       class="form-input "
-                                       type="text" name="quantity" placeholder="szt">
-                                <span v-show="errors.has('quantity')" class="help is-danger">{{ errors.first('quantity') }}</span>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <label class="form-label column-1">Cena (netto)</label>
-                            <div class="form-data column-2" style="width: 150px">
-                                <input v-model="price_zl" v-validate="'required|numeric'"
-                                       :class="{'input': true, 'is-danger input-border': errors.has('price_zl') }"
-                                       class="form-input "
-                                       type="text" name="price_zl" placeholder="zł">
-                                <span v-show="errors.has('price_zl')" class="help is-danger">{{ errors.first('price_zl') }}</span>
-                            </div>
-                            <div class="form-data column-3">
-                                <input v-model="price_gr" v-validate="'numeric|max_value:99'"
-                                       :class="{'input': true, 'is-danger input-border': errors.has('price') }"
-                                       class="form-input "
-                                       type="text" name="price" placeholder="gr">
-                                <span v-show="errors.has('price')"
-                                      class="help is-danger">{{ errors.first('price') }}</span>
-                                <p>.</p>
-                            </div>
-                        </div>
-                        <div class="form-row column-2">
-                            <button type="submit" class="custom-button col-2" style="margin-left: -320px">ZAPISZ
-                            </button>
-                        </div>
-                    </form>
-                </modal>
+            <div class="c-breadcrumb">
+                        <span class="c-breadcrumb__item">
+                            <a href="">Asortyment</a>
+                        </span>
             </div>
-        </div>
+
+            <div class="c-tabs">
+                <ul class="c-tabs__nav">
+                    <li class="c-tabs__nav-item" v-for="tab in tabs">
+                        <a href="">{{tab.name}}</a>
+                    </li>
+                    <!--<li class="c-tabs__nav-item">-->
+                        <!--<a href="">Logi</a>-->
+                    <!--</li>-->
+                </ul>
+            </div>
+
+        </header>
+
+        <section class="l-main__content" style="padding: 0">
+
+            <div class="l-table-filters">
+                <div class="l-table-filters__left">
+                    <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Wybierz działanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                        <ul class="c-dropdown__menu">
+                            <li class="c-dropdown__menu-item">
+                                <a href="">
+                                    Cena
+                                    <span class="c-arrow-down"></span>
+                                </a>
+                            </li>
+                            <li class="c-dropdown__menu-item is-active">
+                                <a href="">
+                                    Kto przygotował
+                                    <span class="c-arrow-down"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Filtrowanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                        <ul class="c-dropdown__menu">
+                            <li class="c-dropdown__menu-item">
+                                <a href="">
+                                    Cena
+                                    <span class="c-arrow-down"></span>
+                                </a>
+                            </li>
+                            <li class="c-dropdown__menu-item is-active">
+                                <a href="">
+                                    Kto przygotował
+                                    <span class="c-arrow-down"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="l-table-filters__right">
+                    <div class="c-search-filter">
+                        <input type="text" class="c-search-filter__field" placeholder="Szukaj na liście ofert">
+                    </div>
+
+                    <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Filtrowanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                        <ul class="c-dropdown__menu">
+                            <li class="c-dropdown__menu-item">
+                                <a href="">
+                                    Cena
+                                    <span class="c-arrow-down"></span>
+                                </a>
+                            </li>
+                            <li class="c-dropdown__menu-item is-active">
+                                <a href="">
+                                    Kto przygotował
+                                    <span class="c-arrow-down"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="c-table">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox">
+                        </th>
+                        <th></th>
+                        <th>Kod produktu</th>
+                        <th>Nazwa produktu</th>
+                        <th>Producent</th>
+                        <th>Stan magazynowy</th>
+                        <th>Cena zakupu brutto</th>
+                        <th>Cena sprzedaży brutto</th>
+                        <th>Aktywność</th>
+                        <th>Akcja</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(product,key) in items">
+                        <td data-th="Wybierz">
+                            <input type="checkbox">
+                        </td>
+                        <td data-th="Zdjecie" class="product--photo">
+                            <img :src="wine"/>
+                        </td>
+                        <td data-th="Kod">{{product.symbol}}</td>
+                        <td data-th="Nazwa">
+                            {{product.name}}
+                        </td>
+                        <td data-th="Producent">
+                            aaa
+                        </td>
+                        <td data-th="Stan magazynowy">
+                            {{product.stock_count}}
+                        </td>
+                        <td data-th="Cena zakupu">
+                            15222
+                        </td>
+                        <td data-th="Cena sprzedaży">
+                            {{product.price}}
+                        </td>
+                        <td data-th="Aktywność">
+                            <p v-if="product.visibility === 1">Tak</p>
+                            <p v-if="product.visibility === 0">Nie</p>
+                        </td>
+
+                        <td data-th="Akcja" class="h-relative">
+                                        <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                                            <i></i>
+                                        </span>
+                            <div :class="{'c-actions js-actions': true, 'c-actions js-actions is-active': index === key}">
+                                <div class="c-actions__row">
+                                    <a href="" class="c-actions__item" @click="deleteProduct(product)">Usuń</a>
+                                    <a href="" class="c-actions__item">Edytuj</a>
+                                    <a href="" class="c-actions__item">Duplikuj</a>
+                                    <a href="" class="c-actions__item">Szczegóły</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="c-pagination">
+                    <div class="c-pagination__list">
+                        <span class="c-pagination__item is-active">1</span>
+                        <a href="" class="c-pagination__item">2</a>
+                        <a href="" class="c-pagination__item">3</a>
+                        <a href="" class="c-pagination__item">4</a>
+                        <span class="c-pagination__item">...</span>
+                        <a href="" class="c-pagination__item">25</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
     </div>
+
 </template>
 <script>
   import changeVisibility from './changeVisibibility'
+  import Paginator from '../paginator'
+  import icon from '../../assets/icons'
 
   export default {
     name: 'products-list',
     components: {
+      Paginator,
       changeVisibility,
     },
+
     data () {
       return {
+        wine: icon.wine,
         items: [],
         selectedProducts: [],
         buttons: [],
@@ -430,6 +644,12 @@
         show: false,
         type: 1,
         editingProduct: '',
+        tabs: [
+          {name: 'Wszystkie produkty', path: '/products'},
+          {name: 'Szkice', path: ''},
+          {name: 'Bilety', path: ''},
+          {name: 'Zaimportowane', path: ''}
+        ],
         filters: [
           {
             id: 0,
@@ -479,7 +699,7 @@
         selectedFilter: '',
         selectedAction: '',
         showModal: false,
-        visibility: 1,
+        visibility: null,
         selectedProductsIds: [],
         selectedAll: false,
         selectedMainCategory: '',
@@ -527,6 +747,9 @@
         last_page: '',
         info: false,
         filtered: false,
+        orderBy: 'name',
+        order: 'asc',
+        rows: 5,
       }
     },
     watch: {
@@ -536,32 +759,34 @@
       selectedMainCategory: function (value) {
         this.main_category = value.id
       },
-      selectedVendor: function (value) {
+      selectedVendor: function (value, old) {
         this.vendor_id = value.id
       },
       selectedFilter: function (value) {
         if (value.id === 0) {
-          axios('products-sort-recently-added').then(result => {
-            this.items = result.data
-          })
+          this.orderBy = 'created_at'
+          this.order = 'desc'
         }
         else if (value.id === 1) {
-          axios('products-sort-price-asc').then(result => {
-            this.items = result.data
-          })
+          this.orderBy = 'price'
+          this.order = 'asc'
         }
         else if (value.id === 2) {
-          axios('products-sort-price-desc').then(result => {
-            this.items = result.data
-          })
+          this.orderBy = 'price'
+          this.order = 'desc'
         }
         else {
-          axios('products-sort-name').then(result => {
-            this.items = result.data
-          })
+          this.orderBy = 'name'
+          this.order = 'asc'
         }
-      },
-      current_page: function (page) {
+
+        axios('/products-filter/?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows + '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id + '&main_category=' +
+          this.main_category + '&visibility=' + this.visibility).
+          then(result => {
+            this.items = result.data.data
+            this.current_page = result.data.current_page
+            this.last_page = result.data.last_page
+          })
 
       },
     },
@@ -741,58 +966,72 @@
         })
       },
       filter () {
-        this.filtered = true
-        if (this.price_from === '') {
-          this.price_from = 1
-        }
-
-        if (this.price_to === '') {
-          axios('products-max-price').then(result => {
-            this.price_to = result.data
+        axios('/products-filter/?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows + '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id + '&main_category=' +
+          this.main_category + '&visibility=' + this.visibility).
+          then(result => {
+            this.items = result.data.data
+            this.current_page = result.data.current_page
+            this.last_page = result.data.last_page
           })
-        }
-        if (this.vendor_id === '') {
-          this.vendor_id = '_'
-        }
-        axios.post('/products-filter', {
-          price_from: this.price_from,
-          price_to: this.price_to,
-          vendor: this.vendor_id,
-          category: this.main_category,
-          visibility: this.visibility,
-        }).then(result => {
+        // this.filtered = true
+        // axios.post('/products-filter', {
+        //   price_from: this.price_from,
+        //   price_to: this.price_to,
+        //   vendor: this.vendor_id,
+        //   category: this.main_category,
+        //   visibility: this.visibility,
+        // }).then(result => {
+        //   this.items = result.data.data
+        //   this.current_page = result.data.current_page
+        //   this.last_page = result.data.last_page
+        //   console.log(result.data)
+        //
+        // })
+      },
+      changePage (page) {
+        console.log(page)
+        this.current_page = page
+        // if (this.filtered === true) {
+        axios('/products-filter/?page=' + page + '&order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows + '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id + '&main_category=' +
+          this.main_category + '&visibility=' + this.visibility).
+          then(result => {
+            this.items = result.data.data
+            this.current_page = result.data.current_page
+            this.last_page = result.data.last_page
+            console.log(result.data)
+          })
+        // }
+        // else {
+        //   axios('/products?page=' + page).then(result => {
+        //     this.items = result.data.data
+        //   })
+        // }
+
+      },
+
+      clearFilters () {
+
+      },
+    },
+    created: function () {
+
+      axios('/products-filter/?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows + '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id + '&main_category=' +
+        this.main_category + '&visibility=' + this.visibility).
+        then(result => {
+
           this.items = result.data.data
           this.current_page = result.data.current_page
           this.last_page = result.data.last_page
           console.log(result.data)
-
         })
-      },
-      changePage (page) {
-        this.current_page = page
-        if (this.filtered === true) {
-          axios('/products-filter?page=' + page).then(result => {
-            this.items = result.data.data
-          })
-        }
-        else {
-          axios('/products?page=' + page).then(result => {
-            this.items = result.data.data
-          })
-        }
 
-      },
 
-      clearFilters(){
 
-      }
-    },
-    created: function () {
-      axios('products').then(result => {
-        this.items = result.data.data
-        this.current_page = result.data.current_page
-        this.last_page = result.data.last_page
-      })
+      // axios('products').then(result => {
+      //   this.items = result.data.data
+      //   this.current_page = result.data.current_page
+      //   this.last_page = result.data.last_page
+      // })
 
       axios('all-categories').then(result => {
         this.categories = result.data
@@ -801,6 +1040,12 @@
       axios('vendors').then(result => {
         this.vendors = result.data
       })
+
+      axios('products-max-price').then(result => {
+        this.price_from = 1
+        this.price_to = result.data
+      })
+
     },
   }
 </script>
@@ -1385,9 +1630,11 @@
     }
 
     .page {
-        margin: 0 10px 0 10px;
-        background-color: transparent;
-        border: none;
+        width: 40px;
+        height: 40px;
+        margin: 0 3px 0 3px;
+        background: transparent;
+        border: 1px solid #dddddd;
         font-size: 120%;
     }
 
@@ -1396,6 +1643,11 @@
         border: none;
     }
 
+    .active-page{
+        background: linear-gradient(to right, #21c8cc, #2595ec);
+        border: none;
+        color: white;
+    }
 
 
 </style>
