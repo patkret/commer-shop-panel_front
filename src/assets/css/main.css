@@ -1120,6 +1120,15 @@ a {
   background-size: 100% 100%;
   vertical-align: middle;
 }
+.c-arrow-up:before {
+  content: "";
+  display: inline-block;
+  width: 11px;
+  height: 7px;
+  background: url(../images/icons/arrow-up.png);
+  background-size: 100% 100%;
+  vertical-align: middle;
+}
 
 html {
   min-height: 100%;

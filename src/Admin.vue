@@ -236,7 +236,7 @@
           {
             icon: icons.products, text: 'Asortyment', path: '', children:
               [
-                {text: 'Lista produktów', path: '/products'},
+                {text: 'Lista produktów', path: '/products/list'},
                 {text: 'Dodaj produkt', path: '/product-add/main-info'},
                 {text: 'Kategorie', path: '/categories'},
                 {text: 'Producenci', path: '/vendors'},

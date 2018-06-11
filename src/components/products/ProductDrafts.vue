@@ -61,12 +61,12 @@
             </div>
         </table>
     </div>
-    </div>
+
 </template>
 
 <script>
   export default {
-    name: "sketch-products",
+    name: "product-drafts",
     data () {
       return {
         items: [],

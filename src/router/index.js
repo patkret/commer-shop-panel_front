@@ -24,6 +24,10 @@ import Logs from '../components/Logs'
 import Paginator from '../components/paginator'
 import MainInfo from '../components/products/mainInfo'
 import AdditionalInfo from '../components/products/additionalInfo'
+import Drafts from '../components/products/ProductDrafts'
+import ProductsTable from '../components/products/ProductsTable'
+import ProductTickets from '../components/products/ProductTickets'
+import ImportedProducts from '../components/products/ImportedProducts'
 
 
 
@@ -88,7 +92,29 @@ export default new Router({
         {
           path: '/products',
           name: 'ProductsList',
-          component: ProductsList
+          component: ProductsList,
+          children: [
+            {
+              path: 'drafts',
+              name: 'Drafts',
+              component: Drafts,
+            },
+            {
+              path: 'list',
+              name: 'ProductsTable',
+              component: ProductsTable,
+            },
+            {
+              path: 'tickets',
+              name: 'ProductTickets',
+              component: ProductTickets,
+            },
+            {
+              path: 'imported',
+              name: 'ImportedProducts',
+              component: ImportedProducts,
+            },
+          ]
         },
         {
           path: '/products/edit/:item',
