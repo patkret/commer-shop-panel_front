@@ -1,31 +1,82 @@
 <template>
-        <form action="" @submit.prevent="saveVatRate">
-            <div class="form-row">
-                <label class="form-label col-1">Nazwa</label>
-                <div class="form-data col-2">
-                    <input  v-model="name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input " type="text" name="name">
-                    <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
-                </div>
-            </div>
+<div>
+        <div class="l-wrapper f-center">
 
-            <div class="form-row">
-                <label class="form-label col-1">Stawka</label>
-                <div class="form-data col-2">
-                    <input  v-model="rate" v-validate="'required|numeric'" :class="{'input': true, 'is-danger input-border': errors.has('rate') }" class="form-input " type="text" name="rate">
-                    <span v-show="errors.has('rate')" class="help is-danger">{{ errors.first('rate') }}</span>
-                </div>
-            </div>
+            <!-- tutaj trzeba zrobić kolumny -->
+            <div style="width: 100%;" class="f-content">
+                <form action="" class="c-form" @submit.prevent="saveVatRate">
 
-            <div class="form-row">
-                <label class="form-label col-1" for="">Opis</label>
-                <div class="form-data col-2">
-                    <textarea v-model="rateDescription" class="form-textarea" name="rateDescription" id=""></textarea>
-                </div>
+                    <div class="c-form__fieldset">
+                        <div class="c-form__field-wrapper">
+                            <input type="text"
+                                   :class="{'c-form__field' :true, 'c-form__field is-valid': name.length >= 3 && errors.items.length === 0, 'c-form__field is-invalid' : errors.first('name')} " required
+                                   v-model="name" v-validate="'required'"
+                            name="name">
+                            <label class="c-form__placeholder">Nazwa</label>
+                            <span class="form__errors">{{errors.first('name')}}</span>
+                        </div>
+                    </div>
+                    <div class="c-form__fieldset">
+                        <div class="c-form__field-wrapper">
+                            <input type="text"
+                                   :class="{'c-form__field' :true, 'c-form__field is-valid': rate.length >= 1 && errors.items.length === 0, 'c-form__field is-invalid' : errors.first('rate')}" required
+                                   v-model="rate"
+                                    name="rate"
+                                    v-validate="'required|numeric|max_value:99'">
+                            <label class="c-form__placeholder">Stawka</label>
+                            <span class="form__errors">{{errors.first('rate')}}</span>
+                        </div>
+                    </div>
+                    <div class="c-form__fieldset">
+                        <div class="c-form__field-wrapper">
+                            <textarea rows="10" class="c-form__field" required v-model="rateDescription" id="rate-description">
+                            </textarea>
+                            <label class="c-form__placeholder">Opis</label>
+                        </div>
+                    </div>
+                    <div class="h-center">
+                        <button type="submit" class="c-button c-form__button">
+                            <span>Zapisz</span>
+                        </button>
+                    </div>
+
+                </form>
+
             </div>
-            <div class="form-row col-2">
-                <button type="submit" class="custom-button col-2">Dodaj</button>
-            </div>
-        </form>
+        </div>
+
+</div>
+
+
+
+
+        <!--<form action="" @submit.prevent="saveVatRate">-->
+            <!--<div class="form-row">-->
+                <!--<label class="form-label col-1">Nazwa</label>-->
+                <!--<div class="form-data col-2">-->
+                    <!--<input  v-model="name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input " type="text" name="name">-->
+                    <!--<span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="form-row">-->
+                <!--<label class="form-label col-1">Stawka</label>-->
+                <!--<div class="form-data col-2">-->
+                    <!--<input  v-model="rate" v-validate="'required|numeric'" :class="{'input': true, 'is-danger input-border': errors.has('rate') }" class="form-input " type="text" name="rate">-->
+                    <!--<span v-show="errors.has('rate')" class="help is-danger">{{ errors.first('rate') }}</span>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="form-row">-->
+                <!--<label class="form-label col-1" for="">Opis</label>-->
+                <!--<div class="form-data col-2">-->
+                    <!--<textarea v-model="rateDescription" class="form-textarea" name="rateDescription" id=""></textarea>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-row col-2">-->
+                <!--<button type="submit" class="custom-button col-2">Dodaj</button>-->
+            <!--</div>-->
+        <!--</form>-->
 </template>
 
 <script>
@@ -40,6 +91,9 @@
       }
     },
     methods: {
+      removeRequiredAttribute(){
+        document.getElementById("rate-description").required = false;
+      },
       saveVatRate () {
         this.$validator.validateAll().then((result) => {
           if (result) {
@@ -48,13 +102,17 @@
               rate: this.rate,
               description: this.rateDescription,
             }).then(() => {
-              this.$parent.$data.type = 2
+              this.$router.push('/vat-rates/list')
             })
           }
         });
       },
-
     },
+    beforeUpdate: function () {
+
+        this.removeRequiredAttribute()
+
+    }
 
   }
 </script>

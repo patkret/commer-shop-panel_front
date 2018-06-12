@@ -140,3 +140,37 @@ td{
 .filter--price span{
     margin-left: 10px;
 }
+.component__header{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    grid-template-areas: "name header-button";
+    padding: 45px 0 30px 0;
+}
+.component__header .c-breadcrumb{
+    grid-area: name;
+}
+.component__header .main-header__button{
+    grid-area: header-button;
+    justify-self: end;
+}
+.component__header .c-form__button{
+    margin: 0;
+}
+.f-center{
+    display: grid;
+    grid-template-columns: 30% 1fr 30%;
+    grid-template-areas: ". form-content .";
+}
+.f-content{
+    grid-area: form-content;
+}
+.c-form__fieldset .form__errors{
+    position: absolute;
+    top: 42px;
+    color: red;
+}
+
+.c-form__field{
+    margin-bottom: 10px;
+}

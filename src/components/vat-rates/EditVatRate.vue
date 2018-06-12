@@ -1,80 +1,102 @@
 <template>
 
-        <form action="" @submit.prevent="updateVatRate">
-            <div class="info" v-if="showInfoEdit == true">
-                <p>Cecha została edytowana!</p>
-            </div>
-            <div class="form-row">
-                <label class="form-label col-1">Nazwa</label>
-                <div class="form-data col-2">
-                    <input  v-model="vat_rate.name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input " type="text" name="name">
-                    <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
-                </div>
-            </div>
+    <div>
+        <div class="l-wrapper f-center">
 
-            <div class="form-row">
-                <label class="form-label col-1">Stawka</label>
-                <div class="form-data col-2">
-                    <input  v-model="vat_rate.rate" v-validate="'required|numeric'" :class="{'input': true, 'is-danger input-border': errors.has('rate') }" class="form-input " type="text" name="rate">
-                    <span v-show="errors.has('rate')" class="help is-danger">{{ errors.first('rate') }}</span>
-                </div>
-            </div>
+            <!-- tutaj trzeba zrobić kolumny -->
+            <div style="width: 100%;" class="f-content">
+                <form action="" class="c-form" @submit.prevent="updateVatRate">
 
-            <div class="form-row">
-                <label class="form-label col-1" for="">Opis</label>
-                <div class="form-data col-2">
-                    <textarea v-model="vat_rate.description" class="form-textarea" name="rateDescription" id=""></textarea>
-                </div>
+                    <div class="c-form__fieldset">
+                        <div class="c-form__field-wrapper">
+                            <input type="text"
+                                   :class="{'c-form__field' :true, 'c-form__field is-valid': vat_rate.name.length >= 3 && errors.items.length === 0, 'c-form__field is-invalid' : errors.first('name')} "
+                                   required
+                                   v-model="vat_rate.name" v-validate="'required'"
+                                   name="name">
+                            <label class="c-form__placeholder">Nazwa</label>
+                            <span class="form__errors">{{errors.first('name')}}</span>
+                        </div>
+                    </div>
+                    <div class="c-form__fieldset">
+                        <div class="c-form__field-wrapper">
+                            <input type="text"
+                                   :class="{'c-form__field' :true, 'c-form__field is-valid': vat_rate.rate >= 1 && errors.items.length === 0, 'c-form__field is-invalid' : errors.first('rate')}"
+                                   required
+                                   v-model="vat_rate.rate"
+                                   name="rate"
+                                   v-validate="'required|numeric|max_value:99'">
+                            <label class="c-form__placeholder">Stawka</label>
+                            <span class="form__errors">{{errors.first('rate')}}</span>
+                        </div>
+                    </div>
+                    <div class="c-form__fieldset">
+                        <div class="c-form__field-wrapper">
+                            <textarea rows="10" class="c-form__field" required v-model="vat_rate.description"
+                                      id="rate-description">
+                            </textarea>
+                            <label class="c-form__placeholder">Opis</label>
+                        </div>
+                    </div>
+                    <div class="h-center">
+                        <button type="submit" class="c-button c-form__button">
+                            <span>Zapisz</span>
+                        </button>
+                    </div>
+
+                </form>
+
             </div>
-            <div class="form-row col-2">
-                <button type="submit" class="custom-button col-2">Zapisz</button>
-            </div>
-        </form>
+        </div>
+
+    </div>
 
 </template>
 
 <script>
   export default {
-    name: "edit-vat-rate",
-    props: ['rate'],
+    name: 'edit-vat-rate',
     data: () => {
       return {
         vat_rate: {
           name: '',
           rate: '',
-          description: ''
+          description: '',
         },
         showInfoEdit: false,
 
       }
     },
-    watch: {
-      showInfoEdit: function () {
-        setTimeout(() => {
-          this.showInfoEdit = false
-          this.$parent.$data.type = 2
-        }, 3000)
-      },
-    },
+
     methods: {
-      updateVatRate() {
+      fetchRate () {
+        axios('vat-rates/' + this.$route.params.item).then(result => {
+          this.vat_rate = result.data
+        })
+      },
+      updateVatRate () {
         this.$validator.validateAll().then((result) => {
           if (result) {
-            axios.put('vat-rates/' + this.rate.id , {
-              vat_rate: this.vat_rate
-            });
-            // this.$emit('vat_rate', this.vat_rate)
-            this.showInfoEdit = true
-            setTimeout(() => {
-              this.$parent.$data.type = 2
-            }, 500)
+            axios.put('vat-rates/' + this.vat_rate.id, {
+              vat_rate: this.vat_rate,
+            }).then(() => {
+              this.$router.push('/vat-rates/list')
+            })
           }
         })
       },
 
+      removeRequiredAttribute () {
+        document.getElementById('rate-description').required = false
+      },
+
     },
     created: function () {
-        this.vat_rate = this.rate
+      this.fetchRate()
+    },
+
+    beforeUpdate: function () {
+      this.removeRequiredAttribute()
     },
   }
 </script>
@@ -87,12 +109,15 @@
         grid-template-areas: 'col-1 col-2';
         grid-template-columns: 130px 520px;
     }
+
     .col-1 {
         grid-area: col-1;
     }
+
     .col-2 {
         grid-area: col-2;
     }
+
     .form-label {
         font-weight: 700;
         margin-top: 10px;
@@ -101,6 +126,7 @@
         text-align: right;
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
+
     .form-input {
         background-color: #ffffff;
         margin-left: 10px;
@@ -109,11 +135,12 @@
         height: 35px;
         line-height: 35px;
         padding-left: 10px;
-        border:none;
+        border: none;
         font-size: 12px;
         font-weight: 700;
         width: 100%;
     }
+
     .form-textarea {
         resize: none;
         height: 250px;
@@ -127,16 +154,19 @@
         width: 100%;
         margin-right: 10px;
     }
+
     .form-data {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
     }
+
     .input-border {
         border: 2px solid red;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
     }
+
     .form-data span {
         background-color: red;
         border-radius: 5px;
@@ -149,6 +179,7 @@
         border-top-left-radius: 0;
         width: 100%;
     }
+
     .custom-button {
         margin: 40px;
         height: 40px;
@@ -166,6 +197,7 @@
         cursor: pointer;
         text-decoration: none;
     }
+
     .custom-button::after {
         position: absolute;
         top: -2px;
@@ -177,12 +209,14 @@
         z-index: -1;
         border-radius: 5px;
     }
+
     .custom-button:hover {
         color: #ffffff;
         background: linear-gradient(to right, #21c8cc, #2595ec);
         background-size: 104%;
         background-position: -2px;
     }
+
     .info {
         width: 100%;
         height: 50px;

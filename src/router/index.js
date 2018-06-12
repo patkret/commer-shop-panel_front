@@ -10,6 +10,8 @@ import AddProduct from '../components/products/Products'
 import EditProduct from '../components/products/addProduct'
 import ProductsList from '../components/products/ProductsList'
 import VatRates from '../components/vat-rates/VatRates'
+import VatRatesList from '../components/vat-rates/VatRatesList'
+import EditVatRate from '../components/vat-rates/EditVatRate'
 import Variants from '../components/variants/Variants'
 import Vendors from '../components/vendors/Vendors'
 import Users from '../components/users/Users'
@@ -28,6 +30,7 @@ import Drafts from '../components/products/ProductDrafts'
 import ProductsTable from '../components/products/ProductsTable'
 import ProductTickets from '../components/products/ProductTickets'
 import ImportedProducts from '../components/products/ImportedProducts'
+import AddVatRate from '../components/vat-rates/AddVatRate'
 
 
 
@@ -125,6 +128,23 @@ export default new Router({
           path: '/vat-rates',
           name: 'VatRates',
           component: VatRates,
+          children: [
+            {
+              path: 'add',
+              name: 'AddVatRate',
+              component: AddVatRate,
+            },
+            {
+              path: 'list',
+              name: 'VatRatedList',
+              component: VatRatesList,
+            },
+            {
+              path: 'edit/:item',
+              name: 'EditVatRate',
+              component: EditVatRate,
+            },
+          ]
         },
         {
           path: '/variants',
