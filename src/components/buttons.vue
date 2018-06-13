@@ -5,7 +5,11 @@
             <input type="checkbox">
             <span class="slider round"></span>
         </label>
-
+        <!--NOWY CHECKBOX -->
+        <label class="new-checkbox-container">
+            <input class="new-input" type="checkbox">
+            <span class="new-check"></span>
+        </label>
         <p>Checkbox</p>
         <div class="checkbox-square form-group">
             <input type="checkbox" id="checkbox" v-model="visibility">
@@ -52,18 +56,14 @@
 <style scoped>
     /*SWITCh*/
 
-    /* The switch - the box around the slider */
     .switch {
         position: relative;
         display: inline-block;
         width: 60px;
         height: 34px;
     }
-
-    /* Hide default HTML checkbox */
     .switch input {display:none;}
 
-    /* The slider */
     .slider {
         position: absolute;
         cursor: pointer;
@@ -109,4 +109,57 @@
     .slider.round:before {
         border-radius: 50%;
     }
+    /*NEW CHECKBOX */
+    .new-checkbox-container {
+        display: block;
+        position: relative;
+        cursor: pointer;
+        border: 1px solid #dde0e5;
+        height: 20px;
+        width: 20px;
+        background-color: #ffffff;
+        margin-left: 20px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .new-checkbox-container input{
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+    .new-check {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 16px;
+        width: 20px;
+        font-weight: 700;
+
+    }
+    .new-check::after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    .new-checkbox-container input:checked ~ .new-check::after {
+        display: block;
+    }
+    .new-checkbox-container .new-check::after {
+        content: 'V';
+        left: 50%;
+        font-size: 14px;
+        font-weight: 700;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        height: 10px;
+        width: 10px;
+        border: solid #ffffff;
+        font-weight: 700;
+    }
+
+
+
 </style>

@@ -122,7 +122,7 @@
             </div>
 
         </main>
-
+    
     </div>
 
     <!--<div id="main">-->
@@ -239,7 +239,7 @@
                 {text: 'Lista produktów', path: '/products/list'},
                 {text: 'Dodaj produkt', path: '/product-add/main-info'},
                 {text: 'Kategorie', path: '/categories'},
-                {text: 'Producenci', path: '/vendors'},
+                {text: 'Producenci', path: '/vendors/list'},
                 {text: 'Zestawy atrybutów', path: '/attribute-sets'},
                 {text: 'Zestawy wariantów', path: '/variants'},
                 {text: 'Stawki VAT', path: '/vat-rates/list'},

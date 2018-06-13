@@ -14,6 +14,9 @@ import VatRatesList from '../components/vat-rates/VatRatesList'
 import EditVatRate from '../components/vat-rates/EditVatRate'
 import Variants from '../components/variants/Variants'
 import Vendors from '../components/vendors/Vendors'
+import AddVendor from '../components/vendors/AddVendor'
+import VendorsList from '../components/vendors/VendorsList'
+import EditVendor from '../components/vendors/EditVendor'
 import Users from '../components/users/Users'
 import Stock from '../components/stock/Stock'
 import OrdersList from '../components/orders/OrdersList'
@@ -155,6 +158,23 @@ export default new Router({
           path: '/vendors',
           name: 'Vendors',
           component: Vendors,
+          children: [
+            {
+              path: 'add',
+              name: 'AddVendor',
+              component: AddVendor,
+            },
+            {
+              path: 'list',
+              name: 'VendorList',
+              component: VendorsList,
+            },
+            {
+              path: 'edit/:item',
+              name: 'EditVendor',
+              component: EditVendor,
+            }
+          ]
         },
         {
           path: '/users',

@@ -1,5 +1,128 @@
 <template>
-    <ul class="vat-container">
+    <div>
+        <div class="l-table-filters">
+            <div class="l-table-filters__left">
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Wybierz działanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Filtrowanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="l-table-filters__right">
+
+                <!--<div class="c-dropdown js-dropdown">-->
+                <!--<span class="c-dropdown__name">-->
+                <!--Filtrowanie-->
+                <!--<span class="c-arrow-down"></span>-->
+                <!--</span>-->
+
+                <!--<ul class="c-dropdown__menu">-->
+                <!--<li class="c-dropdown__menu-item">-->
+                <!--<a href="">-->
+                <!--Cena-->
+                <!--<span class="c-arrow-down"></span>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li class="c-dropdown__menu-item is-active">-->
+                <!--<a href="">-->
+                <!--Kto przygotował-->
+                <!--<span class="c-arrow-down"></span>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--</ul>-->
+                <!--</div>-->
+            </div>
+        </div>
+
+        <div class="c-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox">
+                    </th>
+                    <th>ID</th>
+                    <th>Nazwa</th>
+                    <th>Aktywność</th>
+                    <th>Akcja</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, key) in items">
+                    <td data-th="Wybierz">
+                        <input type="checkbox">
+                    </td>
+                    <td data-th="ID">{{item.id}}</td>
+                    <td data-th="Nazwa">{{item.name}}</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    <td data-th="Akcja" class="h-relative">
+                                        <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                                            <i></i>
+                                        </span>
+                        <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
+                            <div class="c-actions__row">
+                                <button class="c-actions__item" @click="deleteVendor(item)">Usuń</button>
+                                <router-link :to="'edit/' + item.id" class="c-actions__item">Edytuj</router-link>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="c-pagination">
+            </div>
+        </div>
+    </div>
+
+
+</template>
+    <!-- <ul class="vat-container">
         <li v-for="(item, key) in items" class="attr-list-item">
            {{item.id}}. {{item.name}}
             <div class="buttons-container">
@@ -14,8 +137,7 @@
                 </div>
             </div>
         </li>
-    </ul>
-</template>
+    </ul> -->
 
 <script>
   export default {
@@ -24,12 +146,19 @@
       return {
         items: [],
         showButtons: {},
+        index: '',
       }
     },
     methods: {
-      showActions (key) {
-        this.showButtons[key] = !this.showButtons[key]
-        this.$forceUpdate()
+     showActions (key) {
+        if (this.index === key) {
+          this.show = false
+          this.index = ''
+        }
+        else {
+          this.show = true
+          this.index = key
+        }
       },
       editVendor(item){
         this.$emit('vendor', item)
@@ -81,69 +210,78 @@
 </script>
 
 <style scoped>
-    .vat-container {
-        width: 80%;
-        background-color: #ffffff;
-        margin-left: 20px;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 5px 5px 5px 2px #eff1f4;
+    
+    .c-table table th:first-child, .c-table table td:first-child {
+        width: 15px;
+        text-align: left;
     }
-    .attr-p {
-        text-align: right;
+
+    .c-table table th:nth-child(2), .c-table table td:nth-child(2) {
+        width: 15px;
+        text-align: left;
     }
-    .attr-list-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 0;
-        height: 40px;
-        line-height: 40px;
-        margin: 5px 0;
+
+    .c-table table th:nth-child(3), .c-table table td:nth-child(3) {
+        width: 70%;
+        text-align: left;
     }
-    .buttons-container {
+
+    .l-table-filters__right {
+        border-right: 1px solid #dddddd;
+    }
+      /*SWITCh*/
+
+    .switch {
         position: relative;
-    }
-    .more-button {
-        height: 40px;
-        border: none;
-        color: #dde0e5;
-        background-color: #ffffff;
-        padding-bottom: 15px;
-    }
-    .dot {
-        height: 6px;
-        width: 6px;
-        background-color: #bbb;
-        border-radius: 50%;
         display: inline-block;
+        width: 40px;
+        height: 20px;
     }
-    .action-buttons {
+    .switch input {display:none;}
+
+    .slider {
         position: absolute;
-        top: 0;
-        left: -120px;
-        display: flex;
-        border: 1px solid #dde0e5;
-        border-radius: 5px;
-    }
-    .action-buttons button {
-        /*border: 1px solid #dde0e5;*/
-        background-color: #ffffff;
-        height: 40px;
-        border-radius: 5px;
-        border: none;
-    }
-    .action-buttons button:first-child {
-        border-right: 1px solid #dde0e5;
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-    }
-    .action-buttons button:last-child {
-        border-right: 1px solid #dde0e5;
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-    }
-    .action-buttons button:hover {
         cursor: pointer;
-        background-color: #dde0e5;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 15px;
+        width: 15px;
+        left: 4px;
+        bottom: 3px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #00DE01;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #00DE01;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(18px);
+        -ms-transform: translateX(18px);
+        transform: translateX(18px);
+    }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
     }
 </style>
