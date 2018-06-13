@@ -48,28 +48,6 @@
             </div>
 
             <div class="l-table-filters__right">
-
-                <!--<div class="c-dropdown js-dropdown">-->
-                <!--<span class="c-dropdown__name">-->
-                <!--Filtrowanie-->
-                <!--<span class="c-arrow-down"></span>-->
-                <!--</span>-->
-
-                <!--<ul class="c-dropdown__menu">-->
-                <!--<li class="c-dropdown__menu-item">-->
-                <!--<a href="">-->
-                <!--Cena-->
-                <!--<span class="c-arrow-down"></span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--<li class="c-dropdown__menu-item is-active">-->
-                <!--<a href="">-->
-                <!--Kto przygotował-->
-                <!--<span class="c-arrow-down"></span>-->
-                <!--</a>-->
-                <!--</li>-->
-                <!--</ul>-->
-                <!--</div>-->
             </div>
         </div>
 
@@ -87,16 +65,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(item, key) in items">
+                <tr v-for="(vendor, key) in vendors">
                     <td data-th="Wybierz">
                         <input type="checkbox">
                     </td>
-                    <td data-th="ID">{{item.id}}</td>
-                    <td data-th="Nazwa">{{item.name}}</td>
+                    <td data-th="ID">{{vendor.id}}</td>
+                    <td data-th="Nazwa">{{vendor.name}}</td>
                     <td>
                         <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider round"></span>
+                            <input v-model="vendor.is_visible" type="checkbox" @change="changeVisibility(vendor.id, vendor.is_visible)">
+                            <span  class="slider round"></span>
                         </label>
                     </td>
                     <td data-th="Akcja" class="h-relative">
@@ -105,8 +83,8 @@
                                         </span>
                         <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
                             <div class="c-actions__row">
-                                <button class="c-actions__item" @click="deleteVendor(item)">Usuń</button>
-                                <router-link :to="'edit/' + item.id" class="c-actions__item">Edytuj</router-link>
+                                <button class="c-actions__item" @click="deleteVendor(vendor)">Usuń</button>
+                                <router-link :to="'edit/' + vendor.id" class="c-actions__item">Edytuj</router-link>
                             </div>
                         </div>
                     </td>
@@ -144,12 +122,20 @@
     name: "vendors-list",
     data () {
       return {
-        items: [],
+        vendors: [],
         showButtons: {},
         index: '',
       }
     },
     methods: {
+        changeVisibility(id, visibility){
+            axios.post('/vendors/change-visibility', {
+                id: id,
+                is_visible: visibility
+            }).then(result => {
+                console.log(result)
+            })
+        },
      showActions (key) {
         if (this.index === key) {
           this.show = false
@@ -164,7 +150,7 @@
         this.$emit('vendor', item)
       },
 
-      deleteVendor (item) {
+      deleteVendor (vendor) {
         this.$swal({
           title: 'Czy chcesz usunąć producenta?',
           text: 'Ta akcja nieodwracalnie usunie producenta',
@@ -176,9 +162,9 @@
           confirmButtonText: 'Usuń',
         }).then((result) => {
             if(result.value) {
-              let itemIndex = this.items.map(x => x.id).indexOf(item.id)
-              this.items.splice(itemIndex, 1)
-              axios.delete('vendors/' + item.id).then(
+              let itemIndex = this.vendors.map(x => x.id).indexOf(vendor.id)
+              this.vendors.splice(itemIndex, 1)
+              axios.delete('vendors/' + vendor.id).then(
                 result => {
                   console.log(result)
                 })
@@ -200,8 +186,8 @@
     created: function () {
       axios('vendors').
       then(result => {
-        this.items = result.data
-        this.items.forEach((v,k) => {
+        this.vendors = result.data
+        this.vendors.forEach((v,k) => {
           this.showButtons[k] = false
         })
       });

@@ -48,7 +48,6 @@
 </template>
 
 <script>
-  import VendorForm from './VendorForm'
   import VendorsList from './VendorsList'
   import AddVendor from './AddVendor'
   import EditVendor from './EditVendor'
