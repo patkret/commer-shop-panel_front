@@ -1,41 +1,41 @@
 <template>
-    <div>
-        <div class="card-header" v-if="type === 1">
-            <h3>{{stock.name}}</h3>
-            <button class="custom-button" @click="changeType(2)">Dodaj do magazynu</button>
-        </div>
+    <!--<div>-->
+        <!--<div class="card-header" v-if="type === 1">-->
+            <!--<h3>{{stock.name}}</h3>-->
+            <!--<button class="custom-button" @click="changeType(2)">Dodaj do magazynu</button>-->
+        <!--</div>-->
 
-        <add-to-stock v-if="type === 2" :stock="stock"/>
-        <div class="table-container" v-if="type === 1">
-        <table class="stock-table">
-            <tr class="table-head">
-                <th>ID</th>
-                <th>Dodano</th>
-                <th>Ilość</th>
-                <th>Cena</th>
-                <th>Akcja</th>
-            </tr>
-            <tr v-for="(item,key) in items" :class="{'single-item': true, 'single-item active': index === key}">
-                <td>{{item.group_id}}.</td>
-                <td>{{item.added_at}}</td>
-                <td>{{item.quantity}}</td>
-                <td>{{item.price}} zł</td>
-                <td>
-                    <div class="buttons-container">
-                        <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': index === key}">
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                            <span class="dot"></span>
-                        </button>
-                        <div v-if="index === key && show === true" class="action-buttons">
-                            <button @click="deleteStockItems(item)" class="delete">Usuń</button>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        </div>
-    </div>
+        <!--<add-to-stock v-if="type === 2" :stock="stock"/>-->
+        <!--<div class="table-container" v-if="type === 1">-->
+        <!--<table class="stock-table">-->
+            <!--<tr class="table-head">-->
+                <!--<th>ID</th>-->
+                <!--<th>Dodano</th>-->
+                <!--<th>Ilość</th>-->
+                <!--<th>Cena</th>-->
+                <!--<th>Akcja</th>-->
+            <!--</tr>-->
+            <!--<tr v-for="(item,key) in items" :class="{'single-item': true, 'single-item active': index === key}">-->
+                <!--<td>{{item.group_id}}.</td>-->
+                <!--<td>{{item.added_at}}</td>-->
+                <!--<td>{{item.quantity}}</td>-->
+                <!--<td>{{item.price}} zł</td>-->
+                <!--<td>-->
+                    <!--<div class="buttons-container">-->
+                        <!--<button @click="showActions(key)" :class="{'more-button': true, 'more-button active': index === key}">-->
+                            <!--<span class="dot"></span>-->
+                            <!--<span class="dot"></span>-->
+                            <!--<span class="dot"></span>-->
+                        <!--</button>-->
+                        <!--<div v-if="index === key && show === true" class="action-buttons">-->
+                            <!--<button @click="deleteStockItems(item)" class="delete">Usuń</button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
 
 </template>
 

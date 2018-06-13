@@ -244,7 +244,7 @@
                 {text: 'Zestawy wariantów', path: '/variants'},
                 {text: 'Stawki VAT', path: '/vat-rates/list'},
                 {text: 'Szablony opisów', path: '/'},
-                {text: 'Magazyn', path: '/stock'},
+                {text: 'Magazyn', path: '/stock/list'},
               ],
           },
           {

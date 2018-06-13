@@ -1,22 +1,139 @@
 <template>
 
-    <ul class="vat-container">
-        <li v-for="(item, key) in items" class="attr-list-item">
-            {{item.id}}. {{item.name}}
-            <div class="buttons-container">
-                <button @click="showActions(key)" class="more-button">
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                </button>
-                <div v-if="showButtons[key]" class="action-buttons">
-                    <button @click="deleteStock(item)" class="delete">Usuń</button>
-                    <button class="edit" @click="editStock(item)">Edytuj</button>
-                    <button class="edit" @click="addToStock(item)">Stan magazynu</button>
+    <!--<ul class="vat-container">-->
+        <!--<li v-for="(item, key) in items" class="attr-list-item">-->
+            <!--{{item.id}}. {{item.name}}-->
+            <!--<div class="buttons-container">-->
+                <!--<button @click="showActions(key)" class="more-button">-->
+                    <!--<span class="dot"></span>-->
+                    <!--<span class="dot"></span>-->
+                    <!--<span class="dot"></span>-->
+                <!--</button>-->
+                <!--<div v-if="showButtons[key]" class="action-buttons">-->
+                    <!--<button @click="deleteStock(item)" class="delete">Usuń</button>-->
+                    <!--<button class="edit" @click="editStock(item)">Edytuj</button>-->
+                    <!--<button class="edit" @click="addToStock(item)">Stan magazynu</button>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</li>-->
+    <!--</ul>-->
+
+    <div>
+        <div class="l-table-filters">
+            <div class="l-table-filters__left">
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Wybierz działanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Filtrowanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </li>
-    </ul>
+
+            <div class="l-table-filters__right">
+
+                <!--<div class="c-dropdown js-dropdown">-->
+                <!--<span class="c-dropdown__name">-->
+                <!--Filtrowanie-->
+                <!--<span class="c-arrow-down"></span>-->
+                <!--</span>-->
+
+                <!--<ul class="c-dropdown__menu">-->
+                <!--<li class="c-dropdown__menu-item">-->
+                <!--<a href="">-->
+                <!--Cena-->
+                <!--<span class="c-arrow-down"></span>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li class="c-dropdown__menu-item is-active">-->
+                <!--<a href="">-->
+                <!--Kto przygotował-->
+                <!--<span class="c-arrow-down"></span>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--</ul>-->
+                <!--</div>-->
+            </div>
+        </div>
+
+        <div class="c-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox">
+                    </th>
+                    <th>ID</th>
+                    <th>Nazwa</th>
+                    <th>Na magazynie</th>
+                    <th>Akcja</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(warehouse, key) in items">
+                    <td data-th="Wybierz">
+                        <input type="checkbox">
+                    </td>
+                    <td data-th="ID">{{warehouse.id}}</td>
+                    <td data-th="Nazwa">{{warehouse.name}}</td>
+                    <td data-th="Ilosc">1500</td>
+                    <td data-th="Akcja" class="h-relative">
+                                        <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                                            <i></i>
+                                        </span>
+                        <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
+                            <div class="c-actions__row">
+                                <button class="c-actions__item" @click="deleteStock(warehouse)">Usuń</button>
+                                <router-link :to="'edit/' + warehouse.id" class="c-actions__item" tag="button">Edytuj</router-link>
+                                <router-link :to="'add-to/' + warehouse.id" class="c-actions__item" tag="button">Stan</router-link>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="c-pagination">
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -26,12 +143,19 @@
       return {
         items: [],
         showButtons: {},
+        index: ''
       }
     },
     methods: {
       showActions (key) {
-        this.showButtons[key] = !this.showButtons[key]
-        this.$forceUpdate()
+          if (this.index === key) {
+            this.show = false
+            this.index = ''
+          }
+          else {
+            this.show = true
+            this.index = key
+        }
       },
       addToStock (item) {
         this.$emit('addToStock', item)
@@ -64,6 +188,7 @@
                 type: 'success',
                 confirmButtonText: 'OK',
               })
+
             } else {
               this.$swal('Anulowano', 'Magazyn nie został usunięty.', 'info')
             }
@@ -167,4 +292,25 @@
         background-color: #dde0e5;
     }
 
+
+    .c-table table th:first-child, .c-table table td:first-child {
+        width: 15px;
+        text-align: left;
+    }
+
+    .c-table table th:nth-child(2), .c-table table td:nth-child(2) {
+        width: 15px;
+        text-align: left;
+    }
+    .c-table table th:nth-child(3), .c-table table td:nth-child(3) {
+        width: 100%;
+        text-align: left;
+    }
+
+    .l-table-filters__right {
+        border-right: 1px solid #dddddd;
+    }
+    .c-actions__item:first-child, .c-actions__item:nth-child(2){
+        border-right: none;
+    }
 </style>
