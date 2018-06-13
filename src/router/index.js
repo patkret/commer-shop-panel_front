@@ -24,6 +24,7 @@ import Account from '../components/accounts/account'
 import select from '../components/custom-select'
 import Logs from '../components/Logs'
 import Paginator from '../components/paginator'
+import inpt from '../components/custom-input'
 import MainInfo from '../components/products/mainInfo'
 import AdditionalInfo from '../components/products/additionalInfo'
 import Drafts from '../components/products/ProductDrafts'
@@ -31,6 +32,9 @@ import ProductsTable from '../components/products/ProductsTable'
 import ProductTickets from '../components/products/ProductTickets'
 import ImportedProducts from '../components/products/ImportedProducts'
 import AddVatRate from '../components/vat-rates/AddVatRate'
+import StockForm from '../components/stock/StockForm'
+import StockList from '../components/stock/StockList'
+import addToStock from '../components/stock/addToStock'
 
 
 
@@ -170,6 +174,29 @@ export default new Router({
           path: '/stock',
           name: 'Stock',
           component: Stock,
+          children: [
+            {
+              path: 'add',
+              name: 'StockForm',
+              component: StockForm,
+            },
+
+            {
+              path: 'list',
+              name: 'StockList',
+              component: StockList,
+            },
+            {
+              path: 'edit/:item',
+              name: 'StockForm',
+              component: StockForm,
+            },
+            {
+              path: 'add-to/:item',
+              name: 'addToStock',
+              component: addToStock,
+            },
+          ]
         },
         {
 
@@ -201,6 +228,11 @@ export default new Router({
           path: '/paginator',
           name: 'Paginator',
           component: Paginator,
+        },
+        {
+          path: '/inpt',
+          name: 'inpt',
+          component: inpt,
         },
       ],
     },

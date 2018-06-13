@@ -1,41 +1,68 @@
 <template>
-    <form action="" @submit.prevent="saveStock">
-        <div class="form-row">
-            <label class="form-label col-1">Nazwa</label>
-            <div class="form-data col-2">
-                <input v-model="stock.name" v-validate="'required'"
-                       :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input "
-                       type="text" name="name" placeholder="...">
-                <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
-            </div>
+    <div class="l-wrapper f-center">
+        <div style="width: 100%;" class="f-content">
+            <form action="" class="c-form" @submit.prevent="saveStock">
+
+                <div class="c-form__fieldset">
+                    <div class="c-form__field-wrapper">
+                        <custom-input :label="'Nazwa'" rules="required" min-input-length="4" v-model="stock.name"/>
+                        <!--<input type="text"-->
+                               <!--:class="{'c-form__field' :true, 'c-form__field is-valid': stock.name.length >= 3 && errors.items.length === 0, 'c-form__field is-invalid' : errors.first('name')} " required-->
+                               <!--v-model="stock.name" v-validate="'required'"-->
+                               <!--name="name">-->
+                        <!--<label class="c-form__placeholder">Nazwa</label>-->
+                        <!--<span class="form__errors">{{errors.first('name')}}</span>-->
+                    </div>
+                </div>
+
+                <!--<div class="c-form__fieldset">-->
+                    <!--<div class="c-form__field-wrapper">-->
+                        <!--<custom-input :label="'Test'" rules="" min-input-length="2" v-model="test"/>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="h-center">
+                    <button type="submit" class="c-button c-form__button">
+                        <span>Zapisz</span>
+                    </button>
+                </div>
+
+            </form>
+
         </div>
-        <div class="form-row col-2">
-            <button type="submit" class="custom-button col-2">ZAPISZ</button>
-        </div>
-    </form>
+    </div>
 </template>
 
 <script>
+  import CustomInput from '../custom-input'
+
   export default {
+    components: {CustomInput},
     name: 'stock-form',
-    props: ['editStock'],
+    // props: ['editStock'],
     data () {
       return {
         stock: {
           name: '',
         },
+        test: ''
+
       }
     },
     methods: {
+
+      fetchStock(){
+        axios('/warehouses/' + this.$route.params.item).then( result => {
+          this.stock = result.data
+        })
+      },
       saveStock () {
         this.$validator.validateAll().then((result) => {
           if (result) {
-            if (this.editStock) {
-              axios.put('/warehouses/' + this.editStock.id, {
+            if (this.stock.id) {
+              axios.put('/warehouses/' + this.stock.id, {
                 stock: this.stock,
               }).then(() => {
-                this.$parent.$data.type = 2
-                this.$parent.$data.stock = ''
+                this.$router.push('/stock/list')
               })
             }
 
@@ -43,8 +70,7 @@
               axios.post('/warehouses', {
                 stock: this.stock,
               }).then(() => {
-                this.$parent.$data.type = 2
-                this.$parent.$data.vendor = ''
+                this.$router.push('/stock/list')
               })
             }
           }
@@ -54,9 +80,12 @@
     },
 
     created: function () {
-      if (this.editStock) {
-        this.stock = this.editStock
-      }
+
+      // this.fetchStock()
+      // console.log(this.$route.params.item)
+      // if (this.editStock) {
+      //   this.stock = this.editStock
+      // }
     },
   }
 </script>
@@ -177,4 +206,6 @@
         background-size: 104%;
         background-position: -2px;
     }
+
+
 </style>

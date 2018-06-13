@@ -13,6 +13,7 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import Vuex from 'vuex'
 import axios from 'axios'
 import { store } from './store/store'
+import customInput from './components/custom-input'
 import VModal from 'vue-js-modal'
 import './assets/css/main.css'
 import './assets/css/component-styles.css'
@@ -24,8 +25,10 @@ Vue.use(normalize)
 Vue.use(VeeValidate)
 Vue.use(multiselectStyle)
 Vue.component('multiselect', Multiselect)
+Vue.component('custom-input', customInput)
 Vue.use(VueSweetalert2)
 Vue.use(Vuex)
+Vue.use(VModal)
 Vue.use(VModal)
 
 window.axios = axios
