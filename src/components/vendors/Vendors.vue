@@ -1,5 +1,5 @@
 <template>
-    <div id="main-content-with-side-menu">
+    <!-- <div id="main-content-with-side-menu">
         <h1 class="card-name">Producenci</h1>
         <div class="side-menu-container">
             <div id="side-menu">
@@ -15,21 +15,47 @@
             </div>
         </div>
         <div class="component-container">
-            <!--<router-view></router-view>-->
+            <router-view></router-view>
             <vendor-form v-if="type == 1"></vendor-form>
             <vendors-list v-if="type == 2" @vendor="vendorToEdit"></vendors-list>
             <vendor-form v-if="type == 3" :vendorEdit="vendor"></vendor-form>
         </div>
+    </div> -->
+
+     <div class="l-main__main">
+        <header class="l-main__header component__header">
+
+            <div class="c-breadcrumb">
+                        <span class="c-breadcrumb__item">
+                            Producenci
+                        </span>
+            </div>
+            <div class="main-header__button" >
+                <router-link to="/vendors/add" class="c-form__button c-button" v-if="$route.path !== '/vendors/add'">
+                    <span>Dodaj producenta</span>
+                </router-link>
+                <router-link to="/vendors/list" class="c-form__button c-button" v-if="$route.path !== '/vendors/list'">
+                    <span>Powrót</span>
+                </router-link>
+            </div>
+        </header>
+
+        <section class="l-main__content" style="padding: 0">
+            <router-view></router-view>
+        </section>
+
     </div>
 </template>
 
 <script>
-  import VendorForm from './VendorForm'
   import VendorsList from './VendorsList'
+  import AddVendor from './AddVendor'
+  import EditVendor from './EditVendor'
   export default {
     components: {
-      VendorForm,
-      VendorsList
+      VendorsList,
+      AddVendor,
+      EditVendor,
     },
     name: "vendors",
     data: () => ({
@@ -37,15 +63,13 @@
       vendor: ''
     }),
     methods:{
-      changeComponent(type){
+        changeComponent (type) {
         this.type = type
-        this.vendor = ''
       },
-
-      vendorToEdit(vendor){
-        this.vendor = vendor
+      editVendor (vendor) {
         this.type = 3
-      }
+        this.vendor = vendor
+      },
     }
   }
 </script>

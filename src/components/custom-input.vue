@@ -1,5 +1,4 @@
 <template>
-
     <div :class="{'my-input': true, 'my-input is-validated': value.length >= minInputLength,  'my-input not-validated': errors.has(label)}">
         <transition name="slide-fade">
             <span :class="{'label': true}" v-if="showCustLabel" >{{label}}</span>
@@ -7,7 +6,6 @@
         <input type="text" :class="{'my-input__input' : true, 'my-input__input red-label': errors.has(label)}" :name="label" :value="value" :placeholder="label" v-validate="{ rules }" @input="updateField($event.target.value)"/>
         <span class="not-valid__error" v-if="errors.has(label)">{{errors.first(label)}}</span>
     </div>
-
 </template>
 
 <script>
@@ -19,21 +17,17 @@
       showCustLabel: false,
     }),
 
-    methods:{
-      updateField(field) {
-        if(field === ''){
+    methods: {
+      updateField (field) {
+        if (field === '') {
           this.showCustLabel = false
         }
-        else{
+        else {
           this.showCustLabel = true
         }
         this.$emit('input', field)
       },
     },
-
-    created: function () {
-      console.log(this.minInputLength)
-    }
   }
 </script>
 
