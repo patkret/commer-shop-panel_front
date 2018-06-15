@@ -5,6 +5,11 @@ import Admin from './../Admin'
 import Dashboard from '../components/dashboard/Dashboard'
 import buttons from '../components/buttons'
 import AttributeSets from '../components/attribute-sets/AttributeSets'
+import AttributeSetsList from '../components/attribute-sets/AttributeSetsList'
+import AttributeSetForm from '../components/attribute-sets/AttributeSetForm'
+import attributesList from '../components/attribute-sets/attributesList'
+import CategoriesList from '../components/attribute-sets/CategoriesList'
+import addAttribute from '../components/attribute-sets/addAttribute'
 import Categories from '../components/categories/Categories'
 import AddProduct from '../components/products/Products'
 import EditProduct from '../components/products/addProduct'
@@ -35,6 +40,7 @@ import AddVatRate from '../components/vat-rates/AddVatRate'
 import StockForm from '../components/stock/StockForm'
 import StockList from '../components/stock/StockList'
 import addToStock from '../components/stock/addToStock'
+import StockItems from '../components/stock/StockItems'
 
 
 
@@ -67,6 +73,35 @@ export default new Router({
           path: '/attribute-sets',
           name: 'AttributeSets',
           component: AttributeSets,
+          children: [
+            {
+              path: 'list',
+              name: 'AttributeSetsList',
+              component: AttributeSetsList,
+            },
+            {
+              path: 'add',
+              name: 'AttributeSetForm',
+              component: AttributeSetForm,
+              children: [
+                {
+                  path: 'categories',
+                  name: 'CategoriesList',
+                  component: CategoriesList,
+                },
+                {
+                  path: 'attribute-add',
+                  name: 'addAttribute',
+                  component: addAttribute,
+                },
+                {
+                  path: 'attributes',
+                  name: 'attributesList',
+                  component: attributesList,
+                },
+              ]
+            },
+          ]
         },
         {
           path: '/buttons',
@@ -180,7 +215,6 @@ export default new Router({
               name: 'StockForm',
               component: StockForm,
             },
-
             {
               path: 'list',
               name: 'StockList',
@@ -192,9 +226,14 @@ export default new Router({
               component: StockForm,
             },
             {
-              path: 'add-to/:item',
+              path: 'items/:item/add-to',
               name: 'addToStock',
               component: addToStock,
+            },
+            {
+              path: 'items/:item',
+              name: 'StockItems',
+              component: StockItems,
             },
           ]
         },

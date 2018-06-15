@@ -240,7 +240,7 @@
                 {text: 'Dodaj produkt', path: '/product-add/main-info'},
                 {text: 'Kategorie', path: '/categories'},
                 {text: 'Producenci', path: '/vendors'},
-                {text: 'Zestawy atrybutów', path: '/attribute-sets'},
+                {text: 'Zestawy atrybutów', path: '/attribute-sets/list'},
                 {text: 'Zestawy wariantów', path: '/variants'},
                 {text: 'Stawki VAT', path: '/vat-rates/list'},
                 {text: 'Szablony opisów', path: '/'},

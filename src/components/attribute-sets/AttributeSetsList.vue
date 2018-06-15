@@ -1,25 +1,148 @@
+<!--<template>-->
+    <!--<div class="attr-container">-->
+        <!--<h4 class="attr-p">Akcja</h4>-->
+        <!--<ul class="attr-list">-->
+            <!--<li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">-->
+                <!--<p>{{item.id}}. {{item.name}}</p>-->
+                <!--<div class="buttons-container">-->
+                    <!--<button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">-->
+                        <!--<span class="dot"></span>-->
+                        <!--<span class="dot"></span>-->
+                        <!--<span class="dot"></span>-->
+                    <!--</button>-->
+                    <!--<div class="arrow-left"  v-if="index === key && show === true">-->
+                    <!--<div class="action-buttons">-->
+                        <!--<button class="delete" @click="deleteAttributeSet(item)">Usuń</button>-->
+                        <!--<button class="edit" @click = "editAttributeSet(item)">Edytuj</button>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
+<!--</template>-->
+
 <template>
-    <div class="attr-container">
-        <h4 class="attr-p">Akcja</h4>
-        <ul class="attr-list">
-            <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
-                <p>{{item.id}}. {{item.name}}</p>
-                <div class="buttons-container">
-                    <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                    </button>
-                    <div class="arrow-left"  v-if="index === key && show === true">
-                    <div class="action-buttons">
-                        <button class="delete" @click="deleteAttributeSet(item)">Usuń</button>
-                        <button class="edit" @click = "editAttributeSet(item)">Edytuj</button>
-                    </div>
-                    </div>
+    <div>
+        <div class="l-table-filters">
+            <div class="l-table-filters__left">
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Wybierz działanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </li>
-        </ul>
+
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Filtrowanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="l-table-filters__right">
+
+                <div class="c-dropdown js-dropdown">
+                <span class="c-dropdown__name">
+                Filtrowanie
+                <span class="c-arrow-down"></span>
+                </span>
+
+                <ul class="c-dropdown__menu">
+                <li class="c-dropdown__menu-item">
+                <a href="">
+                Cena
+                <span class="c-arrow-down"></span>
+                </a>
+                </li>
+                <li class="c-dropdown__menu-item is-active">
+                <a href="">
+                Kto przygotował
+                <span class="c-arrow-down"></span>
+                </a>
+                </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="c-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox">
+                    </th>
+                    <th>ID</th>
+                    <th>Nazwa zestawu</th>
+                    <th>Aktywność</th>
+                    <th>Akcja</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(set, key) in items">
+                    <td data-th="Wybierz">
+                        <input type="checkbox">
+                    </td>
+                    <td data-th="ID">{{set.id}}</td>
+                    <td data-th="Nazwa">{{set.name}}</td>
+                    <td data-th="Widocznosc">
+                        <span v-if="set.visibility">Tak</span>
+                        <span v-if="!set.visibility">Nie</span>
+                    </td>
+                    <td data-th="Akcja" class="h-relative">
+                                        <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                                            <i></i>
+                                        </span>
+                        <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
+                            <div class="c-actions__row">
+                                <button class="c-actions__item" @click="deleteAttributeSet(set)">Usuń</button>
+                                <router-link :to="'edit/' + set.id" class="c-actions__item">Edytuj</router-link>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="c-pagination">
+            </div>
+        </div>
     </div>
+
+
 </template>
 
 <script>
@@ -93,93 +216,20 @@
 </script>
 
 <style scoped>
-    .attr-container {
-        width: 80%;
-        background-color: #ffffff;
-        margin-left: 20px;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 5px 5px 5px 2px #eff1f4;
-    }
-    .attr-p {
-        text-align: right;
-    }
-    .attr-list{
-        padding: 0;
-    }
-    .attr-list-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 0;
-        height: 40px;
-        line-height: 40px;
-        margin: 5px 0;
-    }
-    .attr-list-item p{
-        margin: 0 0 0 10px;
-        padding: 0;
-    }
-    .buttons-container {
-        position: relative;
-    }
-    .more-button {
-        height: 40px;
-        border: none;
-        color: #dde0e5;
-        background-color: #ffffff;
-        padding-bottom: 15px;
-    }
-    .dot {
-        height: 6px;
-        width: 6px;
-        background-color: #bbb;
-        border-radius: 50%;
-        display: inline-block;
-    }
-    .action-buttons {
-        position: absolute;
-        top: -22px;
-        left: -115px;
-        display: flex;
-        border: 1px solid #dde0e5;
-        border-radius: 5px;
-        z-index: -1;
+
+    .c-table table th:first-child, .c-table table td:first-child {
+        width: 15px;
+        text-align: left;
     }
 
-    .action-buttons button {
-        /*border: 1px solid #dde0e5;*/
-        background-color: #ffffff;
-        height: 40px;
-        border-radius: 5px;
-        border: none;
+    .c-table table th:nth-child(2), .c-table table td:nth-child(2) {
+        width: 15px;
+        text-align: left;
     }
-    .action-buttons button:first-child {
-        border-right: 1px solid #dde0e5;
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-    }
-    .action-buttons button:last-child {
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-    }
-    .action-buttons button:hover {
-        cursor: pointer;
-        background-color: #dde0e5;
-    }
-    .active{
-        background-color: #F3F4F8;
-        border-radius: 5px;
 
+    .c-table table th:nth-child(3), .c-table table td:nth-child(3) {
+        width: 70%;
+        text-align: left;
     }
-    .arrow-left{
-        width: 0;
-        height: 0;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-left:8px solid #FFFFFF;
-        position: absolute;
-        z-index: 20;
-        top: 36%;
-        right: 42px;
-    }
+
 </style>

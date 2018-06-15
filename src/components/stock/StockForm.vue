@@ -6,20 +6,8 @@
                 <div class="c-form__fieldset">
                     <div class="c-form__field-wrapper">
                         <custom-input :label="'Nazwa'" rules="required" min-input-length="4" v-model="stock.name"/>
-                        <!--<input type="text"-->
-                               <!--:class="{'c-form__field' :true, 'c-form__field is-valid': stock.name.length >= 3 && errors.items.length === 0, 'c-form__field is-invalid' : errors.first('name')} " required-->
-                               <!--v-model="stock.name" v-validate="'required'"-->
-                               <!--name="name">-->
-                        <!--<label class="c-form__placeholder">Nazwa</label>-->
-                        <!--<span class="form__errors">{{errors.first('name')}}</span>-->
                     </div>
                 </div>
-
-                <!--<div class="c-form__fieldset">-->
-                    <!--<div class="c-form__field-wrapper">-->
-                        <!--<custom-input :label="'Test'" rules="" min-input-length="2" v-model="test"/>-->
-                    <!--</div>-->
-                <!--</div>-->
                 <div class="h-center">
                     <button type="submit" class="c-button c-form__button">
                         <span>Zapisz</span>
@@ -38,20 +26,17 @@
   export default {
     components: {CustomInput},
     name: 'stock-form',
-    // props: ['editStock'],
     data () {
       return {
         stock: {
           name: '',
         },
-        test: ''
-
       }
     },
     methods: {
 
       fetchStock(){
-        axios('/warehouses/' + this.$route.params.item).then( result => {
+        axios('warehouses/' + this.$route.params.item).then( result => {
           this.stock = result.data
         })
       },
@@ -81,11 +66,9 @@
 
     created: function () {
 
-      // this.fetchStock()
-      // console.log(this.$route.params.item)
-      // if (this.editStock) {
-      //   this.stock = this.editStock
-      // }
+      if(this.$route.params.item){
+        this.fetchStock()
+      }
     },
   }
 </script>

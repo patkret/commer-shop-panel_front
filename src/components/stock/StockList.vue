@@ -112,7 +112,7 @@
                     </td>
                     <td data-th="ID">{{warehouse.id}}</td>
                     <td data-th="Nazwa">{{warehouse.name}}</td>
-                    <td data-th="Ilosc">1500</td>
+                    <td data-th="Ilosc">{{warehouse.warehouse_items.length}}</td>
                     <td data-th="Akcja" class="h-relative">
                                         <span class="c-actions-button js-actions-button" @click="showActions(key)">
                                             <i></i>
@@ -121,7 +121,7 @@
                             <div class="c-actions__row">
                                 <button class="c-actions__item" @click="deleteStock(warehouse)">Usuń</button>
                                 <router-link :to="'edit/' + warehouse.id" class="c-actions__item" tag="button">Edytuj</router-link>
-                                <router-link :to="'add-to/' + warehouse.id" class="c-actions__item" tag="button">Stan</router-link>
+                                <router-link :to="'items/' + warehouse.id" class="c-actions__item" tag="button">Stan</router-link>
                             </div>
                         </div>
                     </td>
