@@ -1,7 +1,7 @@
 <template>
     <!--<div>-->
         <!--<div class="card-header" v-if="type === 1">-->
-            <!--<h3>{{stock.name}}</h3>-->
+            <!--&lt;!&ndash;<h3>{{stock.name}}</h3>&ndash;&gt;-->
             <!--<button class="custom-button" @click="changeType(2)">Dodaj do magazynu</button>-->
         <!--</div>-->
 
@@ -37,6 +37,117 @@
         <!--</div>-->
     <!--</div>-->
 
+    <div>
+        <div class="l-table-filters">
+            <div class="l-table-filters__left">
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Wybierz działanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Filtrowanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="l-table-filters__right">
+
+                <div class="c-dropdown js-dropdown">
+                <span class="c-dropdown__name">
+                Filtrowanie
+                <span class="c-arrow-down"></span>
+                </span>
+
+                <ul class="c-dropdown__menu">
+                <li class="c-dropdown__menu-item">
+                <a href="">
+                Cena
+                <span class="c-arrow-down"></span>
+                </a>
+                </li>
+                <li class="c-dropdown__menu-item is-active">
+                <a href="">
+                Kto przygotował
+                <span class="c-arrow-down"></span>
+                </a>
+                </li>
+                </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="c-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Dodano</th>
+                    <th>Ilość</th>
+                    <th>Cena</th>
+                    <th>Akcja</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(item, key) in items">
+                    <td data-th="ID">{{item.group_id}}</td>
+                    <td data-th="Data">{{item.added_at}}</td>
+                    <td data-th="Ilosc">{{item.quantity}}</td>
+                    <td data-th="Ilosc">{{item.price}}</td>
+                    <td data-th="Akcja" class="h-relative">
+                                        <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                                            <i></i>
+                                        </span>
+                        <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
+                            <div class="c-actions__row">
+                                <button class="c-actions__item" @click="deleteStockItems(item)">Usuń</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="c-pagination">
+            </div>
+        </div>
+    </div>
+
 </template>
 
 <script>
@@ -50,18 +161,8 @@
       items: [],
       index: '',
       show: false,
-      type: 1,
     }),
 
-    watch: {
-      type: function (val) {
-        if (val === 1) {
-          axios('warehouse-items/' + this.stock.id).then(result => {
-            this.items = result.data
-          })
-        }
-      },
-    },
     methods: {
       showActions (key) {
         if (this.index === key) {
@@ -74,13 +175,15 @@
         }
       },
 
-      changeType (type) {
-        this.type = type
+      fetchItems() {
+        axios('warehouse-items/' + this.$route.params.item).then(result => {
+          this.items = result.data
+        })
       },
 
       deleteStockItems (item) {
         axios.delete('warehouse-items/' + item.group_id).then(() => {
-          axios('warehouse-items/' + this.stock.id).then(result => {
+          axios('warehouse-items/' + this.$route.params.item).then(result => {
             this.items = result.data
           })
           this.index = ''
@@ -90,9 +193,7 @@
     },
 
     created: function () {
-      axios('warehouse-items/' + this.stock.id).then(result => {
-        this.items = result.data
-      })
+      this.fetchItems()
     },
   }
 </script>
