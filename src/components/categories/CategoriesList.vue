@@ -1,46 +1,43 @@
 <template>
-    <div class="categories-container">
-        <div class="categories-list">
-            <div class="list-container">
-                <draggable :element="'ul'"
-                           :list="items"
-                           class="dragArea list-group lista-dziecko"
-                           :options="{group:{name: 'g1'}}">
-                    <li v-for="(item, key) in items">
-                        <div class="top-category attr-list-item" :class="{'attr-list-item active': index === key}">
-                            <div>
-                            {{item.name}}
-                            </div>
-                            <div class="buttons-container">
-                                <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">
-                                    <span class="dot"></span>
-                                    <span class="dot"></span>
-                                    <span class="dot"></span>
-                                </button>
-                                <div class="arrow-left"  v-if="index === key && show === true">
-                                    <div class="action-buttons">
-                                        <button @click="deleteCategory(item)" class="delete">Usuń</button>
-                                        <button @click="editCategory(item)" class="edit">Edytuj</button>
-                                        <button @click="duplicateCategory(item)" class="duplicate">Duplikuj</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                            <drag class="list-item" v-if="item.children" :children="item.children" :item="item" @duplCategory="duplicateCategory" @singleCategory="editCategory"></drag>
-                    </li>
-                </draggable>
+  <div style="display: flex; justify-content: space-between;">
+    <div style="width: 30%;">
+      <div>
+        <draggable :element="'ul'" :list="items" class="dragArea list-group lista-dziecko" :options="{group:{name: 'g1'}}">
+          <li v-for="(item, key) in items" class="c-list">
+            <div class="top-category attr-list-item" :class="{'attr-list-item active': index === key}">
+              <input class="new-checkbox" type="checkbox"> {{item.name}}
+                <div data-th="Akcja" class="h-relative">
+                  <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                    <i></i>
+                  </span>
+                  <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
+                    <div class="c-actions__row">
+                      <button class="c-actions__item" @click="deleteCategory(item)">Usuń</button>
+                      <router-link :to="'edit/' + item.id" class="c-actions__item">Edytuj</router-link>
+                      <router-link :to="'categories/list/duplicate/' +item.id" class="c-actions__item">Duplikuj</router-link>
+                    </div>
+                  </div>
+                </div>
+           
             </div>
-        </div>
+            <drag class="list-item" v-if="item.children" :children="item.children" :item="item"></drag>
+          </li>
+        </draggable>
+      </div>
     </div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
   import draggable from 'vuedraggable'
   import drag from './Drag.vue'
-
+  import AddCategory from './AddCategory'
+  import EditCategory from './EditCategory'
+  import DuplicateCategory from './DuplicateCategory'
   export default {
-    name: "Categories",
-    props: ['editingCategory', 'duplicatingCategory'],
+    name: "CategoriesList",
+    // props: ['editingCategory', 'duplicatingCategory'],
     components: {
       draggable,
       drag,
@@ -74,6 +71,10 @@
     },
 
     methods: {
+      fetchItems() {
+  axios('categories')
+        .then(result => this.items = result.data)
+      },
       editChild(child){
        this.child = child
         this.$emit('child', this.child)
@@ -112,7 +113,7 @@
             if (result.value) {
               let itemIndex = this.items.map(x => x.id).indexOf(item.id)
               this.items.splice(itemIndex, 1)
-              axios.delete('categories/' + item.id)
+              axios.delete('/categories/' + item.id)
               this.$swal({
                 title: 'Usunięto!',
                 text: 'Kategoria została usunięta',
@@ -129,8 +130,7 @@
 
     },
     created: function () {
-      axios('categories')
-        .then(result => this.items = result.data)
+    this.fetchItems()
     },
   }
 </script>
@@ -149,18 +149,16 @@
         border: 1px #000000 dashed;
     }
     .list-container {
-        margin: 0px 50px 0 50px;
         border: 1px solid #f2f4f7;
         border-radius: 10px;
         background-color: #ffffff;
-        padding: 30px;
+        padding: 10px;
         box-shadow: 5px 5px 5px 2px #eff1f4;
     }
     .attr-list-item {
         display: flex;
-        justify-content: space-between;
+        /* justify-content: space-between; */
         flex-wrap: wrap;
-        padding: 0 0 0 10px;
         min-height: 40px;
         line-height: 40px;
         margin: 5px 0;
@@ -171,15 +169,10 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
-       padding: 10px;
     }
     .active {
         background-color: #F3F4F8;
         border-radius: 5px;
-    }
-    .attr-list-item p{
-        margin: 0 0 0 10px;
-        padding: 0;
     }
     .buttons-container {
         position: relative;
@@ -198,52 +191,9 @@
         border-radius: 50%;
         display: inline-block;
     }
-    .action-buttons {
-        position: absolute;
-        top: -22px;
-        left: -185px;
-        display: flex;
-        border: 1px solid #dde0e5;
-        border-radius: 5px;
-        z-index: -1;
-    }
-    .action-buttons button {
-        background-color: #ffffff;
-        height: 40px;
-        border-radius: 5px;
-        border: none;
-        border-right: 1px solid #dde0e5;
-    }
-    .action-buttons button:first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-    .action-buttons button:nth-child(2) {
-        border-radius: 0;
-    }
-    .action-buttons button:last-child {
-        border-right: none;
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-    }
-    .action-buttons button:hover {
-        cursor: pointer;
-        background-color: #dde0e5;
-    }
     .active .top-category, .active .more-button{
         background-color: #F3F4F8;
         border-radius: 5px;
-    }
-    .arrow-left{
-        width: 0;
-        height: 0;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-left:8px solid #FFFFFF;
-        position: absolute;
-        z-index: 20;
-        top: 36%;
-        right: 42px;
     }
 
 </style>

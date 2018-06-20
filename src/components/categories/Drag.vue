@@ -2,21 +2,19 @@
     <draggable :element="'ul'" :list="children" class="dragArea list-group" :options="{group:{ name:'g1'}}">
         <li class="list-item" :key="key" v-for="(el, key) in children">
             <div :class="{'drag-undercategory': true, 'drag-undercategory active': index === key}">
+              <input type="checkbox">
                 <p class="list-item-p">{{el.name}}</p>
-                <div class="buttons-container">
-                    <button @click="showActions(key)"
-                            :class="{'more-button': true, 'more-button active': show === true && index === key}">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                    </button>
-                    <div class="arrow-left" v-if="index === key && show === true">
-                        <div class="action-buttons">
-                            <button @click="deleteCategory(el)" class="delete">Usuń</button>
-                            <button @click="editCategory(el)" class="edit">Edytuj</button>
-                            <button @click="duplicateCategory(el)" class="duplicate">Duplikuj</button>
-                        </div>
+                <div data-th="Akcja" class="h-relative">
+                  <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                    <i></i>
+                  </span>
+                  <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
+                    <div class="c-actions__row">
+                      <button class="c-actions__item" @click="deleteCategory(item)">Usuń</button>
+                      <router-link :to="'edit/' + item.id" class="c-actions__item">Edytuj</router-link>
+                      <router-link :to="'duplicate/' + item.id" class="c-actions__item">Duplikuj</router-link>
                     </div>
+                  </div>
                 </div>
             </div>
             <drag class="list-item-drag" v-if="el.children" :children="el.children" :item="el" @duplCategory="duplicateCategory" @singleCategory="editCategory" ></drag>

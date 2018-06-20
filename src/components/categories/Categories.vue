@@ -1,44 +1,27 @@
+
+
 <template>
-    <div>
-        <div id="main-content-with-side-menu">
-            <h1 class="card-name">Kategorie</h1>
-            <div class="side-menu-container">
-                <div id="side-menu">
-                    <div class="side-button" :class="{'side-menu-item': true, 'side-menu-item active': type == 1}"
-                         @click.prevent="changeComponent(1)">
-                        <p>Dodaj kategorie</p>
-                    </div>
-                    <div class="side-button" :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}"
-                         @click.prevent="changeComponent(2)">
-                        <p>Wszystkie kategorie</p>
-                    </div>
-                    <div class="side-button side-menu-item active" v-if="type == 3">
-                        <p>Edycja kategorii</p>
-                    </div>
-                    <div class="side-button side-menu-item active" v-if="type == 4">
-                        <p>Duplikowanie kategorii</p>
-                    </div>
-                </div>
+     <div class="l-main__main">
+        <header class="l-main__header component__header">
+
+            <div class="c-breadcrumb">
+                        <span class="c-breadcrumb__item">
+                            Kategorie
+                        </span>
             </div>
-            <div class="component-container">
-
-                <add-category v-if="type == 1"></add-category>
-                <category-list v-if="type == 2" @duplCategory="duplicateCategory" @singleCategory="editCategory" @child="getChild"></category-list>
-                <edit-category v-if="type == 3" :category="editingCategory" :childCategory="childCategory"></edit-category>
-                <duplicate-category v-if="type == 4" :category="duplicatingCategory" :childCategory="childCategory"></duplicate-category>
-
-                <!--<transition name="slide-fade">-->
-                    <!--<add-category v-if="type === 1"/>-->
-                <!--</transition>-->
-                <!--<transition name="slide-fade">-->
-                    <!--<category-list v-if="type === 2" @singleCategory="editCategory" @child="getChild"/>-->
-                <!--</transition>-->
-                <!--<transition name="slide-fade">-->
-                    <!--<edit-category v-if="type === 3" :category="editingCategory" :childCategory="childCategory"/>-->
-                <!--</transition>-->
-
+            <div class="main-header__button" >
+                <router-link to="/categories/list/add" class="c-form__button c-button" v-if="$route.path !== '/categories/list/add'">
+                    <span>Dodaj kategorie</span>
+                </router-link>
+                <router-link to="/categories/list" class="c-form__button c-button" v-if="$route.path !== '/categories/list'">
+                    <span>Powrót</span>
+                </router-link>
             </div>
-        </div>
+        </header>
+
+        <section class="l-main__content" style="padding: 0">
+            <router-view></router-view>
+        </section>
 
     </div>
 </template>
@@ -46,18 +29,17 @@
 <script>
 
   import AddCategory from './AddCategory'
-  import EditCategory from './EditCategory'
-  import CategoryList from './CategoryList'
-  import DuplicateCategory from './DuplicateCategory'
+//   import EditCategory from './EditCategory'
+  import CategoriesList from './CategoriesList'
+//   import DuplicateCategory from './DuplicateCategory'
 
   export default {
     name: 'Categories',
     components: {
-
-      CategoryList,
-      EditCategory,
+      CategoriesList,
+    //   EditCategory,
       AddCategory,
-      DuplicateCategory,
+    //   DuplicateCategory,
 
     },
     data: () => ({

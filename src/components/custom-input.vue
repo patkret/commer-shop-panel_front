@@ -26,6 +26,7 @@
         }
       }
     },
+
     methods: {
       updateField (field) {
         if (field.length === 0) {
