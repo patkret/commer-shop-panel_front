@@ -238,7 +238,7 @@
               [
                 {text: 'Lista produktów', path: '/products/list'},
                 {text: 'Dodaj produkt', path: '/product-add/main-info'},
-                {text: 'Kategorie', path: '/categories'},
+                {text: 'Kategorie', path: '/categories/list'},
                 {text: 'Producenci', path: '/vendors/list'},
                 {text: 'Zestawy atrybutów', path: '/attribute-sets'},
                 {text: 'Zestawy wariantów', path: '/variants'},

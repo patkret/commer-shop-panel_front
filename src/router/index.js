@@ -6,6 +6,10 @@ import Dashboard from '../components/dashboard/Dashboard'
 import buttons from '../components/buttons'
 import AttributeSets from '../components/attribute-sets/AttributeSets'
 import Categories from '../components/categories/Categories'
+import CategoriesList from '../components/categories/CategoriesList'
+import AddCategory from '../components/categories/AddCategory'
+import DuplicateCategory from '../components/categories/DuplicateCategory'
+import EditCategory from '../components/categories/EditCategory'
 import AddProduct from '../components/products/Products'
 import EditProduct from '../components/products/addProduct'
 import ProductsList from '../components/products/ProductsList'
@@ -80,6 +84,30 @@ export default new Router({
           path: '/categories',
           name: 'Categories',
           component: Categories,
+          children: [
+            {
+              path: 'list',
+              name: 'CategoriesList',
+              component: CategoriesList,
+              children: [
+                {
+                  path: 'add',
+                  name: 'AddCategory',
+                  component: AddCategory,
+                },
+                {
+                  path: 'duplicate',
+                  name: 'DuplicateCategory',
+                  component: DuplicateCategory,
+                },
+                {
+                  path: 'edit/:id',
+                  name: 'EditCategory',
+                  component: EditCategory,
+                }
+              ]
+            },
+          ]
         },
         {
           path: '/product-add',

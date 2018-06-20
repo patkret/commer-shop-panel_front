@@ -1,6 +1,6 @@
 <template>
 
-        <div :class="{'my-input': true, 'my-input is-validated': val > minInputLength,  'my-input not-validated': errors.has(label)}">
+        <div :class="{'my-input': true, 'my-input is-validated': value > minInputLength,  'my-input not-validated': errors.has(label)}">
             <transition name="slide-fade">
                 <span :class="{'label': true}" v-if="showCustLabel" >{{label}}</span>
             </transition>
@@ -16,8 +16,7 @@
     inject: ['$validator'],
     props: ['label', 'rules', 'minInputLength', 'value'],
     data: () => ({
-      showCustLabel: false,
-    val: ''    
+      showCustLabel: false,   
     }),
 
     methods:{
@@ -36,7 +35,7 @@
     },
 
     created: function() {
-     this.val = (this.value).length
+
     }
   }
 </script>

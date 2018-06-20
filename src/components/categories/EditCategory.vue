@@ -1,91 +1,71 @@
-<template>
-    <form @submit.prevent="updateCategory">
-        <div class="info" v-if="showInfoEdit == true">
-            <p>Kategoria została zedytowana!</p>
-        </div>
-        <div class="form-row">
-            <label class="form-label col-1" for="">Nazwa kategorii</label>
-            <div class="form-data col-2">
-                <input  v-model="editingCategory.name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('name') }" class="form-input " type="text" name="name">
-                <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
-            </div>
-        </div>
-        <div class="form-row">
-            <label for="" class="form-label col-1">Przypisz do</label>
-            <multiselect
-                    class="shop-select categories-form-field"
-                    v-model="selectedCategory"
-                    :options="items"
-                    :allow-empty="false"
-                    :searchable="false"
-                    :selectedLabel="''"
-                    track-by="name"
-                    label="name"
-                    :deselectLabel="''"
-                    :selectLabel="''"
-                    :hideSelected="true"
-                    placeholder="Wybierz"/>
-        </div>
-        <div class="form-row">
-            <label class="form-label col-1" for="">Aktywność</label>
-            <div class="checkbox-square form-group">
-                <input v-model="editingCategory.visibility" class="visibility-hidden" type="checkbox" id="checkbox">
-                <label for="checkbox" class="square"></label>
-            </div>
-        </div>
-        <div class="form-row">
-            <label class="form-label col-1" for="">Opis kategorii</label>
-            <div class="form-data col-2">
-                <textarea v-model="editingCategory.description" class="form-textarea" name="description" id=""></textarea>
-            </div>
-            <div class="col-3"></div>
-        </div>
-        <div class="form-row">
-            <label class="form-label col-1" for="">Tytuł strony</label>
-            <div class="form-data col-2">
-                <input  v-model="editingCategory.page_title" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('title') }" class="form-input " type="text" name="title">
-                <span v-show="errors.has('title')" class="help is-danger">{{ errors.first('title') }}</span>
-            </div>
-            <div class="form-help col-3">
-                <div class="form-help-square"></div>
-                <div class="form-help-cloud"><p>Pomocny Krzysztof</p></div>
-            </div>
-        </div>
-        <div class="form-row">
-            <label class="form-label col-1" for="">Meta description</label>
-            <div class="form-data col-2">
-                <input  v-model="editingCategory.metaDescription" class="form-input " type="text" name="metaDescription">
-            </div>
-            <div class="form-help col-3">
-                <div class="form-help-square"></div>
-                <div class="form-help-cloud"><p>Pomocny Krzysztof</p></div>
-            </div>
-        </div>
-        <div class="form-row">
-            <label class="form-label col-1" for="">Meta Keywords</label>
-            <div class="form-data col-2">
-                <input  v-model="editingCategory.metaKeywords" class="form-input" type="text" name="metaKeywords">
-            </div>
-            <div class="form-help col-3">
-                <div class="form-help-square"></div>
-                <div class="form-help-cloud"><p>Pomocny Krzysztof</p></div>
-            </div>
-        </div>
-        <div class="form-row">
-            <label class="form-label col-1" for="">Url</label>
-            <div class="form-data col-2">
-                <input  v-model="editingCategory.addressUrl" class="form-input " type="text" name="addressUrl">
 
-            </div>
-            <div class="form-help col-3">
-                <div class="form-help-square"></div>
-                <div class="form-help-cloud"><p>Pomocny Krzysztof</p></div>
-            </div>
+
+<template>
+  <div style="background-color: #ffffff; width: 40%; padding: 40px">
+    <form action="" class="c-form" @submit.prevent="saveCategory">
+
+      <div class="c-form__fieldset">
+        <div class="c-form__field-wrapper">
+          <custom-input :label="'Nazwa'" v-model="editingCategory.name" rules="required" min-input-length="4" />
         </div>
-        <div class="form-row">
-            <button type="submit" class="custom-button col-2">Zapisz</button>
+      </div>
+      <div class="c-form__fieldset">
+            <div class="c-form__switch">
+              <div class="c-form__switch-label">Aktywność</div>
+
+              <div class="c-form__switch-control">
+                <input type="checkbox" id="visibility" v-model="visibility">
+                <label for="visibility"></label>
+              </div>
+            </div>
+          </div>
+      <div class="c-form__fieldset" @click="toggleCategory = !toggleCategory">
+        <div :class="{'c-form__multiselect js-multiselect': true, 'c-form__multiselect js-multiselect is-opened': toggleCategory}">
+          <span class="c-form__multiselect-name">
+            Wybierz kategorię
+            <span class="c-arrow-down"></span>
+          </span>
+          <ul class="c-form__multiselect-menu">
+
+            <li class="c-form__multiselect-menu-item" v-for="item in items">
+              <div class="c-form__checkbox">
+                <input v-model="selectedCategory" type="checkbox" :id="item.id">
+                <label>
+                  <span>{{item.name}}</span>
+                </label>
+              </div>
+            </li>
+          </ul>
         </div>
+      </div>
+      <div class="c-form__fieldset">
+        <div class="c-form__field-wrapper">
+          <custom-input :label="'Tytuł'" v-model="page_title" rules="required" />
+        </div>
+      </div>
+      <div class="c-form__fieldset">
+        <div class="c-form__field-wrapper">
+          <custom-input :label="'keywords'" v-model="metaKeywords" rules="required" />
+        </div>
+      </div>
+      <div class="c-form__fieldset">
+        <div class="c-form__field-wrapper">
+          <custom-input :label="'description'" v-model="metaDescription" rules="required" />
+        </div>
+      </div>
+      <div class="c-form__fieldset">
+        <div class="c-form__field-wrapper">
+          <custom-input :label="'URL'" v-model="addressUrl" rules="required" />
+        </div>
+      </div>
+      <div class="h-center">
+        <button type="submit" class="c-button c-form__button">
+          <span>Zapisz</span>
+        </button>
+      </div>
+
     </form>
+  </div>
 </template>
 
 <script>
