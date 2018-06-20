@@ -1,19 +1,18 @@
 
 <template>
     <div class="attr-container">
-        <h4 class="attr-p">Akcja</h4>
         <ul class="attr-list">
             <li v-for="(item, key) in attributes" class="attr-list-item">
                 {{item.id}} {{item.name}}
-                <div class="buttons-container">
-                    <button @click="showActions(key)" class="more-button">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                    </button>
-                    <div class="action-buttons visibility-hidden" :data-category="key">
-                        <button class="delete" @click="deleteAttribute(key)">Usuń</button>
-                        <button class="edit" @click="editAttribute(item, key)">Edytuj</button>
+                <div class="h-relative">
+                       <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                                            <i></i>
+                                        </span>
+                    <div :class="{'c-actions js-actions': true , 'is-active': index === key}">
+                        <div class="c-actions__row">
+                            <button class="c-actions__item" type="button" @click="deleteAttribute(key)">Usuń</button>
+                            <router-link :to="'attribute-edit/' + key" class="c-actions__item" tag="button" @click.native="setActiveRoute(item)">Edytuj</router-link>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -23,16 +22,32 @@
 
 <script>
   export default {
-    props: ['attributes'],
     name: 'attributes-list',
     data () {
       return {
-        buttons: [],
+        index:'',
+        show: false,
+      }
+    },
+
+    computed: {
+      attributes: function () {
+        return this.$store.getters.getAttributesInSet
       }
     },
     methods: {
+      setActiveRoute(item){
+        this.$parent.activeRoute = 'attribute-sets/add/attribute-edit'
+      },
       showActions (key) {
-        document.querySelector('[data-category="'+key+'"').classList.toggle('visibility-hidden');
+        if(this.index === key){
+          this.show = false
+          this.index = ''
+        }
+        else{
+          this.show = true
+          this.index = key
+        }
       },
       deleteAttribute (index) {
         this.$swal({
@@ -68,69 +83,25 @@
 </script>
 
 <style scoped>
-    .attr-container {
-        width: 80%;
-        background-color: #ffffff;
-        margin-left: 20px;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 5px 5px 5px 2px #eff1f4;
+    .attr-container{
+        margin: -50px;
     }
-    .attr-p {
-        text-align: right;
+    .attr-list-item{
+        width: 100%;
+        height: 60px;
+        border-bottom: 1px solid #dddddd;
+        display: grid;
+        grid-template-columns: 90% 10%;
+        align-items: center;
+        padding-left: 35px;
+        font-size: 0.8rem;
     }
-    .attr-list-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 0;
-        height: 40px;
-        line-height: 40px;
-        margin: 5px 0;
+    .f-content .c-form__cont{
+        margin: 0;
+        padding: 0;
     }
-    .buttons-container {
-        position: relative;
-    }
-    .more-button {
-        height: 40px;
-        border: none;
-        color: #dde0e5;
-        background-color: #ffffff;
-        padding-bottom: 15px;
-    }
-    .dot {
-        height: 6px;
-        width: 6px;
-        background-color: #bbb;
-        border-radius: 50%;
-        display: inline-block;
-    }
-    .action-buttons {
-        position: absolute;
-        top: 0;
-        left: -120px;
-        display: flex;
-        border: 1px solid #dde0e5;
-        border-radius: 5px;
-    }
-    .action-buttons button {
-        /*border: 1px solid #dde0e5;*/
-        background-color: #ffffff;
-        height: 40px;
-        border-radius: 5px;
-        border: none;
-    }
-    .action-buttons button:first-child {
-        border-right: 1px solid #dde0e5;
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-    }
-    .action-buttons button:last-child {
-        border-right: 1px solid #dde0e5;
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-    }
-    .action-buttons button:hover {
-        cursor: pointer;
-        background-color: #dde0e5;
+    .c-actions{
+        top: -12px;
+        left: -15px;
     }
 </style>

@@ -1,129 +1,106 @@
 <template>
-    <div class="single-attribute">
-        <form class="single-attribute-form">
-            <div class="info" v-if="showInfoEdit == true">
-                <p>Atrybut został edytowany!</p>
+    <div class="component__content">
+        <transition name="fade">
+            <div class="success-info" v-if="showInfoEdit">
+                <span>Atrybut został pomyślnie dodany!</span>
             </div>
-            <div class="sing-attr-row">
-                <label class="attr-label">Nazwa</label>
-                <div class="input-container">
-                    <div class="input-col">
-                        <div :class="{'cust-inpt': true,  'cust-inpt inpt-border': errors.has('name')}">
-                            <input type="text" v-validate="'required'" :class="{'single-input': true, }"
-                                   placeholder="Nazwa..." name="name" v-model="attribute.name">
-                        </div>
-                        <span v-show="errors.has('name')" class="validator-help">{{ errors.first('name') }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="sing-attr-row">
-                <label class="attr-label">Typ atrybutu</label>
-                <div class="input-container">
-                    <multiselect
-                            class="shop-select"
-                            v-model="attribute.type"
-                            :options="options"
-                            :allow-empty="false"
-                            :searchable="false"
-                            :selectedLabel="''"
-                            track-by="name"
-                            label="name"
-                            id="ms-1"
-                            :deselectLabel="''"
-                            :selectLabel="''"
-                            :hideSelected="true"
-                            placeholder="Wybierz"></multiselect>
-                </div>
-            </div>
-            <div class="sing-attr-row">
-                <label class="attr-label">Aktywność</label>
-                <div class="input-container">
-                    <div class="checkbox-square form-group">
-                        <input type="checkbox" id="attr-visibility" class="visibility-hidden"
-                               v-model="attribute.visibility">
-                        <label for="attr-visibility" class="square"></label>
-                    </div>
-                </div>
-            </div>
-            <div class="sing-attr-row" v-if="attribute.type.type == 1">
-                <label class="attr-label">Domyślnie zaznaczony</label>
-                <div class="input-container">
-                    <div class="checkbox-square form-group">
-                        <input type="checkbox" id="def-checked" class="visibility-hidden" v-model="attribute.checked">
-                        <label for="def-checked" class="square"></label>
-                    </div>
-                </div>
-            </div>
-            <div class="sing-attr-row" v-if="attribute.type.type == 0">
-                <label class="attr-label">Wartość domyślna</label>
-                <div class="input-container">
-                    <div class="cust-inpt">
-                        <input type="text" name="name" placeholder="..." v-model="attribute.defaultValue">
-                    </div>
-                </div>
-            </div>
-            <div class="sing-attr-row" v-if="attribute.type.type == 2">
-                <label class="attr-label">Pole dla select</label>
-                <div class="input-container">
-                    <div class="select-input-container">
-                        <div class="select-input">
-                            <input type="text" name="name" placeholder="..." v-model="selectName">
-                        </div>
-                        <button class="button-select-fields" @click.prevent="addOption()">+</button>
-                    </div>
+        </transition>
 
+        <div class="c-single-col">
+            <div class="component__row">
+                <custom-input label="Nazwa atrybutu" rules="required" :min-input-length="3"
+                              v-model="attribute.name"></custom-input>
+            </div>
+            <div class="component__row">
+                <div class="c-form__switch">
+                    <div class="c-form__switch-label">Aktywność</div>
+
+                    <div class="c-form__switch-control">
+                        <input type="checkbox" id="visibility" v-model="attribute.visibility">
+                        <label for="visibility"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="component__row">
+                <div :class="{'c-dropdown js-dropdown' :true, 'c-dropdown js-dropdown is-opened': showOptions }"
+                     @click="showOptions = !showOptions">
+                                <span class="c-dropdown__name">
+                                    {{attribute.type.name}}
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item" v-for="option in options">
+                            <a href="" @click.prevent="attribute.type = option">
+                                {{option.name}}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <div class="sing-attr-row" v-for="(item, index) in attribute.selectOptions" v-if="attribute.type.type == 2">
-                <label class="attr-label"></label>
-                <div class="input-container">
-                    <div class="select-input-container">
-                        <div class="select-input">
-                            <input type="text" name="name" placeholder="..." v-model="item.name">
-                        </div>
-                        <button class="button-select-fields" @click.prevent="removeOption(index)">-</button>
+            <div class="component__row" v-if="attribute.type.type === 0">
+                <custom-input label="Wartość domyślna" rules="" min-input-length="1"
+                              v-model="attribute.defaultValue"></custom-input>
+            </div>
+            <div class="component__row checkbox__row" v-if="attribute.type.type === 1">
+                <div class="c-form__switch">
+                    <div class="c-form__switch-label checked__label">Domyślnie zaznaczony</div>
 
+                    <div class="c-form__switch-control">
+                        <input type="checkbox" id="checked" v-model="attribute.checked">
+                        <label for="checked"></label>
                     </div>
                 </div>
             </div>
-            <div class="sing-attr-row" v-if="attribute.selectOptions != 0">
-                <label class="attr-label">Domyślna opcja</label>
-                <div class="input-container">
-                    <multiselect
-                            class="shop-select"
-                            v-model="attribute.defaultValue"
-                            :options="attribute.selectOptions"
-                            :allow-empty="false"
-                            :searchable="false"
-                            :selectedLabel="''"
-                            track-by="name"
-                            label="name"
-                            :deselectLabel="''"
-                            :selectLabel="''"
-                            :hideSelected="true"
-                            placeholder="Wybierz"></multiselect>
+            <div class="component__row select__row" v-if="attribute.type.type === 2">
+                <custom-input label="Pole dla select" v-model="selectName" rules=""
+                              min-input-length="1"></custom-input>
+                <button class="icon__button" type="button" @click.stop="addOption"><i class="fa fa-plus"></i></button>
+            </div>
+            <div class="component__row select__row" v-for="(option, index) in attribute.selectOptions" v-if="attribute.type.type === 2">
+                <custom-input label="Pole" v-model="option.name" rules=""
+                              min-input-length="1"></custom-input>
+                <button class="icon__button remove__button" type="button" @click="removeOption(index)"><i class="fa fa-times"></i></button>
+            </div>
+            <div class="component__row" v-if="attribute.type.type === 2 && attribute.selectOptions.length > 0">
+                <div :class="{'c-dropdown js-dropdown' :true, 'c-dropdown js-dropdown is-opened': showSelectDefaultValues }"
+                     @click="showSelectDefaultValues = !showSelectDefaultValues">
+                                <span class="c-dropdown__name">
+                                    {{attribute.defaultValue.name}}
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item" v-for="option in attribute.selectOptions">
+                            <a href="" @click.prevent="attribute.defaultValue = option">
+                                {{option.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="component__row">
+                <textarea class="custom-textarea" rows="12" placeholder="Opis" v-model="attribute.description"></textarea>
+            </div>
+            <div class="component__row">
+                <div class="h-center">
+                    <button type="button" class="c-button c-form__button" @click="updateAttribute()">
+                        <span>Dodaj</span>
+                    </button>
                 </div>
             </div>
 
-            <div class="sing-attr-row">
-                <label class="attr-label">Opis</label>
-                <div class="input-container">
-                    <div class="cust-textarea">
-                        <textarea class="textarea1" name="description" placeholder="..."
-                                  v-model="attribute.description"></textarea>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <button class="custom-button" @click.prevent="updateAttribute()">ZAPISZ</button>
+        </div>
+
+
     </div>
 </template>
 
 <script>
   export default {
     name: 'edit-attribute',
-    props: ['singleAttribute'],
+    // props: ['singleAttribute'],
     data: () => ({
       options: [
         {type: 0, name: 'Pole tekstowe'},
@@ -142,6 +119,8 @@
       },
 
       showInfoEdit: false,
+      showOptions: false,
+      showSelectDefaultValues: false
     }),
     watch: {
 
@@ -153,6 +132,9 @@
       },
     },
     methods: {
+      getAttribute() {
+        this.attribute = this.$store.state.attributesInSet[this.$route.params.id]
+      },
       addOption () {
         this.attribute.selectOptions.push({name: this.selectName})
         this.selectName = ''
@@ -171,154 +153,104 @@
         })
       },
     },
-
     created: function () {
-      if (this.singleAttribute) {
-        this.attribute = this.singleAttribute
-      }
-    },
+      this.getAttribute
+    }
   }
 </script>
 
 <style scoped>
-    .single-attribute {
+    .component__content {
         display: grid;
-        grid-template-columns: 10% 70% 20%;
-        grid-template-rows: auto 50px;
-        grid-template-areas: ". sing-attr-form ." ". cust-button .";
+        grid-template-columns: 20% 1fr 20%;
+        grid-template-areas: ". middle-col .";
     }
 
-    .single-attribute-form {
-        grid-area: sing-attr-form;
-        display: grid;
+    .c-single-col {
+        grid-area: middle-col;
+        grid-auto-rows: 1fr;
+        /*height: 300px;*/
     }
 
-    .sing-attr-row {
-        display: grid;
-        grid-template-columns: 20% 30px 80%;
-        grid-template-areas: "label . input";
-        margin-bottom: 25px;
-    }
-
-    .attr-label {
-        grid-area: label;
-        justify-self: end;
-        align-self: center;
-    }
-
-    .input-container {
-        grid-area: input;
-        align-self: center;
-    }
-
-    .cust-inpt {
-        width: 80%;
-        height: 35px;
-        background-color: white;
-        border-radius: 5px;
-        align-content: center;
-    }
-
-    .cust-inpt input {
-        border: none;
-        width: 95%;
-        margin-left: 15px;
-        margin-top: 7px;
-    }
-
-    .checkbox-square {
-        margin-left: -13px;
+    .c-dropdown {
+        margin: 15px 0 15px 0;
+        height: 38px;
+        width: 100%;
 
     }
 
-    .cust-textarea {
-        width: 80%;
-        height: 150px;
-        background-color: white;
-        border-radius: 5px;
-        align-content: center;
+    .c-dropdown__name {
+        line-height: 38px;
+        padding-left: 15px;
     }
 
-    .textarea1 {
-        border: none;
+    .custom-textarea {
         resize: none;
-        width: 95%;
-        height: 135px;
-        margin-left: 15px;
-        margin-top: 5px;
+        width: 100%;
+        border: 1px solid #dddddd;
+        font-size: 0.8rem;
+        padding: 10px 15px 10px 15px;
     }
 
-    .custom-button {
-        grid-area: cust-button;
-        margin: 0 50px 0 180px;
+    textarea:focus {
+        outline-width: 0;
     }
 
-    .cust-inpt-select {
-        width: 70%;
-        background-color: #FFFFFF;
+    .c-dropdown__menu {
+        width: 100%;
     }
 
-    .cust-inpt-select input {
+    .checked__label {
+        max-width: 58px;
+    }
+
+    .checkbox__row {
+        margin-bottom: 15px;
+    }
+
+    .select__row {
+        display: grid;
+        grid-template-columns: 95% 5%;
+        align-items: start;
+    }
+
+    .icon__button {
         border: none;
-        width: 90%;
+        background: transparent;
+        height: 38px;
+        color: #2595ec;
+        cursor: pointer;
     }
 
-    .button-select-fields {
-        border: none;
-        background-color: #F6F7FB;
+    .icon__button:focus {
+        outline-width: 0;
     }
 
-    .select-input-container {
+    .remove__button{
+        color: red;
+    }
+
+    .success-info{
+        position: absolute;
+        font-size: 0.9rem;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
+        top: 100px;
+        left: 350px;
+        width: 79%;
+        background-color: #00DD00;
+        color: #ffffff;
+        padding: 20px;
+        border-radius: 3px;
     }
 
-    .select-input {
-        width: 75%;
-        height: 35px;
-        border: none;
-        background-color: #FFFFFF;
-        border-radius: 5px;
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to{
+        opacity: 0;
     }
 
-    .select-input input {
-        width: 95%;
-        margin-left: 15px;
-        margin-top: 5px;
-        border: none;
-    }
-
-    .info {
-        width: 100%;
-        height: 50px;
-        background-color: #94C01E;
-        margin-bottom: 50px;
-        color: #FFFFFF;
-        text-align: center;
-    }
-
-    .validator-help {
-        width: 78.5%;
-        background-color: red;
-        border-radius: 5px;
-        color: #fff;
-        padding: 10px 0 10px 10px;
-        font-size: 12px;
-        font-weight: 700;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-    }
-
-    .inpt-border {
-        border: 1px solid red;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-
-    .input-col {
-        display: flex;
-        flex-direction: column;
-    }
 
 </style>

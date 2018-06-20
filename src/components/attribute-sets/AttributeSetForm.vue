@@ -90,13 +90,28 @@
                 <div class="c-form__two-column">
                     <div class="c-form__side-menu">
                         <ul>
-                            <li>
-                                <router-link :to="'categories'">Kategorie</router-link>
+                            <li @click="setActiveRoute('/attribute-sets/add/categories')">
+                                <router-link :to="{name: 'CategoriesList'}"
+                                             :class="{'link': true, 'link item__is-active': activeRoute === '/attribute-sets/add/categories'}"
+                                             >Kategorie
+                                </router-link>
                             </li>
-                            <li>
-                                <router-link :to="'attribute-add'">Dodaj atrybut</router-link>
+                            <li @click="setActiveRoute('/attribute-sets/add/attribute-add')">
+                                <router-link :to="{name: 'addAttribute'}"
+                                             :class="{'link': true, 'link item__is-active': activeRoute === '/attribute-sets/add/attribute-add'}">Dodaj atrybut
+                                </router-link>
                             </li>
-                            <li><router-link :to="'attributes'">Wszystkie atrybuty</router-link></li>
+                            <li @click="setActiveRoute('/attribute-sets/add/attributes')">
+                                <router-link :to="{name:'attributesList'}"
+                                             :class="{'link': true, 'link item__is-active': activeRoute === '/attribute-sets/add/attributes'}"
+                                             >Wszystkie atrybuty
+                                </router-link>
+                            </li>
+                            <li v-if="activeRoute === 'attribute-sets/add/attribute-edit'">
+                                <span :class="{'link': true, 'link item__is-active': activeRoute === 'attribute-sets/add/attribute-edit' }"
+                                             >Edytuj atrybut
+                                </span>
+                            </li>
                         </ul>
                     </div>
                     <div class="c-form__cont">
@@ -121,32 +136,35 @@
 
   export default {
     name: 'attribute-set-form',
+    computed: {
+      attributes: function () {
+        return this.$store.getters.getAttributesInSet
+      },
+      defaultCategoriesIds: function () {
+        let ids = this.$store.state.attributeSetSubChildren.concat(this.$store.state.attributeSetDefaultCategories)
+        return ids
+      }
+    },
     data: () => ({
       name: '',
       visibility: 1,
       type: 1,
       defaultValue: '',
-      attributes: [],
-      defaultCategories: '',
+      // attributes: [],
+      // defaultCategories: '',
       mainCategories: '',
       children: '',
       attribute: '',
-      indexOfAttribute: '',
       info: false,
+      activeRoute: '',
 
     }),
 
-    watch: {
-      indexOfAttribute () {
-        this.type = 4
-      },
-    },
-
     methods: {
-
-      changeType: function (type) {
-        this.type = type
+      setActiveRoute(route){
+        this.activeRoute = route
       },
+
       getAttribute (attribute) {
         this.attributes.push(attribute)
 
@@ -169,7 +187,11 @@
         this.attributes[key] = attribute
         this.indexOfAttribute = ''
       },
+      clearSelectedCategories() {
+        this.$store.commit('clearSelectedCategories')
+      },
       saveAttributeSet () {
+        this.$store.getters('getAttributesInSet')
         this.$validator.validateAll().then((result) => {
           if (this.attributes.length === 0) {
             this.info = !this.info
@@ -179,14 +201,18 @@
               name: this.name,
               visibility: this.visibility,
               attributes: JSON.stringify(this.attributes),
-              defaultCategoriesIds: this.mainCategories.concat(this.children),
+              defaultCategoriesIds: this.defaultCategoriesIds,
             }).then(() => {
-              this.$parent.$data.type = 2
+              this.$router.push('attribute-sets/list')
             })
           }
         })
-
+        this.clearSelectedCategories()
       },
+    },
+
+    created: function () {
+      this.setActiveRoute(this.$route.path)
     },
   }
 </script>
@@ -233,10 +259,21 @@
 
     .c-form__side-menu ul li {
         padding: 0 30px 50px 30px;
+
     }
 
     .c-form__cont {
         padding: 50px;
+    }
+
+    .item__is-active {
+        border-bottom: 4px solid #2595ec;
+
+    }
+
+    .link {
+        padding-bottom: 15px;
+        cursor: pointer;
     }
 
 </style>

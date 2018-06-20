@@ -2,8 +2,9 @@
     <div>
         <li class="cat-item" :key="key" v-for="(el, key) in children">
             <label class="check-container">
-                <p :class="{'label': true, 'label inactive': el.visibility == 0} ">
+                <p :class="{'label': true, 'label inactive': el.visibility === 0} ">
                     {{el.name}}
+                    <span v-if="el.children">({{el.children.length}})</span>
                 </p>
                 <input type="checkbox" v-model="selectedElement" :value="el.id">
                 <span class="checkmark"></span>
@@ -28,10 +29,22 @@
         child: '',
       }
     },
-    components: {
-
+    watch: {
+      selectedElement: function (value) {
+        this.setSelected(value)
+      }
     },
+   created: function () {
+    this.getSelected()
+   },
     methods: {
+      setSelected(value){
+        this.$store.commit('setAttributeSetSubChildrenCategories', value)
+      },
+      getSelected(){
+        this.selectedElement = this.$store.state.attributeSetSubChildren
+      }
+
 
     },
   }
@@ -75,7 +88,7 @@
         width: 23px;
         background-color: #FFFFFF;
         border: 1px solid #DAD8DA;
-        border-radius: 5px;
+        /*border-radius: 5px;*/
     }
 
     .check-container:hover input ~ .checkmark {

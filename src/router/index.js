@@ -10,6 +10,7 @@ import AttributeSetForm from '../components/attribute-sets/AttributeSetForm'
 import attributesList from '../components/attribute-sets/attributesList'
 import CategoriesList from '../components/attribute-sets/CategoriesList'
 import addAttribute from '../components/attribute-sets/addAttribute'
+import editAttribute from '../components/attribute-sets/editAttribute'
 import Categories from '../components/categories/Categories'
 import AddProduct from '../components/products/Products'
 import EditProduct from '../components/products/addProduct'
@@ -101,6 +102,11 @@ export default new Router({
                   path: 'attributes',
                   name: 'attributesList',
                   component: attributesList,
+                },
+                {
+                  path: 'attribute-edit/:id',
+                  name: 'editAttribute',
+                  component: editAttribute,
                 },
               ]
             },
@@ -232,7 +238,7 @@ export default new Router({
           children: [
             {
               path: 'add',
-              name: 'StockForm',
+              name: 'AddStock',
               component: StockForm,
             },
             {
@@ -242,7 +248,7 @@ export default new Router({
             },
             {
               path: 'edit/:item',
-              name: 'StockForm',
+              name: 'EditStock',
               component: StockForm,
             },
             {

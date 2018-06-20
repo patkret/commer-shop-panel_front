@@ -43,7 +43,12 @@ export const store = new Vuex.Store({
     selectedStock: '',
     selectedCategories: [],
     selectedMainCategory: '',
-    test: []
+    test: [],
+    attributesInSet: [],
+    attributeSetDefaultCategories: [],
+    attributeSetMainCategories: [],
+    attributeSetChildren: [],
+    attributeSetSubChildren: []
   },
 
   getters: {
@@ -54,7 +59,8 @@ export const store = new Vuex.Store({
     sets: state => state.sets,
     variantSets: state => state.variantSets,
     selectedVariantSet: state => {
-     return state.variantSets.find(el => el.id === state.product.selectedVariantSet)
+      return state.variantSets.find(
+        el => el.id === state.product.selectedVariantSet)
     },
     selectedVariants: state => state.product.variantSets,
     otherVariants: state => state.otherVariants,
@@ -73,7 +79,13 @@ export const store = new Vuex.Store({
     getVatRate: state => state.selectedRate,
     getStock: state => state.selectedStock,
     getCategory: state => state.selectedCategories,
-    getMainCategory: state => state.selectedMainCategory
+    getMainCategory: state => state.selectedMainCategory,
+    getAttributesInSet: state => state.attributesInSet,
+    getAttributeSetDefaultCategories:
+      state => state.attributeSetDefaultCategories,
+    getAttributeSetMainCategories: state => state.attributeSetMainCategories,
+    getAttributeSetChildrenCategories: state => state.attributeSetChildren,
+    getAttributeSetSubChildrenCategories: state => state.attributeSetSubChildren,
   },
 
   mutations: {
@@ -96,11 +108,13 @@ export const store = new Vuex.Store({
 
     selectedVariantSet: (state, payload) => {
       state.selectedSet = payload
-      if(payload.length !== 0){
-        if(state.product.variantSets.length === 0){
+      if (payload.length !== 0) {
+        if (state.product.variantSets.length === 0) {
           console.log('if')
-          let req = payload.variants.filter(variant => {return variant.required === 1 })
-          let other = payload.variants.filter(variant => {return variant.required === false })
+          let req = payload.variants.filter(
+            variant => {return variant.required === 1 })
+          let other = payload.variants.filter(
+            variant => {return variant.required === false })
           state.product.variantSets = req
           state.otherVariants = other
           state.product.selectedVariantSet = payload.id
@@ -150,7 +164,7 @@ export const store = new Vuex.Store({
         variantSets: [],
         categories: '',
         stock: '',
-        main_category: ''
+        main_category: '',
       }
     },
 
@@ -164,31 +178,51 @@ export const store = new Vuex.Store({
     clearOtherSets: state => {
       state.otherVariants = []
     },
-    saveVatRate: (state,payload) => {
+    saveVatRate: (state, payload) => {
       state.selectedRate = payload
       state.product.vat_rate = payload.id
     },
-    saveVendor: (state,payload) => {
+    saveVendor: (state, payload) => {
       state.selectedVendor = payload
       state.product.vendor = payload.id
     },
-    saveCategories: (state,payload) => {
+    saveCategories: (state, payload) => {
       state.selectedCategories = payload
       state.product.category = payload.id
     },
-    saveStock: (state,payload) => {
+    saveStock: (state, payload) => {
       state.selectedStock = payload
       state.product.stock = payload.id
     },
-    saveMainCategory: (state,payload) => {
+    saveMainCategory: (state, payload) => {
       state.selectedMainCategory = payload
       state.product.main_category = payload.id
     },
     getAttrSets: (state, payload) => {
       state.test = payload
-    }
+    },
 
-
+    setAttributeInSet: (state, payload) => {
+      state.attributesInSet.push(payload)
+    },
+    setAttributeSetDefaultCategories: (state, payload) => {
+      state.attributeSetDefaultCategories = payload
+    },
+    setAttributeSetMainCategories: (state, payload) => {
+      state.attributeSetMainCategories = payload
+    },
+    setAttributeSetChildCategories: (state, payload) => {
+      state.attributeSetChildren = payload
+    },
+    setAttributeSetSubChildrenCategories: (state, payload) => {
+      state.attributeSetSubChildren = payload
+    },
+    clearSelectedCategories: state => {
+      state.attributeSetDefaultCategories = []
+      state.attributeSetMainCategories = []
+      state.attributeSetChildren = []
+      state.attributeSetSubChildren = []
+    },
   },
 
   actions: {
@@ -198,22 +232,23 @@ export const store = new Vuex.Store({
           result.data.attributeSets = JSON.parse(result.data.attributeSets)
           result.data.variantSets = JSON.parse(result.data.variantSets)
 
-        axios('vendors').then(response => {
-          let ven = response.data.find(el => el.id === result.data.vendor)
-          context.commit('saveVendor', ven)
-        })
-        axios('vat-rates').then(response => {
-          let rate = response.data.find(el => el.id === result.data.vat_rate)
-          context.commit('saveVatRate', rate)
-        })
-        axios('all-categories').then(response => {
-          let main_cat = response.data.find(el => el.id === result.data.main_category)
-          context.commit('saveMainCategory', main_cat)
-        })
-        axios('warehouses').then(response => {
-          let stoc = response.data.find(el => el.id === result.data.stock)
-          context.commit('saveStock', stoc)
-        })
+          axios('vendors').then(response => {
+            let ven = response.data.find(el => el.id === result.data.vendor)
+            context.commit('saveVendor', ven)
+          })
+          axios('vat-rates').then(response => {
+            let rate = response.data.find(el => el.id === result.data.vat_rate)
+            context.commit('saveVatRate', rate)
+          })
+          axios('all-categories').then(response => {
+            let main_cat = response.data.find(
+              el => el.id === result.data.main_category)
+            context.commit('saveMainCategory', main_cat)
+          })
+          axios('warehouses').then(response => {
+            let stoc = response.data.find(el => el.id === result.data.stock)
+            context.commit('saveStock', stoc)
+          })
           context.commit('addProduct', result.data)
         },
       )
@@ -232,11 +267,12 @@ export const store = new Vuex.Store({
 
     getAttributeSets: (context, state) => {
 
-      axios('attribute-sets-categories/' + state.product.main_category).then(result => {
+      axios('attribute-sets-categories/' + state.product.main_category).
+        then(result => {
 
-        context.commit('getAttrSets', result.data)
-        }
-      )
+            context.commit('getAttrSets', result.data)
+          },
+        )
     },
 
     getVariantSets: context => {

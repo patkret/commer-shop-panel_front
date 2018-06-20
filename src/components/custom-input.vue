@@ -16,10 +16,19 @@
     data: () => ({
       showCustLabel: false,
     }),
-
+    watch: {
+      value: function (val) {
+        if(val.length === 0){
+          this.showCustLabel = false
+        }
+        else{
+          this.showCustLabel = true
+        }
+      }
+    },
     methods: {
       updateField (field) {
-        if (field === '') {
+        if (field.length === 0) {
           this.showCustLabel = false
         }
         else {
@@ -78,7 +87,7 @@
         width: 99%;
         font-size: 130%;
         border: transparent;
-        padding-left: 10px;
+        padding-left: 15px;
         margin-bottom: 7px;
     }
 
