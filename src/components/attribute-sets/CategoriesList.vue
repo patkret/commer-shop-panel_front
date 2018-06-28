@@ -54,11 +54,16 @@
         },
         set: function (value) {
           return this.$store.commit('setAttributeSetChildCategories', value)
-        }
-
+        },
+      },
+      selectedSubChildren: function () {
+        return this.$store.getters.getAttributeSetSubChildrenCategories
       }
     },
     watch: {
+      selectedSubChildren: function () {
+        this.setDefaultCategories()
+      },
       selectedChildren: function () {
         this.$emit('children', this.selectedChildren)
       },
@@ -71,7 +76,9 @@
 
       setDefaultCategories () {
         let categories = this.selectedMainCategories.concat(this.selectedChildren)
-        this.$store.commit('setAttributeSetDefaultCategories', categories)
+        let allCat = categories.concat(this.selectedSubChildren)
+
+        this.$store.commit('setAttributeSetDefaultCategories', allCat)
       },
     },
 
@@ -79,9 +86,6 @@
       axios('categories').then(result => {
         this.categories = result.data
       })
-      if (this.attributeMainCategories != null) {
-        this.selectedMainCategories = this.attributeMainCategories
-      }
     },
     updated: function () {
       this.setDefaultCategories()
@@ -133,7 +137,8 @@
         position: absolute;
         opacity: 0;
         cursor: pointer;
-        margin-top: -35px;
+        left: 5px;
+        top: 5px;
     }
 
     .checkmark {

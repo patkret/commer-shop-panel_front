@@ -1,70 +1,11 @@
 <template>
-    <!--<div>-->
-    <!--<p v-if="info" class="attribute-alert"> Przynajmniej jeden atrybut musi być wybrany.</p>-->
-    <!--<form class="attribute-form">-->
-
-    <!--<div class="attributes-col">-->
-    <!--<div class="attributes-row">-->
-    <!--<div class="label-col">-->
-    <!--<label>Nazwa</label>-->
-    <!--</div>-->
-    <!--<div class="input-col">-->
-    <!--<div :class="{'attr-input': true,  'attr-input inpt-border': errors.has('name')}">-->
-    <!--<input type="text" v-validate="'required'" :class="{'single-input': true, }"-->
-    <!--placeholder="Nazwa..." name="name" v-model="name">-->
-    <!--</div>-->
-    <!--<span v-show="errors.has('name')" class="validator-help">{{ errors.first('name') }}</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="attributes-row">-->
-    <!--<div class="label-col">-->
-    <!--<label>Aktywność</label>-->
-    <!--</div>-->
-    <!--<div class="input-col">-->
-    <!--<div class="checkbox-square">-->
-    <!--<input class="visibility-hidden" type="checkbox" id="checkbox" v-model="visibility">-->
-    <!--<label for="checkbox" class="square"></label>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="attributes-row">-->
-    <!--<div class="label-col">-->
-    <!--<label></label>-->
-    <!--</div>-->
-    <!--<div class="input-col">-->
-    <!--<button class="custom-button" @click.prevent="saveAttributeSet">ZAPISZ</button>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</form>-->
-    <!--<div class="top-menu-container">-->
-    <!--<div class="top-menu">-->
-    <!--<ul class="top-menu-items">-->
-    <!--<li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 1}">-->
-    <!--Kategorie dla zestawu-->
-    <!--</li>-->
-    <!--<li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 2}">Dodaj-->
-    <!--atrybut-->
-    <!--</li>-->
-    <!--<li @click="changeType(3)" :class="{'top-menu-item': true, 'top-menu-item-active': type === 3}">-->
-    <!--Wybrane atrybuty-->
-    <!--</li>-->
-    <!--<li v-if="type === 4" :class="{'top-menu-item': true, 'top-menu-item-active': type === 4}">-->
-    <!--Edycja atrybutu-->
-    <!--</li>-->
-    <!--</ul>-->
-    <!--</div>-->
-    <!--<div class="menu-tab">-->
-    <!--<categories-list v-if="type == 1" @mainCategories="getMainCategories"-->
-    <!--@children="getChildren"></categories-list>-->
-    <!--<add-attribute v-if="type == 2" @attribute="getAttribute"></add-attribute>-->
-    <!--<attributes-list v-if="type == 3" :attributes="attributes"-->
-    <!--@singleAttribute="editAttribute"></attributes-list>-->
-    <!--<edit-attribute v-if="type == 4" :singleAttribute="attribute" @attribute="updateAttribute"></edit-attribute>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
     <div class="l-wrapper f-center">
+        <transition name="fade">
+            <div class="err-info" v-if="info">
+                <span>Dodaj atrybut aby zapisać zestaw!</span>
+            </div>
+        </transition>
+
         <div style="width: 100%;" class="f-content">
             <form action="" class="c-form" @submit.prevent="saveAttributeSet">
                 <div class="c-form__row-wrapper">
@@ -89,30 +30,37 @@
 
                 <div class="c-form__two-column">
                     <div class="c-form__side-menu">
-                        <ul>
-                            <li @click="setActiveRoute('/attribute-sets/add/categories')">
-                                <router-link :to="{name: 'CategoriesList'}"
-                                             :class="{'link': true, 'link item__is-active': activeRoute === '/attribute-sets/add/categories'}"
-                                             >Kategorie
-                                </router-link>
-                            </li>
-                            <li @click="setActiveRoute('/attribute-sets/add/attribute-add')">
-                                <router-link :to="{name: 'addAttribute'}"
-                                             :class="{'link': true, 'link item__is-active': activeRoute === '/attribute-sets/add/attribute-add'}">Dodaj atrybut
-                                </router-link>
-                            </li>
-                            <li @click="setActiveRoute('/attribute-sets/add/attributes')">
-                                <router-link :to="{name:'attributesList'}"
-                                             :class="{'link': true, 'link item__is-active': activeRoute === '/attribute-sets/add/attributes'}"
-                                             >Wszystkie atrybuty
-                                </router-link>
-                            </li>
-                            <li v-if="activeRoute === 'attribute-sets/add/attribute-edit'">
+                        <template v-if="!ifEdit">
+                            <ul>
+                                <li v-for="link in addTabs" @click="setActiveRoute(link.path)">
+                                    <router-link :to="{name: link.componentName}"
+                                                 :class="{'link': true, 'link item__is-active': activeRoute === link.path}">
+                                        {{link.name}}
+                                    </router-link>
+                                </li>
+                                <li v-if="activeRoute === 'attribute-sets/add/attribute-edit'">
                                 <span :class="{'link': true, 'link item__is-active': activeRoute === 'attribute-sets/add/attribute-edit' }"
-                                             >Edytuj atrybut
+                                >Edytuj atrybut
                                 </span>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
+                        </template>
+                        <template v-if="ifEdit">
+                            <ul>
+                                <li v-for="link in editTabs" @click="setActiveRoute(link.path)">
+                                    <router-link :to="{name: link.componentName}"
+                                                 :class="{'link': true, 'link item__is-active': activeRoute === link.path}"
+                                    >{{link.name}}
+                                    </router-link>
+                                </li>
+                                <li v-if="activeRoute === `attribute-sets/edit/${attributeSet.id}/attribute-edit`">
+                                <span :class="{'link': true, 'link item__is-active': activeRoute === 'attribute-sets/add/attribute-edit' }"
+                                >Edytuj atrybut
+                                </span>
+                                </li>
+                            </ul>
+                        </template>
+
                     </div>
                     <div class="c-form__cont">
                         <router-view></router-view>
@@ -137,82 +85,106 @@
   export default {
     name: 'attribute-set-form',
     computed: {
+      attributeSet () {
+        return this.$store.getters.getAttributeSet
+      },
       attributes: function () {
         return this.$store.getters.getAttributesInSet
       },
       defaultCategoriesIds: function () {
-        let ids = this.$store.state.attributeSetSubChildren.concat(this.$store.state.attributeSetDefaultCategories)
-        return ids
-      }
+        return this.$store.getters.getAttributeSetDefaultCategories
+      },
     },
     data: () => ({
       name: '',
       visibility: 1,
-      type: 1,
-      defaultValue: '',
-      // attributes: [],
-      // defaultCategories: '',
-      mainCategories: '',
-      children: '',
-      attribute: '',
       info: false,
       activeRoute: '',
+      ifEdit: '',
+      addTabs: [
+        {name: 'Kategorie', path: '/attribute-sets/add/categories', componentName: 'AttributesCategoriesList'},
+        {name: 'Dodaj atrybut', path: '/attribute-sets/add/attribute-add', componentName: 'addAttribute'},
+        {name: 'Wszystkie atrybuty', path: '/attribute-sets/add/attributes', componentName: 'attributesList'},
+      ],
+      editTabs: [
+        {name: 'Kategorie', path: `/attribute-sets/edit/:item/categories`, componentName: 'AttributesCategoriesListEdit'},
+        {name: 'Dodaj atrybut', path: '/attribute-sets/edit/:item/attribute-add', componentName: 'addAttributeEdit'},
+        {name: 'Wszystkie atrybuty', path: '/attribute-sets/edit/:item/attributes', componentName: 'attributesListEdit'},
+      ],
 
     }),
+    watch: {
+      attributeSet (data) {
+        this.name = data.name
+        this.visibility = data.visibility
+      },
+    },
 
     methods: {
-      setActiveRoute(route){
-        this.activeRoute = route
+      checkIfEdit() {
+        this.$route.params.item ? this.ifEdit = true : this.ifEdit = false
       },
-
-      getAttribute (attribute) {
-        this.attributes.push(attribute)
-
-        setTimeout(() => {
-          this.type = 3
-        }, 2000)
+      setActiveRoute (route) {
+        this.ifEdit ? this.activeRoute = '/attribute-sets/edit/:item/categories' : this.activeRoute = route
+        // this.activeRoute = route
       },
-      getMainCategories (mainCategories) {
-        this.mainCategories = mainCategories
+      getAttributeSetToEdit () {
+        this.ifEdit ? this.$store.dispatch('fetchAttributeSet', this.$route.params.item) : ''
+        // if (this.ifEdit) {
+        //   this.$store.dispatch('fetchAttributeSet', this.$route.params.item)
+        // }
       },
-      getChildren (children) {
-        this.children = children
-      },
-      editAttribute (attribute, key) {
-        this.attribute = attribute
-        this.indexOfAttribute = key
-        this.type = 4
-      },
-      updateAttribute (attribute, key) {
-        this.attributes[key] = attribute
-        this.indexOfAttribute = ''
-      },
-      clearSelectedCategories() {
+      clearFormData () {
         this.$store.commit('clearSelectedCategories')
+        this.$store.commit('clearAttributesInSet')
       },
       saveAttributeSet () {
-        this.$store.getters('getAttributesInSet')
         this.$validator.validateAll().then((result) => {
           if (this.attributes.length === 0) {
-            this.info = !this.info
+            this.info = true
+            setTimeout(() => {
+              this.info = false
+            }, 3000)
           }
-          else if (result) {
-            axios.post('/attribute-sets', {
-              name: this.name,
-              visibility: this.visibility,
-              attributes: JSON.stringify(this.attributes),
-              defaultCategoriesIds: this.defaultCategoriesIds,
-            }).then(() => {
-              this.$router.push('attribute-sets/list')
-            })
+          else if(result) {
+            if(!this.ifEdit){
+              axios.post('/attribute-sets', {
+                name: this.name,
+                visibility: this.visibility,
+                attributes: JSON.stringify(this.attributes),
+                defaultCategoriesIds: this.defaultCategoriesIds,
+              }).then(() => {
+                this.$router.push('/attribute-sets/list')
+                this.clearFormData()
+              })
+            }
+            else{
+              axios.put(`/attribute-sets/${this.attributeSet.id}`, {
+                name: this.name,
+                visibility: this.visibility,
+                attributes: JSON.stringify(this.attributes),
+                defaultCategoriesIds: this.defaultCategoriesIds,
+              }).then(() => {
+                this.$router.push('/attribute-sets/list')
+                this.clearFormData()
+              })
+            }
+
           }
         })
-        this.clearSelectedCategories()
+
       },
     },
 
     created: function () {
+      this.checkIfEdit()
       this.setActiveRoute(this.$route.path)
+      this.getAttributeSetToEdit()
+    },
+
+    destroyed () {
+      this.$store.commit('clearSelectedCategories')
+      this.$store.commit('clearAttributesInSet')
     },
   }
 </script>
@@ -274,6 +246,22 @@
     .link {
         padding-bottom: 15px;
         cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .err-info {
+        position: absolute;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        top: 100px;
+        left: 350px;
+        width: 79vw;
+        background-color: red;
+        color: #ffffff;
+        padding: 20px;
+        border-radius: 3px;
     }
 
 </style>

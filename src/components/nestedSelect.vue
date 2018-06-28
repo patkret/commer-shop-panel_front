@@ -1,26 +1,28 @@
 <template>
-    <div class="component-container"  @click="showOptions = !showOptions">
-        <div class="component__select">
-            <transition name="slide-fade">
-                <span class="label__selected" v-if="value">{{placeholder}}</span>
-            </transition>
-            <span class="component__select--name">{{value ? value.name : placeholder}}</span>
-            <span class="c-arrow-down" v-if="!showOptions"></span>
-            <span class="c-arrow-up" v-if="showOptions"></span>
-        <transition name="slide-down">
-        <ul class="component__select-options" v-if="showOptions" >
-            <li :class="{'select--option': true, 'is-selected': value === option}" v-for="option in options" :value="option" @click.stop="selectOption(option)">
-                 <input type="checkbox" :value="option"/><label class="option-label"> {{option.name}}</label>
-            </li>
-        </ul>
-        </transition>
+        <div class="component-container"  @click="showOptions = !showOptions">
+            <div class="component__select">
+                <span class="component__select--name">{{value ? value.name : placeholder}}</span>
+                <span class="c-arrow-down" v-if="!showOptions"></span>
+                <span class="c-arrow-up" v-if="showOptions"></span>
+                <transition name="slide-down">
+                    <ul class="component__select-options" v-if="showOptions" >
+                        <li :class="{'select--option': true, 'is-selected': value === option}" v-for="option in options" :value="option" @click.stop="selectOption(option)">
+                            <label class="option-label"> <input type="checkbox" :value="option"/> {{option.name}}</label>
+                            <div class="line"></div>
+                            <children v-if="option.children" :children="option.children"></children>
+                        </li>
+                    </ul>
+                </transition>
+            </div>
         </div>
-    </div>
 </template>
 
 <script>
+  import Children from './children'
+
   export default {
-    name: 'single-select',
+    components: {Children},
+    name: 'nested-select',
     props: ['options', 'placeholder', 'value'],
     data: () => ({
       showOptions: false
@@ -35,8 +37,14 @@
 </script>
 
 <style scoped>
+    .line{
+        background-color: #dddddd;
+        width: 100%;
+        height: 1px;
+        margin-left: 0;
+    }
     .component-container{
-        /*margin: 0 0 15px 0;*/
+        margin: 25px 0 25px 0;
     }
     .component__select {
         height: 38px;
@@ -54,8 +62,6 @@
     .component__select--name {
         font-size: 0.8rem;
         padding: 0 0 0 15px;
-        z-index: 1000;
-        font-weight: 800;
     }
 
     .c-arrow-down, .c-arrow-up{
@@ -63,7 +69,7 @@
     }
 
     .component__select-options{
-        max-height: 150px;
+        max-height: 300px;
         border: 1px solid #dddddd;
         border-top: none;
         overflow: auto;
@@ -79,16 +85,16 @@
     }
 
     .component__select-options input{
-        display: none;
+        /*display: none;*/
     }
 
     .select--option{
-        height: 35px;
+
         display: grid;
         align-content: center;
-        padding: 0 0 0 25px;
+        /*padding: 0 0 0 25px;*/
         background-color: #ffffff;
-        border-bottom: 1px solid #dddddd;
+        /*border-bottom: 1px solid #dddddd;*/
         max-width: 700px;
         cursor: pointer;
     }
@@ -115,6 +121,7 @@
 
     .option-label{
         cursor: pointer;
+        padding-left: 10px;
     }
 
     .cust-sel:focus{
@@ -153,27 +160,5 @@
     .slide-down-enter, .slide-down-leave-to
         /* .slide-fade-leave-active below version 2.1.8 */ {
         transform: translateY(-8px);
-    }
-    .label__selected{
-        background-color: inherit;
-        padding: 0 5px 0 5px;
-        position: absolute;
-        top: -8px;
-        left: 10px;
-        height: 15px;
-        line-height: 15px;
-        white-space: nowrap;
-    }
-
-    .slide-fade-enter-active {
-        transition: all .3s ease;
-    }
-    .slide-fade-leave-active {
-        transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-    }
-    .slide-fade-enter, .slide-fade-leave-to
-    {
-        transform: translateY(10px);
-        opacity: 0;
     }
 </style>

@@ -1,26 +1,24 @@
 <template>
-    <div id="main-content-with-side-menu">
-        <h1 class="card-name">Warianty</h1>
-        <div class="side-menu-container">
-            <div id="side-menu">
-                <div class="side-button" :class="{'side-menu-item': true, 'side-menu-item active': type == 1}"
-                     @click.prevent="changeComponent(1)">
-                    <p>Dodaj zestaw</p>
-                </div>
-                <div class="side-button" :class="{'side-menu-item' : true, 'side-menu-item active': type == 2}"
-                     @click.prevent="changeComponent(2)">
-                    <p>Wszystkie zestawy</p>
-                </div>
-                <div class="side-button side-menu-item active" v-if="type == 3">
-                    <p>Edycja zestawu</p>
-                </div>
+    <div class="l-main__main">
+        <header class="l-main__header component__header">
+
+            <div class="c-breadcrumb">
+                        <span class="c-breadcrumb__item">
+                            <router-link to="/variants/list">Zestawy wariantów</router-link></span>
+                <!--<span class="c-breadcrumb__item" >Dodaj zestaw</span>-->
             </div>
-        </div>
-        <div class="component-container">
-            <variants-set-form v-if="type == 1" :side_type="type"></variants-set-form>
-            <variants-list v-if="type == 2" @singleVariant="editSet"></variants-list>
-            <variants-set-form v-if="type == 3" :set=set></variants-set-form>
-        </div>
+            <div class="main-header__button">
+                <router-link to="/variants/add/variant-add" class="c-form__button c-button"
+                             v-if="$route.path === '/variants/list'">
+                    <span>Dodaj zestaw</span>
+                </router-link>
+            </div>
+        </header>
+
+        <section class="l-main__content" style="padding: 0">
+            <router-view></router-view>
+        </section>
+
     </div>
 </template>
 

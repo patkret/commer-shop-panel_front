@@ -130,27 +130,13 @@
                     <div class="c-form__switch-label">Aktywność</div>
 
                     <div class="c-form__switch-control">
-                        <input type="checkbox" id="visibility" v-model="attribute.visibility">
-                        <label for="visibility"></label>
+                        <input type="checkbox" id="att-vis" v-model="attribute.visibility">
+                        <label for="att-vis"></label>
                     </div>
                 </div>
             </div>
             <div class="component__row">
-                <div :class="{'c-dropdown js-dropdown' :true, 'c-dropdown js-dropdown is-opened': showOptions }"
-                     @click="showOptions = !showOptions">
-                                <span class="c-dropdown__name">
-                                    {{attribute.type.name}}
-                                    <span class="c-arrow-down"></span>
-                                </span>
-
-                    <ul class="c-dropdown__menu">
-                        <li class="c-dropdown__menu-item" v-for="option in options">
-                            <a href="" @click.prevent="attribute.type = option">
-                                {{option.name}}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <single-select :options="options" v-model="attribute.type"/>
             </div>
 
             <div class="component__row" v-if="attribute.type.type === 0">
@@ -178,21 +164,8 @@
                 <button class="icon__button remove__button" type="button" @click="removeOption(index)"><i class="fa fa-times"></i></button>
             </div>
             <div class="component__row" v-if="attribute.type.type === 2 && attribute.selectOptions.length >0">
-                <div :class="{'c-dropdown js-dropdown' :true, 'c-dropdown js-dropdown is-opened': showSelectDefaultValues }"
-                     @click="showSelectDefaultValues = !showSelectDefaultValues">
-                                <span class="c-dropdown__name">
-                                    {{attribute.defaultValue.name}}
-                                    <span class="c-arrow-down"></span>
-                                </span>
 
-                    <ul class="c-dropdown__menu">
-                        <li class="c-dropdown__menu-item" v-for="option in attribute.selectOptions">
-                            <a href="" @click.prevent="attribute.defaultValue = option">
-                                {{option.name}}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <single-select :options="attribute.selectOptions" v-model="attribute.defaultValue" placeholder="Wartość domyślna"></single-select>
             </div>
             <div class="component__row">
                 <textarea class="custom-textarea" rows="12" placeholder="Opis" v-model="attribute.description"></textarea>
@@ -378,6 +351,10 @@
     }
     .fade-enter, .fade-leave-to{
         opacity: 0;
+    }
+
+    .component__row{
+        margin-bottom: 15px;
     }
 
 

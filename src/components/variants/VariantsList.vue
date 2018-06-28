@@ -1,38 +1,143 @@
 <template>
-    <ul class="variants-container">
-        <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
-            <p>{{item.id}} {{item.name}}</p>
-            <div class="buttons-container">
-                <button @click="showActions(key)"
-                        :class="{'more-button': true, 'more-button active': show === true && index === key}">
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                </button>
-                <div class="arrow-left" v-if="index === key && show === true">
-                    <div class="action-buttons">
-                        <button @click="deleteVariant(key, item)" class="delete">Usuń</button>
-                        <button @click="editVariant(item)" class="edit">Edytuj</button>
-                    </div>
+    <div>
+        <div class="l-table-filters">
+            <div class="l-table-filters__left">
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Wybierz działanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="c-dropdown js-dropdown">
+                                <span class="c-dropdown__name">
+                                    Filtrowanie
+                                    <span class="c-arrow-down"></span>
+                                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </li>
-    </ul>
+
+            <div class="l-table-filters__right">
+
+                <div class="c-dropdown js-dropdown">
+                <span class="c-dropdown__name">
+                Filtrowanie
+                <span class="c-arrow-down"></span>
+                </span>
+
+                    <ul class="c-dropdown__menu">
+                        <li class="c-dropdown__menu-item">
+                            <a href="">
+                                Cena
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                        <li class="c-dropdown__menu-item is-active">
+                            <a href="">
+                                Kto przygotował
+                                <span class="c-arrow-down"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="c-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox">
+                    </th>
+                    <th>ID</th>
+                    <th>Nazwa zestawu</th>
+                    <th>Ilość wariantów</th>
+                    <th>Akcja</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(set, key) in items">
+                    <td data-th="Wybierz">
+                        <input type="checkbox">
+                    </td>
+                    <td data-th="ID">{{set.id}}</td>
+                    <td data-th="Nazwa">{{set.name}}</td>
+                    <td data-th="Ilosc">{{set.variants.length}}</td>
+                    <td data-th="Akcja" class="h-relative">
+                                        <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                                            <i></i>
+                                        </span>
+                        <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
+                            <div class="c-actions__row">
+                                <button class="c-actions__item" @click="deleteVariantSet(key, set)">Usuń</button>
+                                <router-link :to="'edit/' + set.id + '/variant-add'" class="c-actions__item">Edytuj
+                                </router-link>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="c-pagination">
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
   export default {
     name: 'variants-list',
-    props: ['variants'],
     data () {
       return {
         items: [],
-        buttons: [],
         index: '',
         show: false,
       }
     },
     methods: {
+      fetchVariantSets () {
+        axios('variant-groups').then(result => {
+          result.data.forEach(el => {
+            if (el.variants != 0) {
+              el.variants = JSON.parse(el.variants)
+            }
+          })
+          this.items = result.data
+        })
+      },
       showActions (key) {
         if (this.index === key) {
           this.show = false
@@ -43,10 +148,10 @@
           this.index = key
         }
       },
-      deleteVariant (index, item) {
+      deleteVariantSet (index, item) {
         this.$swal({
           title: 'Czy chcesz usunąć wariant?',
-          text: 'Ta akcja nieodwracalnie usunie użytkownika',
+          text: 'Ta akcja usunie zestaw w którym znajdują się warianty!',
           type: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#d33',
@@ -54,13 +159,14 @@
           cancelButtonText: 'Anuluj',
           confirmButtonText: 'Usuń',
         }).then((result) => {
-
             if (result.value) {
               this.items.splice(index, 1)
+              this.show = false
+              this.index = ''
               axios.delete('variant-groups/' + item.id).then(() => {
                 this.$swal({
                   title: 'Usunięto!',
-                  text: 'Wariant został usunięty',
+                  text: 'Zestaw został usunięty',
                   type: 'success',
                   confirmButtonText: 'OK',
                 })
@@ -73,116 +179,9 @@
           dismiss => {
           }).catch(this.$swal.noop)
       },
-      editVariant (item, key) {
-        this.$emit('singleVariant', item, key)
-      },
     },
     created: function () {
-
-      if (this.variants) {
-        this.items = this.variants
-      }
-      else {
-        axios('variant-groups').then(result => {
-          this.items = result.data
-        })
-      }
+      this.fetchVariantSets()
     },
   }
 </script>
-
-<style scoped>
-    .variants-container {
-        width: 80%;
-        background-color: #ffffff;
-        margin-left: 20px;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 5px 5px 5px 2px #eff1f4;
-    }
-
-    .attr-list-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 0;
-        height: 40px;
-        line-height: 40px;
-        margin: 5px 0;
-    }
-
-    .attr-list-item p {
-        margin: 0 0 0 10px;
-        padding: 0;
-    }
-
-    .buttons-container {
-        position: relative;
-    }
-
-    .more-button {
-        height: 40px;
-        border: none;
-        color: #dde0e5;
-        background-color: #ffffff;
-        padding-bottom: 15px;
-    }
-
-    .dot {
-        height: 6px;
-        width: 6px;
-        background-color: #bbb;
-        border-radius: 50%;
-        display: inline-block;
-    }
-
-    .action-buttons {
-        position: absolute;
-        top: -22px;
-        left: -115px;
-        display: flex;
-        border: 1px solid #dde0e5;
-        border-radius: 5px;
-        z-index: -1;
-    }
-
-    .action-buttons button {
-        background-color: #ffffff;
-        height: 40px;
-        border-radius: 5px;
-        border: none;
-    }
-
-    .action-buttons button:first-child {
-        border-right: 1px solid #dde0e5;
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-    }
-
-    .action-buttons button:last-child {
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-    }
-
-    .action-buttons button:hover {
-        cursor: pointer;
-        background-color: #dde0e5;
-    }
-
-    .active {
-        background-color: #F3F4F8;
-        border-radius: 5px;
-
-    }
-
-    .arrow-left {
-        width: 0;
-        height: 0;
-        border-top: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        border-left: 8px solid #FFFFFF;
-        position: absolute;
-        z-index: 20;
-        top: 36%;
-        right: 42px;
-    }
-</style>

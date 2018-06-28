@@ -4,8 +4,8 @@
 
             <div class="c-breadcrumb">
                         <span class="c-breadcrumb__item">
-                            Zestaw atrybutów
-                        </span>
+                            <router-link to="/attribute-sets/list">Zestawy atrybutów</router-link></span>
+                <!--<span class="c-breadcrumb__item" >Dodaj zestaw</span>-->
             </div>
             <div class="main-header__button">
                 <router-link to="/attribute-sets/add/categories" class="c-form__button c-button"

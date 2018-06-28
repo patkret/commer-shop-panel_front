@@ -38,6 +38,15 @@
         this.$emit('input', field)
       },
     },
+
+    created: function () {
+      if(this.value.length === 0){
+        this.showCustLabel = false
+      }
+      else{
+        this.showCustLabel = true
+      }
+    }
   }
 </script>
 
@@ -46,7 +55,7 @@
         outline: none;
     }
     .my-input{
-        margin-bottom: 25px;
+        margin-bottom: 12px;
         /*margin-left: 15px;*/
         max-width: 700px;
         width: 100%;
@@ -99,7 +108,7 @@
         transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
     }
     .slide-fade-enter, .slide-fade-leave-to
-        /* .slide-fade-leave-active below version 2.1.8 */ {
+    {
         transform: translateY(10px);
         opacity: 0;
     }

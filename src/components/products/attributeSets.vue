@@ -1,74 +1,44 @@
 <template>
-    <div>
-        <h3 class="header" v-if="sets.length > 0">Wybierz zestawy atrybutów dla produktu</h3>
-        <div class="info" v-if="sets.length == 0">
-            <p>BRAK ZESTAWÓW ATRYBUTÓW</p>
+    <div class="items-list">
+        <div class="items__info" v-if="!$store.state.products.product.main_category">
+            <span>WYBIERZ KATEGORIĘ GŁÓWNĄ DLA PRODUKTU</span>
         </div>
-        <ul>
-            <li v-for="item in selectedSets">
-                <label class="check-container">
-                    <div class="attr-header">
-                        <p class="label">
-                            {{item.name}}
-                        </p>
-                    </div>
-                    <input type="checkbox" @click="addToSets(item)" :checked=true>
-                    <span class="checkmark"></span>
+        <div :class="{'items-list__item': true, 'item-active': selectedAttributeSets.includes(set.id)}" v-for="set in attributeSets">
+            <div class="c-form__checkbox">
+                <input type="checkbox" :id="set.id" :value="set.id" @change="toggleItem(set.id)" :checked="selectedAttributeSets.includes(set.id)">
+                <label :for="set.id">
+                    <span>{{set.name}}</span>
                 </label>
-                <transition name="fade">
-                    <div class="attr-list">
-                        <div v-for="attribute in item.attributes">
-                            <div v-if="attribute.type.type === 0" class="attr-list-row">
-                                <label class="attr-label">
-                                    {{attribute.name}}
-                                </label>
-                                <div class="attr-type">
-                                    <input type="text" name="defValue" v-model="attribute.defaultValue"
-                                           class="attr-input">
-                                </div>
-                            </div>
-                            <div v-if="attribute.type.type === 1" class="attr-list-row">
-                                <label class="attr-label">{{attribute.name}}</label>
-                                <div class="checkbox-square form-group attr-type"
-                                     v-if="attribute.visibility === true || 1">
-                                    <input type="checkbox" id="def-checked" class="visibility-hidden"
-                                           v-model="attribute.checked">
-                                    <label for="def-checked" class="square"></label>
-                                </div>
-                            </div>
-                            <div v-if="attribute.type.type === 2" class="attr-list-row">
-                                <label class="attr-label">{{attribute.name}}</label>
-                                <multiselect
-                                        class="shop-select attr-type"
-                                        v-model="attribute.defaultValue"
-                                        :options="attribute.selectOptions"
-                                        :allow-empty="false"
-                                        :searchable="false"
-                                        :selectedLabel="''"
-                                        track-by="name"
-                                        label="name"
-                                        :deselectLabel="''"
-                                        :selectLabel="''"
-                                        :hideSelected="true"
-                                        placeholder="Wybierz"></multiselect>
-                            </div>
-
+            </div>
+            <div class="line"></div>
+            <div class="item__content" v-if="selectedAttributeSets.includes(set.id)">
+                <div class="attributes-container">
+                    <div class="single-attribute" v-for="attribute in set.attributes">
+                        <span>{{attribute.name}}</span>
+                        <div class="" v-if="attribute.type.type === 0">
+                            <input type="text" v-model="attribute.defaultValue" class="attribute__input">
                         </div>
+                        <div class="" v-if="attribute.type.type === 1">
+                            <label class="check-container">
+                                <input type="checkbox" v-model="attribute.checked">
+                                <span class="checkmark"></span>
+                            </label>
+                            <!--<input type="checkbox" v-model="attribute.checked" >-->
+                        </div>
+                        <div class="" v-if="attribute.type.type === 2">
+                            <select  v-model="attribute.defaultValue" class="attribute__select">
+                                <option v-for="option in attribute.selectOptions" :value="option">
+                                    {{option.name}}
+                                </option>
+                            </select>
+                        </div>
+
                     </div>
-                </transition>
-            </li>
-            <li v-for="set in sets" class="cat-item">
-                <label class="check-container">
-                    <div class="attr-header">
-                        <p class="label">
-                            {{set.name}}
-                        </p>
-                    </div>
-                    <input type="checkbox" @click="removeFromSets(set)" :checked="false">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-        </ul>
+                </div>
+                <div class="line"></div>
+            </div>
+
+        </div>
     </div>
 </template>
 
@@ -76,34 +46,40 @@
   export default {
     name: 'attribute-sets',
     computed: {
-      sets: {
-        get: function () {
-          if (this.$store.state.product.attributeSets.length !== 0) {
-            return this.$store.getters.getNotSelectedSets
-          }
-          return this.$store.getters.sets
-        },
-
-        set: function (value) {
-          this.$store.commit('getSets', value)
-
-        },
-
+      product: function () {
+        return this.$store.getters.getProduct
       },
-
-      selectedSets: {
-        get: function () {
-          return this.$store.getters.getProductAttributeSets
-        },
-
-        set: function (value) {
-          this.$store.commit('saveProductAttributes', value)
-        },
+      attributeSets: function () {
+        return this.$store.getters.getAttributeSets
       },
-
+      selectedAttributeSets: {
+        get: function () {
+          return this.$store.getters.getselectedAttributeSets
+        },
+        set: function (value) {
+          this.$store.commit('setSelectedAttributeSets', value)
+        }
+      }
     },
+    data: () => ({
+      // selectedAttributeSets: []
+    }),
 
     methods: {
+      fetchAttributeSets() {
+        if(this.$store.state.products.product.main_category){
+          this.$store.dispatch('fetchAttributeSets', this.$store.state.products.product.main_category.id)
+        }
+      },
+      toggleItem(id){
+        if(this.selectedAttributeSets.includes(id)){
+          let index = this.selectedAttributeSets.indexOf(id)
+          this.selectedAttributeSets.splice(index, 1)
+        }
+        else{
+          this.selectedAttributeSets.push(id)
+        }
+      },
       removeFromSets (set) {
         this.selectedSets.push(set)
         // let index = this.sets.indexOf(set)
@@ -118,10 +94,14 @@
     },
 
     created: function () {
-
-      if(this.$store.state.product.main_category !== ''){
-        this.$store.dispatch('getAttributeSets')
+      if(this.$store.state.products.attributeSets.length == 0){
+        this.fetchAttributeSets()
       }
+
+      //
+      // if(this.$store.state.product.main_category !== ''){
+      //   this.$store.dispatch('getAttributeSets')
+      // }
 
       // if (this.$store.state.sets.length === 0 && this.$store.state.product.attributeSets.length === 0) {
       //   this.$store.dispatch('getSets')
@@ -135,14 +115,90 @@
     },
 
     beforeDestroy: function () {
-
-      this.$store.commit('saveProductAttributes', this.selectedSets)
-      this.$store.commit('getSets', this.sets)
+      //
+      // this.$store.commit('saveProductAttributes', this.selectedSets)
+      // this.$store.commit('getSets', this.sets)
     },
   }
 </script>
 
 <style scoped>
+    input:focus, select:focus{
+        outline-width: 0;
+    }
+    .items-list__item {
+        width: 80%;
+        background-color: #ffffff;
+    }
+
+    .c-form__checkbox {
+        margin-left: 25px;
+    }
+
+    .c-form__checkbox label span {
+        font-weight: 700;
+        font-size: 120%;
+        margin-left: 20px;
+        padding: 30px;
+    }
+
+    .item__content {
+        background-color: #ffffff;
+    }
+
+    .line {
+        width: 100%;
+        height: 1px;
+        background-color: #dddddd;
+    }
+
+    .item-active{
+        background-color: #eef0f3;
+    }
+    .attributes-container{
+        padding: 25px 0 25px 90px;
+    }
+    .single-attribute{
+        height: 50px;
+        /*border: 1px solid red;*/
+        padding: 5px 0;
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        align-items: center;
+    }
+
+    .single-attribute span{
+        font-size: 0.8rem;
+    }
+    .attribute__input{
+        height: 35px;
+        padding-left: 10px;
+        border: 1px solid #dddddd;
+        width: 55%;
+    }
+    .attribute__select{
+        height: 35px;
+        padding-left: 10px;
+        border: 1px solid #dddddd;
+        width: 55%;
+        background-color: #ffffff;
+    }
+
+    .items__info{
+        width: 80%;
+        height: 60vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.5rem;
+        color: #c5c5c5;
+        opacity: 0.5;
+    }
+
+
+
+
+
 
     .check-container {
         display: block;
@@ -165,19 +221,19 @@
         position: absolute;
         opacity: 0;
         cursor: pointer;
-        margin-top: -40px;
-        margin-left: -30px;
+        left: 5px;
+        top: 5px;
     }
 
     .checkmark {
         position: absolute;
-        top: 10px;
+        top: 0;
         left: 0;
         height: 23px;
         width: 23px;
         background-color: #FFFFFF;
         border: 1px solid #DAD8DA;
-        border-radius: 5px;
+
     }
 
     .check-container:hover input ~ .checkmark {
@@ -204,83 +260,5 @@
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
-    }
-
-    .attr-list {
-        margin: 35px 0 0 80px;
-    }
-
-    .attr-list-row {
-        display: grid;
-        grid-template-columns: 15% 30px 80%;
-        grid-template-areas: "attr-label . attr-type";
-        margin-bottom: 25px;
-
-    }
-
-    .attr-label {
-        grid-area: attr-label;
-        align-self: center;
-    }
-
-    .attr-type {
-        grid-area: attr-type;
-    }
-
-    .attr-input {
-        padding: 15px;
-        border: none;
-        border-radius: 5px;
-        width: 40%;
-    }
-
-    .checkbox-square {
-        margin-left: -10px;
-    }
-
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s;
-    }
-
-    .fade-enter, .fade-leave-to {
-        opacity: 0;
-    }
-
-    .header {
-        margin-bottom: 20px;
-    }
-
-    .attr-header {
-        background-color: white;
-        border-radius: 5px;
-        color: black;
-        height: 45px;
-        margin-bottom: 10px;
-        margin-left: 40px;
-        width: 80%;
-        font-size: 120%;
-        box-shadow: 0 0 4px #62637A;
-    }
-
-    .attr-header p {
-        padding: 10px 0 0 15px;
-    }
-
-    .info{
-        opacity: 0.1;
-        font-weight: 900;
-        font-size: 300%;
-        box-shadow: #cccccc;
-        margin: auto;
-        width: 50%;
-        margin-top: 17%;
-
-
-    }
-
-    .info  p{
-        text-shadow: 2px 2px #2D2E2F;
-        align-self: center;
-        justify-self: center;
     }
 </style>

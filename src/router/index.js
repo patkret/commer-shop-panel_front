@@ -12,6 +12,7 @@ import addAttribute from '../components/attribute-sets/addAttribute'
 import editAttribute from '../components/attribute-sets/editAttribute'
 import Categories from '../components/categories/Categories'
 import CategoriesList from '../components/categories/CategoriesList'
+import AttributesCategoriesList from '../components/attribute-sets/CategoriesList'
 import AddCategory from '../components/categories/AddCategory'
 import DuplicateCategory from '../components/categories/DuplicateCategory'
 import EditCategory from '../components/categories/EditCategory'
@@ -22,6 +23,10 @@ import VatRates from '../components/vat-rates/VatRates'
 import VatRatesList from '../components/vat-rates/VatRatesList'
 import EditVatRate from '../components/vat-rates/EditVatRate'
 import Variants from '../components/variants/Variants'
+import VariantsList from '../components/variants/VariantsList'
+import VariantSetForm from '../components/variants/VariantsSetForm'
+import allVariants from '../components/variants/allVariants'
+import addVariant from '../components/variants/addVariant'
 import Vendors from '../components/vendors/Vendors'
 import AddVendor from '../components/vendors/AddVendor'
 import VendorsList from '../components/vendors/VendorsList'
@@ -38,7 +43,10 @@ import Logs from '../components/Logs'
 import Paginator from '../components/paginator'
 import inpt from '../components/custom-input'
 import MainInfo from '../components/products/mainInfo'
+import Descriptions from '../components/products/Descriptions'
 import AdditionalInfo from '../components/products/additionalInfo'
+import attributeSets from '../components/products/attributeSets'
+import Gallery from '../components/products/Gallery'
 import Drafts from '../components/products/ProductDrafts'
 import ProductsTable from '../components/products/ProductsTable'
 import ProductTickets from '../components/products/ProductTickets'
@@ -93,8 +101,8 @@ export default new Router({
               children: [
                 {
                   path: 'categories',
-                  name: 'CategoriesList',
-                  component: CategoriesList,
+                  name: 'AttributesCategoriesList',
+                  component: AttributesCategoriesList,
                 },
                 {
                   path: 'attribute-add',
@@ -109,6 +117,33 @@ export default new Router({
                 {
                   path: 'attribute-edit/:id',
                   name: 'editAttribute',
+                  component: editAttribute,
+                },
+              ]
+            },
+            {
+              path: 'edit/:item',
+              name: 'AttributeSetForm',
+              component: AttributeSetForm,
+              children: [
+                {
+                  path: 'categories',
+                  name: 'AttributesCategoriesListEdit',
+                  component: AttributesCategoriesList,
+                },
+                {
+                  path: 'attribute-add',
+                  name: 'addAttributeEdit',
+                  component: addAttribute,
+                },
+                {
+                  path: 'attributes',
+                  name: 'attributesListEdit',
+                  component: attributesList,
+                },
+                {
+                  path: 'attribute-edit/:id',
+                  name: 'editAttributeEdit',
                   component: editAttribute,
                 },
               ]
@@ -165,6 +200,56 @@ export default new Router({
               name: 'AdditionalInfo',
               component: AdditionalInfo,
             },
+            {
+              path: 'descriptions',
+              name: 'Descriptions',
+              component: Descriptions,
+            },
+            {
+              path: 'attribute-sets',
+              name: 'attributeSets',
+              component: attributeSets,
+            },
+            {
+              path: 'gallery',
+              name: 'Gallery',
+              component: Gallery,
+            },
+
+          ]
+        },
+        {
+          path: '/product-edit/:id',
+          name: 'EditProduct',
+          component: AddProduct,
+          children: [
+            {
+              path: 'main-info',
+              name: 'MainInfoEdit',
+              component: MainInfo,
+            },
+
+            {
+              path: 'additional-info',
+              name: 'AdditionalInfoEdit',
+              component: AdditionalInfo,
+            },
+            {
+              path: 'descriptions',
+              name: 'DescriptionsEdit',
+              component: Descriptions,
+            },
+            {
+              path: 'attribute-sets',
+              name: 'attributeSetsEdit',
+              component: attributeSets,
+            },
+            {
+              path: 'gallery',
+              name: 'GalleryEdit',
+              component: Gallery,
+            },
+
           ]
         },
         {
@@ -195,11 +280,6 @@ export default new Router({
           ]
         },
         {
-          path: '/products/edit/:item',
-          name: 'EditProduct',
-          component: EditProduct
-        },
-        {
           path: '/vat-rates',
           name: 'VatRates',
           component: VatRates,
@@ -225,6 +305,58 @@ export default new Router({
           path: '/variants',
           name: 'Variants',
           component: Variants,
+          children: [
+            {
+              path: 'list',
+              name: 'VariantsList',
+              component: VariantsList,
+            },
+            {
+              path: 'add',
+              name: 'VariantSetForm',
+              component: VariantSetForm,
+              children: [
+                {
+                  path: 'variant-add',
+                  name: 'addVariant',
+                  component: addVariant,
+                },
+                {
+                  path: 'variant-edit/:item',
+                  name: 'editVariant',
+                  component: addVariant,
+                },
+                {
+                  path: 'all-variants',
+                  name: 'allVariants',
+                  component: allVariants,
+                },
+              ]
+            },
+
+            {
+              path: 'edit/:id',
+              name: 'VariantSetEditForm',
+              component: VariantSetForm,
+              children: [
+                {
+                  path: 'variant-add',
+                  name: 'addVariantEdit',
+                  component: addVariant,
+                },
+                {
+                  path: 'variant-edit/:item',
+                  name: 'editVariantEdit',
+                  component: addVariant,
+                },
+                {
+                  path: 'all-variants',
+                  name: 'allVariantsEdit',
+                  component: allVariants,
+                },
+              ]
+            },
+          ]
         },
         {
           path: '/vendors',

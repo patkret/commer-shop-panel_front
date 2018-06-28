@@ -96,6 +96,7 @@
         padding-left: 35px;
         font-size: 0.8rem;
     }
+
     .f-content .c-form__cont{
         margin: 0;
         padding: 0;

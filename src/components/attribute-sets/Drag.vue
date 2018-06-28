@@ -6,7 +6,7 @@
                     {{el.name}}
                     <span v-if="el.children">({{el.children.length}})</span>
                 </p>
-                <input type="checkbox" v-model="selectedElement" :value="el.id">
+                <input type="checkbox" v-model="selectedElement" :value="el.id" @change="setSelected(el.id)">
                 <span class="checkmark"></span>
             </label>
                 <drag v-if="el.children" :children="el.children" :item="el"></drag>
@@ -29,20 +29,25 @@
         child: '',
       }
     },
-    watch: {
-      selectedElement: function (value) {
-        this.setSelected(value)
-      }
-    },
    created: function () {
     this.getSelected()
    },
     methods: {
-      setSelected(value){
-        this.$store.commit('setAttributeSetSubChildrenCategories', value)
+      setSelected(id){
+
+          if(this.$store.state.attributeSets.attributeSetSubChildren.find(el => el === id)){
+            let index = this.$store.state.attributeSets.attributeSetSubChildren.indexOf(id)
+
+            this.$store.state.attributeSets.attributeSetSubChildren.splice(index, 1)
+
+          }
+          else{
+            this.$store.commit('setAttributeSetSubChildrenCategories', id)
+
+          }
       },
       getSelected(){
-        this.selectedElement = this.$store.state.attributeSetSubChildren
+        this.selectedElement = this.$store.state.attributeSets.attributeSetSubChildren
       }
 
 
@@ -76,8 +81,8 @@
         position: absolute;
         opacity: 0;
         cursor: pointer;
-        margin-top: -35px;
-
+        left: 5px;
+        top: 5px;
     }
 
     .checkmark {

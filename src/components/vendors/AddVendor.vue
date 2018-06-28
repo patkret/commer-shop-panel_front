@@ -21,6 +21,17 @@
               </div>
             </div>
           </div>
+          <div class="c-form__fieldset" v-if="showMessage">
+            <div class="err-info" >
+              <span>{{errorMessage}}</span>
+            </div>
+          </div>
+          <div class="c-form__fieldset dropzone__label">
+            <span>Logo</span>
+          </div>
+          <div class="c-form__fieldset">
+            <vue2-dropzone id="dropzone" :options="dropzoneOptions" @vdropzone-error="uploadError($event)" ref="vendorDrop"></vue2-dropzone>
+          </div>
 
           <div class="h-center">
             <button type="submit" class="c-button c-form__button">
@@ -38,10 +49,30 @@
 </template>
 
 <script>
+  import env from '../../env'
+
   export default {
     name: "add-vendor",
+
     data() {
       return {
+        showMessage: false,
+        errorMessage: '',
+        dropzoneOptions: {
+          url: env.API_URL + 'vendors/check-logo',
+          autoProcessQueue: false,
+          thumbnailWidth: 150,
+          thumbnailHeight: 150,
+          maxFilesize: 0.5,
+          maxFiles: 2,
+          headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
+          dictDefaultMessage: 'Upuść lub wybierz plik',
+          addRemoveLinks: true,
+          dictCancelUpload: 'Usuń',
+          dictMaxFilesExceeded: 'Możesz wybrać tylko jeden plik',
+          dictRemoveFile: 'Usuń',
+          acceptedFiles: 'image/*'
+        },
         vendor: {
           name: '',
           is_visible: '',
@@ -50,19 +81,37 @@
       }
     },
     methods: {
-      saveVendor() {
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            axios.post('/vendors', {
-              vendor: this.vendor
-            }).then(() => {
+      uploadError(event) {
+        console.log(event)
+      this.$refs.vendorDrop.removeFile(event)
+        this.showErrorMessage()
 
-              this.$router.push('/vendors/list')
-            })
-          }
-        });
+      },
+      showErrorMessage() {
+        this.showMessage = true
+        this.errorMessage = 'Sprawdź rozmiar lub typ swojego pliku'
+        setTimeout(() => {
+          this.showMessage = false
+        }, 7000)
+      },
+      saveVendor() {
+        this.vendor.logo = this.$refs.vendorDrop.getQueuedFiles()
+        console.log(this.vendor)
+        // this.$validator.validateAll().then((result) => {
+        //   if (result) {
+        //     axios.post('/vendors', {
+        //       vendor: this.vendor
+        //     }).then(() => {
+        //
+        //       this.$router.push('/vendors/list')
+        //     })
+        //   }
+        // });
       },
     },
+    created(){
+      console.log(env)
+    }
   }
 
 </script>
@@ -133,6 +182,27 @@
 
   .c-form__field--text {
     margin: 5px 20px 0 0;
+  }
+
+  .err-info{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 15px;
+    background-color: red;
+    border-radius: 3px;
+    color: white;
+    font-size: 120%;
+    width: 100%;
+    height: 30px;
+  }
+  .dropzone__label{
+    position: absolute;
+    z-index: 2000;
+    background-color: white;
+    margin-left: 15px;
+    margin-top: -5px;
+    font-size: 120%;
   }
 
 </style>

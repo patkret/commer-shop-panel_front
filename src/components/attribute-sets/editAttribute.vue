@@ -2,7 +2,7 @@
     <div class="component__content">
         <transition name="fade">
             <div class="success-info" v-if="showInfoEdit">
-                <span>Atrybut został pomyślnie dodany!</span>
+                <span>Atrybut został pomyślnie edytowany!</span>
             </div>
         </transition>
 
@@ -16,8 +16,8 @@
                     <div class="c-form__switch-label">Aktywność</div>
 
                     <div class="c-form__switch-control">
-                        <input type="checkbox" id="visibility" v-model="attribute.visibility">
-                        <label for="visibility"></label>
+                        <input type="checkbox" id="attr-visibility" v-model="attribute.visibility">
+                        <label for="attr-visibility"></label>
                     </div>
                 </div>
             </div>
@@ -123,17 +123,23 @@
       showSelectDefaultValues: false
     }),
     watch: {
-
       showInfoEdit: function () {
         setTimeout(() => {
           this.showInfoEdit = false
-          this.$parent.$data.type = 3
-        }, 3000)
+          if(this.$route.params){
+            this.$router.replace({name:'attributesListEdit'})
+            this.$parent.activeRoute = '/attribute-sets/edit/:item/attributes'
+          }
+          else{
+            this.$router.replace({name:'attributesList'})
+            this.$parent.activeRoute = '/attribute-sets/add/attributes'
+          }
+        }, 2000)
       },
     },
     methods: {
       getAttribute() {
-        this.attribute = this.$store.state.attributesInSet[this.$route.params.id]
+        this.attribute = this.$store.state.attributeSets.attributesInSet[this.$route.params.id]
       },
       addOption () {
         this.attribute.selectOptions.push({name: this.selectName})
@@ -147,14 +153,14 @@
 
         this.$validator.validateAll().then((result) => {
           if (result) {
-            this.$emit('attribute', this.attribute, this.indexOfAttribute)
+            this.$store.state.attributeSets.attributesInSet[this.$route.params.id] = this.attribute
             this.showInfoEdit = true
           }
         })
       },
     },
     created: function () {
-      this.getAttribute
+      this.getAttribute()
     }
   }
 </script>

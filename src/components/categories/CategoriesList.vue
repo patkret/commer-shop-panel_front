@@ -25,7 +25,7 @@
         </draggable>
       </div>
     </div>
-    <router-view></router-view>
+    <router-view @updateList="fetchItems"></router-view>
   </div>
 </template>
 
@@ -72,7 +72,7 @@
 
     methods: {
       fetchItems() {
-  axios('categories')
+      axios('categories')
         .then(result => this.items = result.data)
       },
       editChild(child){

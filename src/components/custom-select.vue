@@ -1,85 +1,51 @@
 <template>
     <div class="box">
     <div class="container">
-        <!--<div class="row">-->
-            <!--<div class="custom-input">-->
-                <!--<h2>-->
-                    <!--<transition name="slide">-->
-                        <!--<span v-if="showCustLabel">Nazwa</span>-->
-                    <!--</transition>-->
 
-                    <!--<input type="text" placeholder="Nazwa" class="custom-input" v-model="name" />-->
-                <!--</h2>-->
-
-            <!--</div>-->
-        <!--</div>-->
-
-        <!--<div class="row">-->
-            <!--<div :class="{'my-input': true, 'my-input is-validated': name.length > 2 }">-->
-                <!--<transition name="slide-fade">-->
-                <!--<span :class="{'label': true, 'label label__hidden': !showCustLabel}" v-if="showCustLabel.find(el => el === 'name')" >Nazwa</span>-->
-                <!--</transition>-->
-                <!--<input type="text" class="my-input__input" placeholder="Nazwa" v-model="name" @keyup="setLabel('name')"/>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-            <!--<div :class="{'my-input': true, 'my-input is-validated': city.length > 2 }">-->
-                <!--<transition name="slide-fade">-->
-                <!--<span :class="{'label': true, 'label label__hidden': !showCustLabel}" v-if="showCustLabel['city']" >Miasto</span>-->
-                <!--</transition>-->
-                <!--<input type="text" class="my-input__input" placeholder="Miasto" v-model="city" @keyup="setLabel('city')"/>-->
-            <!--</div>-->
-        <!--</div>-->
         <br>
         <br>
         <cust-inpt  v-model="name" :label="'Nazwa'" :rules="'required'" :minInputLength = "3" />
+        <single-select :options="opt" :placeholder="'Wybierz opcję'" v-model="mydata"></single-select>
+        {{mydata}}
+        <br>
+        <br>
+        <nested-select :options="categories"></nested-select>
 
+        <vue-dropzone id="dropzone" :options="dropzoneOptions"></vue-dropzone>
 
-        <div class="custom-select" @click="showList = !showList">
-            <div class="search-input">
-                <!--<input type="text" class="select-input" placeholder="Wybierz producenta">-->
-                <div class="badges-container">
-                    <span v-if="selectedValues.length === 0" style="background-color: inherit"> Wybierz producenta</span>
-                    <span v-if="selectedValues.length > 0 " v-for="value in selectedValues" class="badge">{{value}}</span>
-                </div>
-                <i class="fa fa-angle-down fa-lg arrow-down"></i>
-            </div>
-            <!--<div class="dropdown-menu" >-->
-                <ul class="items-list" v-if="showList">
-                    <li @click.stop="showList = true">
-                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Producent 1'"/>  Producent 1</label>
-                    </li>
-                    <li @click.stop="showList = true">
-                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Nowy'"/>  Nowy</label>
-                    </li>
-                    <li @click.stop="showList = true">
-                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Dla win'"/>  Dla win</label>
-                    </li>
-                    <li @click.stop="showList = true">
-                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Producent 4'"/>  Producent 4</label>
-                    </li>
-                    <li @click.stop="showList = true">
-                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Producent 5'"/>  Producent 5</label>
-                    </li>
-                    <li @click.stop="showList = true">
-                       <label class="cust-check" ><input type="checkbox" v-model="selectedValues" :value="'Producent 6'"/>  Producent 6</label>
-                    </li>
+        <!--<single-select :options="opt" @click="toggle(true)"></single-select>-->
 
-                </ul>
-            <!--</div>-->
-        </div>
     </div>
     </div>
 </template>
 
 <script>
     import custInpt from './custom-input'
+    import SingleSelect from './singleSelect'
+    import NestedSelect from './nestedSelect'
+    import vue2Dropzone from 'vue2-dropzone'
+    import 'vue2-dropzone/dist/vue2Dropzone.min.css'
   export default {
     name: 'custom-select',
     components: {
-      custInpt
+      NestedSelect,
+      SingleSelect,
+      custInpt,
+      vueDropzone: vue2Dropzone
     },
     data: () => ({
+      dropzoneOptions: {
+        url: 'https://httpbin.org/post',
+        thumbnailWidth: 150,
+        maxFilesize: 0.5,
+        headers: { "My-Awesome-Header": "header value" },
+        maxFiles: 1,
+        dictDefaultMessage: 'Upuść lub wybierz plik',
+        addRemoveLinks: true,
+        dictCancelUpload: 'Usuń',
+        dictRemoveFile: 'Usuń'
+      },
+      mydata: '',
       name: '',
       city: '',
       showCustLabel: [],
@@ -87,9 +53,21 @@
       selectedValues: [],
       rules: [
         {name : 'required' , value: "required"}
-      ]
+      ],
+
+      opt: [
+        {id: '0', 'name' : 'Opcja 1', },
+        {id: '1', 'name' : 'Opcja 2', },
+        {id: '2', 'name' : 'Opcja 3', },
+        {id: '3', 'name' : 'Opcja 4', },
+        {id: '4', 'name' : 'Opcja 5', },
+        {id: '5', 'name' : 'Opcja 6', },
+        {id: '6', 'name' : 'Opcja 7', },
+      ],
+
+      categories: []
     }),
-    // watch: {
+    watch: {
     //   name: function (val) {
     //     if(val !== ''){
     //       this.showCustLabel.push('name')
@@ -103,9 +81,12 @@
     //
     //     this.showList = true;
     //   }
-    // },
+    },
 
     methods: {
+      sendingEvent(file, xhr, formData){
+        console.log(file)
+      },
       setLabel(field){
         // console.log(field)
         if(this.showCustLabel.find(el => el === field)){
@@ -126,6 +107,12 @@
       setName(input) {
         this.name = input
       }
+    },
+
+    created: function () {
+      axios('categories').then(result => {
+        this.categories = result.data
+      })
     }
   }
 </script>

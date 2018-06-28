@@ -14,10 +14,15 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import { store } from './store/store'
 import customInput from './components/custom-input'
+import singleSelect from './components/singleSelect'
 import VModal from 'vue-js-modal'
 import './assets/css/main.css'
 import './assets/css/component-styles.css'
 import './assets/css/custom-buttons.css'
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import Editor from '@tinymce/tinymce-vue';
+
 
 Vue.config.productionTip = false
 
@@ -26,10 +31,14 @@ Vue.use(VeeValidate)
 Vue.use(multiselectStyle)
 Vue.component('multiselect', Multiselect)
 Vue.component('custom-input', customInput)
+Vue.component('single-select', singleSelect)
 Vue.use(VueSweetalert2)
 Vue.use(Vuex)
 Vue.use(VModal)
-Vue.use(VModal)
+Vue.component('editor', Editor)
+Vue.component('vue2Dropzone', vue2Dropzone)
+
+vue2Dropzone.autoDiscover = false;
 
 window.axios = axios
 
@@ -70,6 +79,7 @@ const dictionary = {
       numeric: () => 'Pole może zawierać tylko cyfry ',
       max_value: () => 'Podaj odpowiednią wartość',
       confirmed: () => 'Hasła muszą być takie same',
+      decimal: () => 'Podaj odpowiednią cenę np. 100 lub 100.25'
     },
   },
 }
@@ -81,6 +91,7 @@ const validator = new Validator({
   numeric: 'numeric',
   max_value: 'max_value',
   confirmed: 'confirmed',
+  decimal: 'decimal'
 })
 
 validator.localize('pl')
@@ -90,7 +101,7 @@ new Vue({
   el: '#app',
   router,
   store: store,
-  components: {App},
+  components: {App, vueDropzone: vue2Dropzone},
   template: '<App/>',
 })
 
