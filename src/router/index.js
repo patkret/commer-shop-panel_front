@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './../Login'
+import LoginForm from './../LoginForm'
+import LoginPassword from './../LoginPassword'
 import Admin from './../Admin'
 import Dashboard from '../components/dashboard/Dashboard'
 import buttons from '../components/buttons'
@@ -59,6 +61,18 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login,
+      children: [
+        {
+        path: '',
+        name: 'LoginForm',
+        component: LoginForm
+        },
+        {
+          path: 'forgot-password',
+          name: 'LoginPassword',
+          component: LoginPassword,
+        }
+      ]
     },
     {
       path: '/select',
@@ -130,7 +144,7 @@ export default new Router({
                   component: AddCategory,
                 },
                 {
-                  path: 'duplicate',
+                  path: 'duplicate/:id',
                   name: 'DuplicateCategory',
                   component: DuplicateCategory,
                 },
