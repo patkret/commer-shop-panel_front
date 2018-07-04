@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './../Login'
-import LoginForm from './../LoginForm'
-import LoginPassword from './../LoginPassword'
+import Login from '../Login'
+import LoginForm from '../loginForm'
+import LoginPassword from '../loginPassword'
+import resetPassword from '../resetPassword'
 import Admin from './../Admin'
 import Dashboard from '../components/dashboard/Dashboard'
 import buttons from '../components/buttons'
@@ -38,6 +39,8 @@ import Stock from '../components/stock/Stock'
 import Orders from '../components/orders/Orders'
 import OrdersList from '../components/orders/OrdersList'
 import clientInfo from '../components/orders/clientInfo'
+import paymentDetails from '../components/orders/paymentDetails'
+import shippingDetails from '../components/orders/shippingDetails'
 import presale from '../components/orders/presale'
 import tickets from '../components/orders/tickets'
 import AddOrder from '../components/orders/AddOrder'
@@ -69,6 +72,7 @@ import productDetails from '../components/products/productDetails'
 
 
 
+
 Vue.use(Router)
 
 export default new Router({
@@ -82,14 +86,19 @@ export default new Router({
         {
         path: '',
         name: 'LoginForm',
-        component: LoginForm
+        component: LoginForm,
         },
         {
           path: 'forgot-password',
           name: 'LoginPassword',
           component: LoginPassword,
-        }
-      ]
+        },
+      ],
+    },
+    {
+      path: '/user/:id/reset-password',
+      name: 'resetPassword',
+      component: resetPassword,
     },
     {
       path: '/select',
@@ -516,6 +525,16 @@ export default new Router({
               path: 'client-info',
               name: 'clientInfo',
               component: clientInfo,
+            },
+            {
+              path: 'payment-details',
+              name: 'paymentDetails',
+              component: paymentDetails,
+            },
+            {
+              path: 'shipping-details',
+              name: 'shippingDetails',
+              component: shippingDetails,
             },
           ]
         },

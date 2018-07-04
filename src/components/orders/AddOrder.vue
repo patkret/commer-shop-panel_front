@@ -27,14 +27,25 @@
 <script>
   export default {
     name: 'add-order',
-    currentRoute: '',
-    items: [
-      {name: 'Dane klienta', path: 'main-info'},
-      {name: 'Dane do płatności', path: 'additional-info'},
-      {name: 'Dane do wysyłki', path: 'descriptions'},
-      {name: 'Wyszukaj produkty', path: 'seo'},
-      {name: 'Dodane produkty', path: 'gallery'},
-    ],
+    data: () => ({
+      currentRoute: '',
+      items: [
+        {name: 'Dane klienta', path: 'client-info'},
+        {name: 'Dane do płatności', path: 'payment-details'},
+        {name: 'Dane do wysyłki', path: 'shipping-details'},
+        {name: 'Wyszukaj produkty', path: 'seo'},
+        {name: 'Dodane produkty', path: 'gallery'},
+      ],
+    }),
+    methods: {
+      fetchClients(){
+        this.$store.dispatch('fetchClients')
+      }
+    },
+    created() {
+      this.currentRoute = 'client-info'
+      this.fetchClients()
+    }
   }
 </script>
 
