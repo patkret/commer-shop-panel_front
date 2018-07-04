@@ -4,7 +4,7 @@
             <form action="" class="c-form">
 
                 <div class="c-form__fieldset">
-                    <custom-input label="Kod kreskowy" rules="" v-model="product.barcode"
+                    <custom-input label="Kod kreskowy" rules="required" v-model="product.barcode"
                                   min-input-length="3"></custom-input>
                 </div>
                 <div class="c-form__fieldset">
@@ -18,7 +18,7 @@
                 <div class="c-form__fieldset weight__row">
                     <custom-input label="Waga" rules="" v-model="product.weight"
                                   min-input-length="1" class="weight__input"></custom-input>
-                    <single-select v-model="product.weight_unit" :options="weightOptions"
+                    <single-select v-model="product.weight_unit" placeholder="Jednostka" :options="weightOptions"
                                    class="weight__select"></single-select>
                 </div>
                 <div class="c-form__fieldset sizes__row">

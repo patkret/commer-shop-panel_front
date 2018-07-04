@@ -3,7 +3,7 @@
         <header class="l-main__header">
             <div class="c-breadcrumb">
                 <span class="c-breadcrumb__item">
-                    <a href="">Dodaj zamówienie</a>
+                    <a href="">Lista zamówień</a>
                 </span>
             </div>
 
@@ -21,23 +21,25 @@
             <router-view></router-view>
         </section>
     </main>
-
 </template>
 
 <script>
   export default {
-    name: 'add-order',
-    currentRoute: '',
-    items: [
-      {name: 'Dane klienta', path: 'main-info'},
-      {name: 'Dane do płatności', path: 'additional-info'},
-      {name: 'Dane do wysyłki', path: 'descriptions'},
-      {name: 'Wyszukaj produkty', path: 'seo'},
-      {name: 'Dodane produkty', path: 'gallery'},
-    ],
+    name: 'orders',
+    data: () => ({
+      currentRoute: '',
+      items: [
+        {name: 'Wszystkie zamówienia', path: 'list'},
+        {name: 'Przedsprzedaż', path: 'presale'},
+        {name: 'Opisy', path: 'tickets'},
+      ],
+    }),
+    created() {
+      this.currentRoute = 'list'
+    }
+
   }
 </script>
 
 <style scoped>
-
 </style>

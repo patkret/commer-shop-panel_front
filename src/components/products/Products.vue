@@ -38,12 +38,13 @@
         {name: 'Galeria', path: 'gallery'},
         {name: 'Zestaw wariantów', path: 'variant-sets'},
         {name: 'Zestawy atrybutów', path: 'attribute-sets'},
-        {name: 'Produkty powiązane', path: 'linked-products'},
+        {name: 'Produkty powiązane', path: 'related-products'},
+        {name: 'Lista produktów', path: 'select-related-products'},
       ],
     }),
     watch: {
-      '$route' (from, to) {
-        if(to.path === '/products-add/main-info'){
+      '$route' (to, fro) {
+        if(to.name === 'MainInfo' && fro.name === 'MainInfoEdit'){
           this.$store.commit('clearProduct')
         }
       }
@@ -64,6 +65,7 @@
         this.$store.dispatch('fetchStocks')
         this.$store.dispatch('fetchVendors')
         this.$store.dispatch('fetchCategories')
+        this.$store.dispatch('fetchVariantSets')
         if(Object.keys(this.$route.params).length !== 0){
           this.$store.dispatch('fetchProduct', this.$route.params.id)
         }
@@ -73,6 +75,10 @@
       this.getCurrentRoute()
       this.fetchData()
     },
+    destroyed() {
+      this.$store.commit('clearProduct')
+      this.$store.commit('clearState')
+    }
   }
 </script>
 

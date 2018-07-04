@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'my-input': true, 'my-input is-validated': value.length >= minInputLength,  'my-input not-validated': errors.has(label)}">
+    <div :class="{'my-input': true, 'my-input is-validated': checkInputLength(value),  'my-input not-validated': errors.has(label)}">
         <transition name="slide-fade">
             <span :class="{'label': true}" v-if="showCustLabel" >{{label}}</span>
         </transition>
@@ -18,7 +18,8 @@
     }),
     watch: {
       value: function (val) {
-        if(val.length === 0){
+
+        if(!val || 0 === val.length){
           this.showCustLabel = false
         }
         else{
@@ -29,7 +30,7 @@
 
     methods: {
       updateField (field) {
-        if (field.length === 0) {
+        if (!field || 0 === field.length) {
           this.showCustLabel = false
         }
         else {
@@ -37,10 +38,22 @@
         }
         this.$emit('input', field)
       },
+
+      checkInputLength(value){
+        if(value != null && value.length > 0){
+          if(value.length >= this.minInputLength){
+            return true
+          }
+          else{
+            return false
+          }
+        }
+        else{return false}
+      }
     },
 
     created: function () {
-      if(this.value.length === 0){
+      if(!this.value || 0 === this.value.length){
         this.showCustLabel = false
       }
       else{

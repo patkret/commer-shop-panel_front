@@ -35,7 +35,7 @@
             </div>
 
             <div class="component__row select__price-row" v-if="variant.type.type === 2">
-                <custom-input class="price__label" label="Pole" v-model="selectName" rules="required" ></custom-input>
+                <custom-input class="price__label" label="Pole" v-model="selectName" rules="" ></custom-input>
                 <single-select :options="priceOptions" v-model="variant.priceOption" style="min-width: 150px"
                                class="price__select" placeholder="Zmiana ceny"></single-select>
                 <template v-if="variant.priceOption.type !== 0">

@@ -33,7 +33,11 @@ import VendorsList from '../components/vendors/VendorsList'
 import EditVendor from '../components/vendors/EditVendor'
 import Users from '../components/users/Users'
 import Stock from '../components/stock/Stock'
+import Orders from '../components/orders/Orders'
 import OrdersList from '../components/orders/OrdersList'
+import clientInfo from '../components/orders/clientInfo'
+import presale from '../components/orders/presale'
+import tickets from '../components/orders/tickets'
 import AddOrder from '../components/orders/AddOrder'
 import Integrations from '../components/integrations/Integrations'
 import permissionList from '../components/users/permissionList'
@@ -56,6 +60,10 @@ import StockForm from '../components/stock/StockForm'
 import StockList from '../components/stock/StockList'
 import addToStock from '../components/stock/addToStock'
 import StockItems from '../components/stock/StockItems'
+import variantSets from '../components/products/variantSets'
+import relatedProductsList from '../components/products/relatedProductsList'
+import relatedProducts from '../components/products/relatedProducts'
+import productDetails from '../components/products/productDetails'
 
 
 
@@ -211,9 +219,24 @@ export default new Router({
               component: attributeSets,
             },
             {
+              path: 'variant-sets',
+              name: 'variantSets',
+              component: variantSets,
+            },
+            {
               path: 'gallery',
               name: 'Gallery',
               component: Gallery,
+            },
+            {
+              path: 'related-products',
+              name: 'relatedProducts',
+              component: relatedProducts,
+            },
+            {
+              path: 'select-related-products',
+              name: 'relatedProductsList',
+              component: relatedProductsList,
             },
 
           ]
@@ -245,9 +268,24 @@ export default new Router({
               component: attributeSets,
             },
             {
+              path: 'variant-sets',
+              name: 'variantSetsEdit',
+              component: variantSets,
+            },
+            {
               path: 'gallery',
               name: 'GalleryEdit',
               component: Gallery,
+            },
+            {
+              path: 'related-products',
+              name: 'relatedProductsEdit',
+              component: relatedProducts,
+            },
+            {
+              path: 'select-related-products',
+              name: 'relatedProductsListEdit',
+              component: relatedProductsList,
             },
 
           ]
@@ -276,6 +314,11 @@ export default new Router({
               path: 'imported',
               name: 'ImportedProducts',
               component: ImportedProducts,
+            },
+            {
+              path: 'product-details/:id',
+              name: 'productDetails',
+              component: productDetails,
             },
           ]
         },
@@ -430,13 +473,37 @@ export default new Router({
         },
         {
           path: '/orders',
-          name: 'OrdersList',
-          component: OrdersList,
+          name: 'Orders',
+          component: Orders,
+          children: [
+            {
+              path: 'list',
+              name: 'OrdersList',
+              component: OrdersList,
+            },
+            {
+              path: 'presale',
+              name: 'presale',
+              component: presale,
+            },
+            {
+              path: 'tickets',
+              name: 'tickets',
+              component: tickets,
+            },
+          ]
         },
         {
           path: '/order-add',
           name: 'AddOrder',
           component: AddOrder,
+          children: [
+            {
+              path: 'client-info',
+              name: 'clientInfo',
+              component: clientInfo,
+            },
+          ]
         },
         {
           path: '/integrations',
