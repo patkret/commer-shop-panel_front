@@ -128,7 +128,7 @@
                         <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
                             <div class="c-actions__row">
                                 <button class="c-actions__item" @click="deleteAttributeSet(set)">Usuń</button>
-                                <router-link :to="'edit/' + set.id" class="c-actions__item">Edytuj</router-link>
+                                <router-link :to="'edit/' + set.id + '/categories'" class="c-actions__item">Edytuj</router-link>
                             </div>
                         </div>
                     </td>

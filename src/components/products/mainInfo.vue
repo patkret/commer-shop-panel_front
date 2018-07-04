@@ -212,113 +212,29 @@
             <form action="" class="c-form">
 
                 <div class="c-form__fieldset">
-                    <div class="c-form__field-wrapper">
-                        <input type="text" class="c-form__field" required v-model="product.name">
-                        <label class="c-form__placeholder">Nazwa produktu</label>
-                    </div>
+                    <custom-input label="Nazwa produktu" rules="required" v-model="product.name"
+                                  min-input-length="3"></custom-input>
                 </div>
                 <div class="c-form__fieldset">
-                    <div class="c-form__field-wrapper">
-                        <input type="text" class="c-form__field" required>
-                        <label class="c-form__placeholder">Kod kreskowy</label>
-                    </div>
-                </div>
-                <div class="c-form__fieldset" @click="toggleVendor = !toggleVendor">
-                    <div :class="{'c-form__multiselect js-multiselect': true, 'c-form__multiselect js-multiselect is-opened': toggleVendor}">
-                        <span class="c-form__multiselect-name">
-                Wybierz producenta
-                <span class="c-arrow-down"></span>
-                </span>
-                        <ul class="c-form__multiselect-menu">
-
-                            <li class="c-form__multiselect-menu-item" v-for="vendor in vendors">
-                                <div class="c-form__checkbox">
-                                    <input type="checkbox" id="id_checkboxa_4">
-                                    <label for="id_checkboxa_4">
-                                        <span>{{vendor.name}}</span>
-                                    </label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="c-form__fieldset" @click="toggleCategory = !toggleCategory">
-                    <div :class="{'c-form__multiselect js-multiselect': true, 'c-form__multiselect js-multiselect is-opened': toggleCategory}">
-                        <span class="c-form__multiselect-name">
-                Wybierz kategorię
-                <span class="c-arrow-down"></span>
-                </span>
-                        <ul class="c-form__multiselect-menu">
-
-                            <li class="c-form__multiselect-menu-item" v-for="vendor in vendors">
-                                <div class="c-form__checkbox">
-                                    <input type="checkbox" :id="vendor.id">
-                                    <label>
-                                        <span>{{vendor.name}}</span>
-                                    </label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="c-form__fieldset" @click="toggleRate = !toggleRate">
-                    <div :class="{'c-form__multiselect js-multiselect': true, 'c-form__multiselect js-multiselect is-opened': toggleRate}">
-                        <span class="c-form__multiselect-name">
-                Wybierz VAT
-                <span class="c-arrow-down"></span>
-                </span>
-                        <ul class="c-form__multiselect-menu">
-
-                            <li class="c-form__multiselect-menu-item" v-for="rate in vat_rates">
-                                <div class="c-form__checkbox">
-                                    <input type="checkbox" :id="rate.id">
-                                    <label>
-                                        <span>{{rate.name}}</span>
-                                    </label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <custom-input label="Stan dostępności" rules="required|numeric" v-model="product.stockAvail"
+                                  min-input-length="1"></custom-input>
                 </div>
                 <div class="c-form__fieldset">
-                    <!--<div class="c-form__field-wrapper" @click="showOptions = !showOptions">-->
-                    <!--<custom-select :options="stocks" :showOptions="showOptions"  />-->
-                    <!--</div>-->
-
-                    <div class="l-table-filters__right" @click="showOptions = !showOptions">
-                        <div :class="{'c-dropdown js-dropdown' :true, 'c-dropdown js-dropdown is-opened': showOptions}">
-                                <span class="c-dropdown__name">
-                                    Magazyn
-                                    <span class="c-arrow-down"></span>
-                                </span>
-
-                            <ul class="c-dropdown__menu">
-                                <li class="c-dropdown__menu-item is-active" v-for="stock in stocks">
-                                    <a href="">
-                                        {{stock.name}}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    <single-select v-model="product.vat_rate" :options="vatRates" class="select__full-width"
+                                   placeholder="Stawka VAT"></single-select>
                 </div>
-
-                <!--<div class="c-form__fieldset">-->
-                <!--<div class="c-form__field-wrapper ">-->
-                <!--<input type="text" class="c-form__field is-invalid" required>-->
-                <!--<label class="c-form__placeholder">Ulica</label>-->
-                <!--</div>-->
-                <!--<div class="c-form__field-wrapper c-form__field-wrapper&#45;&#45;short">-->
-                <!--<input type="text" class="c-form__field is-invalid" required>-->
-                <!--<label class="c-form__placeholder">M</label>-->
-                <!--</div>-->
-                <!--<div class="c-form__field-wrapper c-form__field-wrapper&#45;&#45;short">-->
-                <!--<input type="text" class="c-form__field is-invalid" required>-->
-                <!--<label class="c-form__placeholder">LOK</label>-->
-                <!--</div>-->
-                <!--</div>-->
-
+                <div class="c-form__fieldset">
+                    <single-select v-model="product.stock" :options="stocks" class="select__full-width"
+                                   placeholder="Magazyn"></single-select>
+                </div>
+                <div class="c-form__fieldset">
+                    <single-select v-model="product.vendor" :options="vendors" class="select__full-width"
+                                   placeholder="Producent"></single-select>
+                </div>
+                <div class="c-form__fieldset">
+                    <single-select v-model="product.main_category" :options="categories" class="select__full-width"
+                                   placeholder="Kategoria główna"></single-select>
+                </div>
                 <div class="c-form__fieldset">
                     <div class="c-form__switch">
                         <div class="c-form__switch-label">Aktywność</div>
@@ -329,131 +245,17 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="c-form__fieldset">
-                    <div class="c-form__field-wrapper c-form__field-wrapper--medium">
-                        <input type="text" class="c-form__field" required v-model="product.price">
-                        <label class="c-form__placeholder">Cena sprzedaży</label>
-                    </div>
-                    <div class="c-form__field-wrapper c-form__field-wrapper--medium">
-                        <input type="text" class="c-form__field" required>
-                        <label class="c-form__placeholder">Cena sprzedaży</label>
-                    </div>
+                <div class="c-form__fieldset info__row" v-if="warningInfo">
+                    <span>Aby automatycznie przeliczyć cenę wybierz stawkę VAT</span>
                 </div>
-
-                <div class="c-form__fieldset">
-                    <div class="c-form__field-wrapper c-form__field-wrapper--medium">
-                        <input type="text" class="c-form__field" required>
-                        <label class="c-form__placeholder">Cena hurtowa</label>
-                    </div>
-                    <div class="c-form__field-wrapper c-form__field-wrapper--medium">
-                        <input type="text" class="c-form__field" required>
-                        <label class="c-form__placeholder">Cena hurtowa</label>
-                    </div>
+                <div class="c-form__fieldset prices__row">
+                    <custom-input label="Cena sprzedaży NETTO" v-model="product.price" rules="decimal:2"></custom-input>
+                    <custom-input label="Cena sprzedaży BRUTTO" v-model="grossPrice" rules="decimal:2"></custom-input>
                 </div>
-
-                <!--<div class="c-form__fieldset">-->
-                <!--<div class="c-form__field-wrapper">-->
-                <!--<input type="text" class="c-form__field is-valid" required>-->
-                <!--<label class="c-form__placeholder">Miejscowość</label>-->
-                <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="c-form__fieldset">-->
-                <!--<div class="c-form__select">-->
-                <!--<span class="c-form__select-name">+48</span>-->
-                <!--<span class="c-arrow-down c-form__select-arrow"></span>-->
-                <!--&lt;!&ndash; to trzeba przepisać w JS na komponent &ndash;&gt;-->
-                <!--<select onchange="event.target.parentNode.querySelector('.c-form__select-name').textContent = event.target.value">-->
-                <!--<option value="+48">+48</option>-->
-                <!--<option value="+43">+43</option>-->
-                <!--<option value="+46">+46</option>-->
-                <!--</select>-->
-                <!--</div>-->
-                <!--<div class="c-form__field-wrapper">-->
-                <!--<input type="text" class="c-form__field" required>-->
-                <!--<label class="c-form__placeholder">Numer telefonu</label>-->
-                <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="c-form__fieldset">-->
-                <!--<div class="c-form__field-wrapper">-->
-                <!--<input type="email" class="c-form__field" required>-->
-                <!--<label class="c-form__placeholder">E-mail</label>-->
-                <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="c-form__fieldset">-->
-                <!--<div class="c-form__field-wrapper">-->
-                <!--<input type="password" class="c-form__field" required>-->
-                <!--<label class="c-form__placeholder">Hasło</label>-->
-                <!--</div>-->
-                <!--</div>-->
-
-
-                <!--<div class="c-form__fieldset">-->
-                <!--<div class="c-form__checkbox">-->
-                <!--<input type="checkbox" id="id_checkboxa">-->
-                <!--<label for="id_checkboxa">-->
-                <!--<span>Wygeneruj automatycznie podczas zapisania</span>-->
-                <!--</label>-->
-                <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="c-form__fieldset">-->
-                <!--<div class="c-form__radio">-->
-                <!--<input type="radio" id="id_radio_1" name="nazwa_radio">-->
-                <!--<label for="id_radio_1">-->
-                <!--<span>Paragon</span>-->
-                <!--</label>-->
-                <!--</div>-->
-                <!--<div class="c-form__radio">-->
-                <!--<input type="radio" id="id_radio_2" name="nazwa_radio">-->
-                <!--<label for="id_radio_2">-->
-                <!--<span>Faktura</span>-->
-                <!--</label>-->
-                <!--</div>-->
-                <!--</div>-->
-
-
-                <!--<div class="c-form__fieldset" @click="toggleMultiselect = !toggleMultiselect">-->
-                <!--<div class="c-form__label">Ustawienia</div>-->
-                <!--<div :class="{'c-form__multiselect js-multiselect': true, 'c-form__multiselect js-multiselect is-opened': toggleMultiselect}">-->
-                <!--<div class="c-form__checkbox">-->
-                <!--<input type="checkbox" id="id_checkboxa_2">-->
-                <!--<label for="id_checkboxa_2"></label>-->
-                <!--</div>-->
-                <!--<span class="c-form__multiselect-name">-->
-                <!--Wybierz uprawnienia-->
-                <!--<span class="c-arrow-down"></span>-->
-                <!--</span>-->
-                <!--<ul class="c-form__multiselect-menu">-->
-                <!--<li class="c-form__multiselect-menu-item is-active">-->
-                <!--<div class="c-form__checkbox">-->
-                <!--<input type="checkbox" id="id_checkboxa_3" checked>-->
-                <!--<label for="id_checkboxa_3">-->
-                <!--<span>Odczyt</span>-->
-                <!--</label>-->
-                <!--</div>-->
-                <!--</li>-->
-                <!--<li class="c-form__multiselect-menu-item">-->
-                <!--<div class="c-form__checkbox">-->
-                <!--<input type="checkbox" id="id_checkboxa_4">-->
-                <!--<label for="id_checkboxa_4">-->
-                <!--<span>Edycja</span>-->
-                <!--</label>-->
-                <!--</div>-->
-                <!--</li>-->
-                <!--</ul>-->
-                <!--</div>-->
-                <!--</div>-->
-
-                <!--
-                    Żeby trick z latającym label działał, pola musza mieć atrybut required
-                    Jeśli jednak któreś z pól nie jest wymagane, to trzeba będzie przypisać w JS
-                    obsługę zdarzenia submit do formularza i usunąć wszystkim polom atrybut required
-                    lub stworzyć latające labele z użyciem JavaScript.
-                -->
+                <div class="c-form__fieldset prices__row">
+                    <custom-input label="Cena hurtowa NETTO" v-model="wholesaleGrossPrice" rules="decimal:2"></custom-input>
+                    <custom-input label="Cena hurtowa BRUTTO" v-model="wholesaleNetPrice" rules="decimal:2"></custom-input>
+                </div>
                 <div class="h-center">
                     <button type="submit" class="c-button c-form__button">
                         <span>Zapisz</span>
@@ -461,80 +263,89 @@
                 </div>
 
             </form>
-
         </div>
-
     </div>
 </template>
 
 <script>
-  import customSelect from '../singleSelect'
-
   export default {
     name: 'main-info',
-    props: ['attributeSets',],
-    components: {customSelect},
     computed: {
       product: function () {
         return this.$store.getters.getProduct
       },
-      selectedVendor: {
-        get: function () {
-          return this.$store.getters.getVendor
-        },
-        set: function (value) {
-          this.$store.commit('saveVendor', value)
-        },
-      },
-      selectedRate: {
-        get: function () {
-          return this.$store.getters.getVatRate
-        },
-        set: function (value) {
-          this.$store.commit('saveVatRate', value)
-        },
-      },
-      selectedCategories: {
-        get: function () {
-          return this.$store.getters.getCategory
-        },
-        set: function (value) {
-          this.$store.commit('saveCategories', value)
-        },
-      },
-      selectedStock: {
-        get: function () {
-          return this.$store.getters.getStock
-        },
-        set: function (value) {
-          this.$store.commit('saveStock', value)
-        },
-      },
-      selectedMainCategory: {
-        get: function () {
-          return this.$store.getters.getMainCategory
-        },
-        set: function (value) {
-          this.$store.commit('saveMainCategory', value)
-        },
-      },
+      // selectedVendor: {
+      //   get: function () {
+      //     return this.$store.getters.getVendor
+      //   },
+      //   set: function (value) {
+      //     this.$store.commit('saveVendor', value)
+      //   },
+      // },
+      // selectedRate: {
+      //   get: function () {
+      //     return this.$store.getters.getVatRate
+      //   },
+      //   set: function (value) {
+      //     this.$store.commit('saveVatRate', value)
+      //   },
+      // },
+      // selectedCategories: {
+      //   get: function () {
+      //     return this.$store.getters.getCategory
+      //   },
+      //   set: function (value) {
+      //     this.$store.commit('saveCategories', value)
+      //   },
+      // },
+      // selectedStock: {
+      //   get: function () {
+      //     return this.$store.getters.getStock
+      //   },
+      //   set: function (value) {
+      //     this.$store.commit('saveStock', value)
+      //   },
+      // },
+      // selectedMainCategory: {
+      //   get: function () {
+      //     return this.$store.getters.getMainCategory
+      //   },
+      //   set: function (value) {
+      //     this.$store.commit('saveMainCategory', value)
+      //   },
+      // },
 
-      price() {
-          return this.product.price
-      }
-
+      price () {
+        return this.product.price
+      },
+      vatRates () {
+        return this.$store.getters.getVatRates
+      },
+      stocks () {
+        return this.$store.getters.getStocks
+      },
+      vendors () {
+        return this.$store.getters.getVendors
+      },
+      categories () {
+        return this.$store.getters.getCategories
+      },
     },
     data: () => ({
-      vat_rates: [],
-      vendors: [],
+      // vat_rates: [],
+      // vendors: [],
       options: [],
-      stocks: [],
-      categories: [],
+      // stocks: [],
+      // categories: [],
       toggleMultiselect: false,
       toggleVendor: false,
       toggleCategory: false,
       showOptions: false,
       toggleRate: false,
+      grossPrice: '',
+      wholesaleGrossPrice: '',
+      wholesaleNetPrice: '',
+      warningInfo: false,
     }),
 
     watch: {
@@ -554,16 +365,57 @@
       main_category: function (value) {
         this.product.main_category = value.id
       },
-      price: function (value) {
-      }
+      'product.vat_rate': function () {
+        if (this.product.price > 0 && this.grossPrice > 0) {
+          console.log('obie')
+          this.countGrossPrice(this.product.price)
+        }
+        else if(this.product.price > 0){
+          this.countGrossPrice(this.product.price)
+          console.log('licz brutto')
+        }
+        else{
+          console.log('licz netto')
+          this.countNetPrice(this.grossPrice)
+        }
+      },
+      'product.price': function (price) {
+
+        if(this.checkIfVatRateSelected()){
+          this.countGrossPrice(price)
+        }
+
+      },
+      grossPrice: function (price) {
+        console.log(typeof(price))
+        if(this.checkIfVatRateSelected()){
+          this.countNetPrice(price)
+        }
+      },
     },
 
     methods: {
-      nameWithRate ({name, rate}) {
-        return `${name} — [${rate}%] `
+      checkIfVatRateSelected () {
+        if (!this.product.vat_rate) {
+          this.warningInfo = true
+          setTimeout(() => {
+            this.warningInfo = false
+          }, 4000)
+        }
+        else {
+          return true
+        }
       },
-      nameOnly ({name}) {
-        return `${name}`
+      roundPrice (price) {
+        return +(Math.round(price + 'e+2') + 'e-2')
+      },
+
+      countNetPrice (price) {
+        this.$store.state.products.product.price = this.roundPrice(price / ( 1 + (this.product.vat_rate.rate / 100)))
+      },
+
+      countGrossPrice(price){
+        this.grossPrice = this.roundPrice(price * (1 + (this.product.vat_rate.rate / 100)))
       },
 
       saveProduct () {
@@ -605,113 +457,27 @@
     },
 
     created: function () {
-
-      axios('vat-rates').then(result => {
-        this.vat_rates = result.data
-      })
-
-      axios('vendors').then(result => {
-        this.vendors = result.data
-      })
-      axios('all-categories').then(result => {
-        this.options = result.data
-      })
-      axios('warehouses').then(result => {
-        this.stocks = result.data
-      })
-    },
-
-    beforeDestroy: function () {
-
-      this.$store.commit('addProduct', this.product)
     },
   }
 </script>
 
 <style scoped>
-    /*.product-form-container {*/
-    /*display: grid;*/
-    /*grid-template-columns: 50% 50%;*/
-    /*grid-template-areas: "product-form .";*/
-    /*}*/
 
-    /*.product-form {*/
-    /*grid-area: product-form;*/
+    .select__full-width {
+        width: 100%;
+    }
 
-    /*}*/
+    .prices__row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 25px;
+    }
 
-    /*.form-row {*/
-    /*display: grid;*/
-    /*grid-template-columns: 20% 40px 80%;*/
-    /*grid-template-areas: "form-label . input-container";*/
-    /*margin-bottom: 20px;*/
-    /*}*/
-
-    /*.form-label {*/
-    /*grid-area: form-label;*/
-    /*justify-self: start;*/
-    /*align-self: center;*/
-    /*}*/
-
-    /*.input-container {*/
-    /*grid-area: input-container;*/
-    /*display: flex;*/
-    /*flex-direction: column;*/
-
-    /*}*/
-
-    /*.input-container p {*/
-    /*position: absolute;*/
-    /*margin-left: 205px;*/
-
-    /*}*/
-
-    /*.custom-input {*/
-    /*width: 100%;*/
-    /*height: 40px;*/
-    /*padding-left: 15px;*/
-    /*border: none;*/
-    /*border-radius: 5px;*/
-    /*background-color: #FFFFFF;*/
-    /*}*/
-
-    /*.custom-input input {*/
-    /*width: 96%;*/
-    /*margin-top: 9px;*/
-    /*border: none;*/
-    /*font-size: 110%;*/
-    /*}*/
-
-    /*.inpt-border {*/
-    /*border: 1px solid red;*/
-    /*border-bottom-left-radius: 0;*/
-    /*border-bottom-right-radius: 0;*/
-    /*}*/
-
-    /*.validator-help {*/
-    /*background-color: red;*/
-    /*border-radius: 5px;*/
-    /*color: #fff;*/
-    /*padding: 12px 0 10px 10px;*/
-    /*font-size: 12px;*/
-    /*font-weight: 700;*/
-    /*border-top-right-radius: 0;*/
-    /*border-top-left-radius: 0;*/
-    /*margin-right: -17px;*/
-    /*}*/
-
-    /*.form-group {*/
-    /*margin-left: -13px;*/
-    /*}*/
-
-    /*.multiselect .custom__tag {*/
-    /*background: linear-gradient(right, #2599E9, #21C7CC);*/
-    /*border-radius: 8px;*/
-    /*color: #FFFFFF;*/
-    /*padding: 4px;*/
-    /*margin-right: 5px;*/
-    /*margin-bottom: 25px;*/
-    /*line-height: 30px;*/
-    /*}*/
-
+    .info__row {
+        background: darkorange;
+        color: white;
+        height: 45px;
+        font-size: 0.8rem;
+        padding-left: 25px;
+    }
 </style>

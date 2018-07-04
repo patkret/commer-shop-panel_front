@@ -241,7 +241,7 @@
                 {text: 'Kategorie', path: '/categories/list'},
                 {text: 'Zestawy atrybutów', path: '/attribute-sets/list'},
                 {text: 'Producenci', path: '/vendors/list'},
-                {text: 'Zestawy wariantów', path: '/variants'},
+                {text: 'Zestawy wariantów', path: '/variants/list'},
                 {text: 'Stawki VAT', path: '/vat-rates/list'},
                 {text: 'Szablony opisów', path: '/'},
                 {text: 'Magazyn', path: '/stock/list'},

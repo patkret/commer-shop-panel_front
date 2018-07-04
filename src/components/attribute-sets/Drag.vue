@@ -2,10 +2,11 @@
     <div>
         <li class="cat-item" :key="key" v-for="(el, key) in children">
             <label class="check-container">
-                <p :class="{'label': true, 'label inactive': el.visibility == 0} ">
+                <p :class="{'label': true, 'label inactive': el.visibility === 0} ">
                     {{el.name}}
+                    <span v-if="el.children">({{el.children.length}})</span>
                 </p>
-                <input type="checkbox" v-model="selectedElement" :value="el.id">
+                <input type="checkbox" v-model="selectedElement" :value="el.id" @change="setSelected(el.id)">
                 <span class="checkmark"></span>
             </label>
                 <drag v-if="el.children" :children="el.children" :item="el"></drag>
@@ -28,10 +29,27 @@
         child: '',
       }
     },
-    components: {
-
-    },
+   created: function () {
+    this.getSelected()
+   },
     methods: {
+      setSelected(id){
+
+          if(this.$store.state.attributeSets.attributeSetSubChildren.find(el => el === id)){
+            let index = this.$store.state.attributeSets.attributeSetSubChildren.indexOf(id)
+
+            this.$store.state.attributeSets.attributeSetSubChildren.splice(index, 1)
+
+          }
+          else{
+            this.$store.commit('setAttributeSetSubChildrenCategories', id)
+
+          }
+      },
+      getSelected(){
+        this.selectedElement = this.$store.state.attributeSets.attributeSetSubChildren
+      }
+
 
     },
   }
@@ -63,8 +81,8 @@
         position: absolute;
         opacity: 0;
         cursor: pointer;
-        margin-top: -35px;
-
+        left: 5px;
+        top: 5px;
     }
 
     .checkmark {
@@ -75,7 +93,7 @@
         width: 23px;
         background-color: #FFFFFF;
         border: 1px solid #DAD8DA;
-        border-radius: 5px;
+        /*border-radius: 5px;*/
     }
 
     .check-container:hover input ~ .checkmark {

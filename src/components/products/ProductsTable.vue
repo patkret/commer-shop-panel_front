@@ -244,7 +244,7 @@
                         <div :class="{'c-actions js-actions': true, 'c-actions js-actions is-active': index === key}">
                             <div class="c-actions__row">
                                 <a href="" class="c-actions__item" @click="deleteProduct(product)">Usuń</a>
-                                <a href="" class="c-actions__item">Edytuj</a>
+                                <router-link :to="`/product-edit/${product.id}/main-info`" class="c-actions__item">Edytuj</router-link>
                                 <a href="" class="c-actions__item">Duplikuj</a>
                                 <a href="" class="c-actions__item">Szczegóły</a>
                             </div>

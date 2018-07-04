@@ -75,8 +75,8 @@
               <div class="c-form__fieldset">
                 <div class="c-form__switch">
                   <div class="c-form__switch-control">
-                    <input type="checkbox" id="is_visible" v-model="vendor.is_visible" @change="changeVisibility(vendor.id, vendor.is_visible)">
-                    <label for="is_visible"></label>
+                    <input type="checkbox" :id="vendor.id" v-model="vendor.is_visible" @change="changeVisibility(vendor.id, vendor.is_visible)">
+                    <label :for="vendor.id"></label>
                   </div>
                 </div>
               </div>
@@ -116,7 +116,8 @@
     },
     methods: {
         changeVisibility(id, visibility){
-            axios.post('/vendors/change-visibility', {
+          console.log(id, visibility)
+            axios.put('/vendors/change-visibility', {
                 id: id,
                 is_visible: visibility
             }).then(result => {

@@ -33,23 +33,46 @@
       items: [
         {name: 'Dane podstawowe', path: 'main-info'},
         {name: 'Dane dodatkowe', path: 'additional-info'},
+        {name: 'Opisy', path: 'descriptions'},
         {name: 'SEO', path: 'seo'},
         {name: 'Galeria', path: 'gallery'},
         {name: 'Zestaw wariantów', path: 'variant-sets'},
-        {name: 'Zestawy wariantów', path: 'attribute-sets'},
+        {name: 'Zestawy atrybutów', path: 'attribute-sets'},
         {name: 'Produkty powiązane', path: 'linked-products'},
       ],
     }),
+    watch: {
+      '$route' (from, to) {
+        if(to.path === '/products-add/main-info'){
+          this.$store.commit('clearProduct')
+        }
+      }
+    },
     methods: {
       getCurrentRoute () {
         this.currentRoute = this.$route.path
-        this.currentRoute = this.currentRoute.split('/')[2]
+
+        if(Object.keys(this.$route.params).length !== 0){
+          this.currentRoute = this.currentRoute.split('/')[3]
+        }
+        else{
+          this.currentRoute = this.currentRoute.split('/')[2]
+        }
       },
+      fetchData() {
+        this.$store.dispatch('fetchRates')
+        this.$store.dispatch('fetchStocks')
+        this.$store.dispatch('fetchVendors')
+        this.$store.dispatch('fetchCategories')
+        if(Object.keys(this.$route.params).length !== 0){
+          this.$store.dispatch('fetchProduct', this.$route.params.id)
+        }
+      }
     },
     created: function () {
       this.getCurrentRoute()
+      this.fetchData()
     },
-
   }
 </script>
 

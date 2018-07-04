@@ -1,266 +1,237 @@
 <template>
-    <div>
-        <form class="attribute-form">
-            <div class="attributes-col">
-                <div class="attributes-row">
-                    <div class="label-col">
-                        <label>Nazwa</label>
-                    </div>
-                    <div class="input-col">
-                        <div :class="{'attr-input': true,  'attr-input inpt-border': errors.has('name')}">
-                            <input type="text" v-validate="'required'" :class="{'single-input': true, }"
-                                   placeholder="Nazwa..." name="name" v-model="name">
+    <div class="l-wrapper f-center">
+        <!--<transition name="fade">-->
+        <!--<div class="err-info" v-if="info">-->
+        <!--<span>Dodaj atrybut aby zapisać zestaw!</span>-->
+        <!--</div>-->
+        <!--</transition>-->
+
+        <div style="width: 100%;" class="f-content">
+            <form action="" class="c-form" @submit.prevent="saveVariantSet">
+                <div class="c-form__row-wrapper">
+                    <div class="c-form__row-content">
+                        <div class="c-form__fieldset">
+                            <div class="c-form__field-wrapper">
+                                <custom-input :label="'Nazwa'" rules="required" :minInputLength="3"
+                                              v-model="variantSet.name"/>
+                            </div>
                         </div>
-                        <span v-show="errors.has('name')" class="validator-help">{{ errors.first('name') }}</span>
                     </div>
                 </div>
-                <div class="attributes-row">
-                    <div class="label-col">
-                        <label></label>
+
+                <div class="c-form__two-column">
+                    <div class="c-form__side-menu">
+                        <template v-if="!ifEdit">
+                            <ul>
+                                <li v-for="link in addTabs" @click="setActiveRoute(link.path)">
+                                    <router-link :to="{name: link.componentName}"
+                                                 :class="{'link': true, 'link item__is-active': activeRoute === link.path}">
+                                        {{link.name}}
+                                    </router-link>
+                                </li>
+                                <li v-if="activeRoute === `variants/add/variant-edit/${$route.params.item}`">
+                                <span class="link item__is-active"
+                                >Edytuj atrybut
+                                </span>
+                                </li>
+                            </ul>
+                        </template>
+                        <template v-if="ifEdit">
+                            <ul>
+                                <li v-for="link in editTabs" @click="setActiveRoute(link.path)">
+                                    <router-link :to="{name: link.componentName}"
+                                                 :class="{'link': true, 'link item__is-active': activeRoute === link.path}"
+                                    >{{link.name}}
+                                    </router-link>
+                                </li>
+                                <li v-if="activeRoute === `variants/edit/${variantSet.id}/variant-edit/${$route.params.item}`">
+                                <span class="link item__is-active"
+                                >Edytuj atrybut
+                                </span>
+                                </li>
+                            </ul>
+                        </template>
+
                     </div>
-                    <div class="input-col">
-                        <button class="custom-button" @click.prevent="saveVariantSet">ZAPISZ</button>
+                    <div class="c-form__cont">
+                        <router-view></router-view>
                     </div>
                 </div>
-            </div>
-        </form>
-        <div class="top-menu-container">
-            <div class="top-menu">
-                <ul class="top-menu-items">
 
-                    <li @click="changeType(1)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 1}">Dodaj
-                        cechę
-                    </li>
-                    <li @click="changeType(2)" :class="{'top-menu-item': true, 'top-menu-item-active': type == 2}">
-                        Wybrane cechy
-                    </li>
-                    <li v-if="type == 3" :class="{'top-menu-item': true, 'top-menu-item-active': type == 3}">
-                        Edycja cechy
-                    </li>
-                </ul>
-            </div>
-            <div class="menu-tab">
-                <add-variant v-if="type == 1" @variant=getVariant></add-variant>
-                <variants-list v-if="type == 2" :variants="variants" @singleVariant="editVariant"></variants-list>
-                <edit-variant v-if="type == 3" :singleVariant="variant" @variant="updateVariant"></edit-variant>
 
-            </div>
+                <div class="h-center">
+                    <button type="submit" class="c-button c-form__button">
+                        <span>Zapisz</span>
+                    </button>
+                </div>
+
+            </form>
+
         </div>
     </div>
 </template>
 
 <script>
-  import addVariant from './addVariant'
-  import VariantsList from './VariantsList'
-  import editVariant from './editVariant'
+
 
   export default {
-    props: ['set', 'side_type'],
-    components: {
-      VariantsList,
-      addVariant,
-      editVariant,
-    },
+
     name: 'variant-set-form',
     data: () => ({
-      name: '',
-      visibility: 1,
-      type: 1,
-      variants: [],
-      indexOfVariant: '',
-      variant: '',
+      ifEdit: false,
+      activeRoute: '',
+      addTabs: [
+        {name: 'Dodaj wariant', path: '/variants/add/variant-add', componentName: 'addVariant'},
+        {name: 'Wszystkie warianty', path: '/variants/add/all-variants', componentName: 'allVariants'},
+      ],
+      editTabs: [
+        {name: 'Dodaj wariant', path: '/variants/edit/:id/variant-add', componentName: 'addVariantEdit'},
+        {name: 'Wszystkie warianty', path: '/variants/edit/:id/all-variants', componentName: 'allVariantsEdit'},
+      ],
 
     }),
-
-    watch: {
-      indexOfVariant () {
-        this.type = 3
+    computed: {
+      variantSet: function () {
+        return this.$store.getters.getVariantSet
       },
-      side_type () {
-        this.name = ''
-        setTimeout(() => {
-          this.errors.clear()
-        }, 1)
-
-        this.variants = []
+      variants: function () {
+        return this.$store.getters.getVariants
       },
     },
-
     methods: {
 
-      changeType: function (type) {
-        this.type = type
+      checkIfEdit () {
+        if (this.$route.params.id) {
+          this.setActiveRoute('/variants/edit/:id/variant-add')
+          this.ifEdit = true
+          this.$store.dispatch('fetchVariantSet', this.$route.params.id)
+        }
       },
-      getVariant (variant) {
-        if(variant.required === 1){
-          this.variants.unshift(variant)
+      setName () {
+        if (this.$route.params.id) {
+          this.name = this.$store.state.variantSets.variantSet.name
         }
-        else{
-          this.variants.push(variant)
-        }
+      },
 
-        setTimeout(() => {
-          this.type = 2
-        }, 2000)
-      },
-      editVariant (variant, key) {
-        this.variant = variant
-        this.indexOfVariant = key
-        this.type = 3
-      },
-      updateVariant (variant) {
-        this.variants[this.indexOfVariant] = variant
-        this.indexOfAttribute = ''
-      },
       saveVariantSet () {
         this.$validator.validateAll().then((result) => {
           if (result) {
-            if (this.set) {
-              axios.put('/variant-groups/' + this.set.id, {
-                name: this.name,
+            if (this.ifEdit) {
+              axios.put('/variant-groups/' + this.variantSet.id, {
+                name: this.variantSet.name,
                 variants: JSON.stringify(this.variants),
               }).then(() => {
-                this.$parent.$data.type = 2
+                this.$router.push('/variants/list')
               })
             }
             else {
               axios.post('/variant-groups', {
-                name: this.name,
+                name: this.variantSet.name,
                 variants: JSON.stringify(this.variants),
               }).then(() => {
-                this.$parent.$data.type = 2
+                this.$router.push('/variants/list')
               })
             }
-
           }
         })
 
       },
+
+      setActiveRoute (path) {
+        this.activeRoute = path
+      },
+    },
+    beforeCreate: function () {
+
     },
 
     created: function () {
-      if (this.set) {
-        this.name = this.set.name
-        this.variants = JSON.parse(this.set.variants)
-      }
+      this.setActiveRoute(this.$route.path)
+      this.checkIfEdit()
+    },
+    mounted: function () {
+      this.setName()
+    },
 
+    destroyed: function () {
+      this.$store.commit('clearForm')
     },
   }
 </script>
 
 <style scoped>
-    .attribute-form {
+
+    .l-wrapper {
+        padding: 50px 0 50px 0;
+    }
+
+    .f-center {
         display: grid;
-        grid-template-columns: 5% auto 25%;
-        grid-template-areas: ". attributes-col .";
-        margin-top: 20px;
+        grid-template-columns: 1fr;
+        grid-template-areas: "form-content";
     }
 
-    .attributes-col {
-        grid-area: attributes-col;
-    }
-
-    .attributes-row {
+    .c-form__row-wrapper {
         display: grid;
-        height: 50px;
-        grid-template-columns: 20% 20px 80%;
-        grid-template-areas: " attr-label . input-col . ";
-        margin-bottom: 20px;
+        grid-template-columns: 28% 1fr 28%;
+        height: 180px;
+        grid-template-areas: ". row-content .";
     }
 
-    .label-col {
-        grid-area: attr-label;
-        justify-self: end;
-        align-self: center;
+    .c-form__row-content {
+        grid-area: row-content;
     }
 
-    .input-col {
-        grid-area: input-col;
-        align-self: center;
-    }
-
-    .attr-input {
-
-        height: 40px;
-        border-radius: 5px;
-        background-color: #FFFFFF;
-        display: flex;
-        align-items: center;
-    }
-
-    .single-input {
-        border: none;
+    .c-form__two-column {
+        display: grid;
+        grid-template-columns: 3fr 9fr;
         width: 100%;
-        margin-left: 15px;
+        border-top: 1px solid #dddddd;
+        border-bottom: 1px solid #dddddd;
     }
 
-    .checkbox-square {
-        margin-left: -12px;
+    .c-form__side-menu {
+        border-right: 1px solid #dddddd;
+        font-size: 1rem;
+        padding-top: 50px;
     }
 
-    .custom-button {
-        margin: 0;
+    .c-form__side-menu ul {
+        margin-left: 40px;
     }
 
-    .top-menu-container {
-        display: grid;
-        grid-template-columns: 90% 10%;
-        grid-template-rows: 20% 60px 80%;
-        grid-template-areas: "top-menu ." ". .  " "menu-tab . ";
-        margin-top: 20px;
-
-    }
-
-    .top-menu {
-        grid-area: top-menu;
-        border-bottom: 1px solid #E5E7ED;
-        height: 60px;
-        justify-items: start;
+    .c-form__side-menu ul li {
+        padding: 0 30px 50px 30px;
 
     }
 
-    .top-menu-items {
+    .c-form__cont {
+        padding: 50px;
+    }
+
+    .item__is-active {
+        border-bottom: 4px solid #2595ec;
+
+    }
+
+    .link {
+        padding-bottom: 15px;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .err-info {
+        position: absolute;
+        font-size: 0.9rem;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
-        padding: 0;
-
-    }
-
-    .top-menu-item {
-        text-wrap: none;
-        margin-right: 60px;
-        cursor: pointer;
-    }
-
-    .menu-tab {
-        grid-area: menu-tab;
-
-    }
-
-    .validator-help {
+        top: 100px;
+        left: 350px;
+        width: 79vw;
         background-color: red;
-        border-radius: 5px;
-        color: #fff;
-        padding: 10px 0 10px 10px;
-        font-size: 12px;
-        font-weight: 700;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-    }
-
-    .input-col {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .inpt-border {
-        border: 1px solid red;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-    .top-menu-item-active {
-        border-bottom: 2px solid #2595ec;
-        padding-bottom: 25px;
+        color: #ffffff;
+        padding: 20px;
+        border-radius: 3px;
     }
 </style>

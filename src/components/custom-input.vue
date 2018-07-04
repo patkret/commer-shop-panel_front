@@ -14,11 +14,22 @@
     inject: ['$validator'],
     props: ['label', 'rules', 'minInputLength', 'value'],
     data: () => ({
-      showCustLabel: false, 
-    }),  
+      showCustLabel: false,
+    }),
+    watch: {
+      value: function (val) {
+        if(val.length === 0){
+          this.showCustLabel = false
+        }
+        else{
+          this.showCustLabel = true
+        }
+      }
+    },
+
     methods: {
       updateField (field) {
-        if (field === '') {
+        if (field.length === 0) {
           this.showCustLabel = false
         }
         else {
@@ -27,6 +38,15 @@
         this.$emit('input', field)
       },
     },
+
+    created: function () {
+      if(this.value.length === 0){
+        this.showCustLabel = false
+      }
+      else{
+        this.showCustLabel = true
+      }
+    }
   }
 </script>
 
@@ -35,7 +55,7 @@
         outline: none;
     }
     .my-input{
-        margin-bottom: 25px;
+        margin-bottom: 12px;
         /*margin-left: 15px;*/
         max-width: 700px;
         width: 100%;
@@ -77,7 +97,7 @@
         width: 99%;
         font-size: 130%;
         border: transparent;
-        padding-left: 10px;
+        padding-left: 15px;
         margin-bottom: 7px;
     }
 
@@ -88,7 +108,7 @@
         transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
     }
     .slide-fade-enter, .slide-fade-leave-to
-        /* .slide-fade-leave-active below version 2.1.8 */ {
+    {
         transform: translateY(10px);
         opacity: 0;
     }

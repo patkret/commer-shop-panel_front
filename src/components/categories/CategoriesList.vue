@@ -70,18 +70,18 @@
     },
 
     methods: {
-    fetchItems() {
-     axios('categories')
-       .then(result => this.items = result.data)
-     },
-      // editChild(child){
-      //  this.child = child
-      //   this.$emit('child', this.child)
-      // },
-      // duplicateChild(child){
-      //   this.child = child
-      //   this.$emit('child', this.child)
-      // },
+      fetchItems() {
+      axios('categories')
+        .then(result => this.items = result.data)
+      },
+      editChild(child){
+       this.child = child
+        this.$emit('child', this.child)
+      },
+      duplicateChild(child){
+        this.child = child
+        this.$emit('child', this.child)
+      },
       showActions (key) {
         if(this.index === key){
           this.show = false

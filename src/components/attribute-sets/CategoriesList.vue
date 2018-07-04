@@ -3,8 +3,8 @@
         <ul class="all-categories">
             <li v-for="category in categories" class="cat-item">
                 <label class="check-container">
-                    <p :class="{'label': true, 'label inactive': category.visibility == 0} ">
-                        {{category.name}}
+                    <p :class="{'label': true, 'label inactive': category.visibility === 0} ">
+                        {{category.name}} <span v-if="category.children">({{category.children.length}})</span>
                     </p>
                     <input type="checkbox" v-model="selectedMainCategories" :value="category.id">
                     <span class="checkmark"></span>
@@ -12,11 +12,13 @@
                 <ul class="category-list">
                     <li class="cat-item" v-for="child in category.children">
                         <label class="check-container">
-                            <p :class="{'label': true, 'label inactive': child.visibility == 0}">{{child.name}}</p>
+                            <p :class="{'label': true, 'label inactive': child.visibility === 0}">{{child.name}}
+                                <span v-if="child.children">({{child.children.length}})</span>
+                            </p>
                             <input type="checkbox" v-model="selectedChildren" :value="child.id">
                             <span class="checkmark"></span>
                         </label>
-                        <drag v-if="child.children" :children="child.children" :child="child"></drag>
+                        <drag v-if="child.children" :children="child.children" :child="child" ></drag>
                     </li>
                 </ul>
 
@@ -26,39 +28,67 @@
 </template>
 
 <script>
-    import drag from './Drag'
+  import drag from './Drag'
+
   export default {
     components: {
       drag,
     },
     name: 'categories-list',
-    props: ['attributeMainCategories', 'attributeChildren'],
+    // props: ['attributeMainCategories', 'attributeChildren'],
     data: () => ({
       categories: [],
-      selectedMainCategories: [],
-      selectedChildren: [],
-      selectedElement: [],
     }),
-
+    computed: {
+      selectedMainCategories: {
+        get: function  () {
+          return this.$store.getters.getAttributeSetMainCategories
+        },
+        set: function (value) {
+          this.$store.commit('setAttributeSetMainCategories', value)
+        }
+      },
+      selectedChildren: {
+        get: function () {
+          return this.$store.getters.getAttributeSetChildrenCategories
+        },
+        set: function (value) {
+          return this.$store.commit('setAttributeSetChildCategories', value)
+        },
+      },
+      selectedSubChildren: function () {
+        return this.$store.getters.getAttributeSetSubChildrenCategories
+      }
+    },
     watch: {
-      selectedMainCategories: function () {
-        this.$emit('mainCategories', this.selectedMainCategories)
+      selectedSubChildren: function () {
+        this.setDefaultCategories()
       },
       selectedChildren: function () {
         this.$emit('children', this.selectedChildren)
       },
-      attributeChildren: function (e) {
-        this.selectedChildren = e
-      }
+      // attributeChildren: function (e) {
+      //   this.selectedChildren = e
+      // },
+    },
+
+    methods: {
+
+      setDefaultCategories () {
+        let categories = this.selectedMainCategories.concat(this.selectedChildren)
+        let allCat = categories.concat(this.selectedSubChildren)
+
+        this.$store.commit('setAttributeSetDefaultCategories', allCat)
+      },
     },
 
     created: function () {
       axios('categories').then(result => {
         this.categories = result.data
       })
-      if (this.attributeMainCategories != null) {
-        this.selectedMainCategories = this.attributeMainCategories
-      }
+    },
+    updated: function () {
+      this.setDefaultCategories()
     },
   }
 
@@ -69,18 +99,23 @@
         width: 50%;
         margin-left: -5px;
     }
+
     .all-categories {
         margin-top: 20px;
     }
+
     .inactive {
         color: #B9B7B9;
     }
+
     .category-list {
         padding-left: 0px;
     }
+
     .cat-item {
         padding-left: 25px;
     }
+
     .check-container {
         display: block;
         position: relative;
@@ -93,15 +128,19 @@
         -ms-user-select: none;
         user-select: none;
     }
+
     .check-container p {
         padding-top: 3px;
     }
+
     .check-container input {
         position: absolute;
         opacity: 0;
         cursor: pointer;
-        margin-top: -35px;
+        left: 5px;
+        top: 5px;
     }
+
     .checkmark {
         position: absolute;
         top: 0;
@@ -110,7 +149,7 @@
         width: 23px;
         background-color: #FFFFFF;
         border: 1px solid #DAD8DA;
-        border-radius: 5px;
+
     }
 
     .check-container:hover input ~ .checkmark {
