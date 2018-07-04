@@ -117,27 +117,28 @@
       //             this.$parent.$data.type = 2
       //           })
 
-      //         }
-      //       })
-      //     },
-      saveCategory () {
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            axios.post('/categories', {
-              name: this.name,
-              visibility: this.visibility,
-              page_title: this.page_title,
-              metaDescription: this.metaDescription,
-              metaKeywords: this.metaKeywords,
-              addressUrl: this.addressUrl,
-              selectedCategory: this.selectedCategory,
-              parent_id: this.parent_id,
-            }).then(() => {
-              this.$router.push('/categories/list')
-              this.$emit('updateList')
-            })
-          }
-        })
+    //         }
+    //       })
+    //     },
+ saveCategory () {
+       this.$validator.validateAll().then((result) => {
+         if (result) {
+           axios.post('/categories', {
+             name: this.name,
+             visibility: this.visibility,
+             page_title: this.page_title,
+             metaDescription: this.metaDescription,
+             metaKeywords: this.metaKeywords,
+             addressUrl: this.addressUrl,
+             selectedCategory: this.selectedCategory,
+             parent_id: this.parent_id,
+           }).then(() => {
+             this.$router.push('/categories/list')
+             this.$emit('updateList')
+           })
+         }
+       })
+     },
       },
     },
     created: function () {

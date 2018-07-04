@@ -11,8 +11,8 @@
                   <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
                     <div class="c-actions__row">
                       <button class="c-actions__item" @click="deleteCategory(item)">Usuń</button>
-                      <router-link :to="'edit/' + item.id" class="c-actions__item">Edytuj</router-link>
-                      <router-link :to="'duplicate/' + item.id" class="c-actions__item">Duplikuj</router-link>
+                      <router-link :to="'list/edit/'+item.id" class="c-actions__item">Edytuj</router-link>
+                      <router-link :to="'list/duplicate/'+item.id" class="c-actions__item">Duplikuj</router-link>
                     </div>
                   </div>
                 </div>
@@ -24,7 +24,9 @@
 
 <script>
   import draggable from 'vuedraggable'
-
+   import AddCategory from './AddCategory'
+  import EditCategory from './EditCategory'
+  import DuplicateCategory from './DuplicateCategory'
   export default {
     name: "drag",
     props: ['children', 'item', 'category'],
@@ -127,9 +129,9 @@
           dismiss => {
           }).catch(this.$swal.noop)
       },
-      editCategory(el) {
-        this.$emit('singleCategory', el)
-      },
+      // editCategory(el) {
+      //   this.$emit('singleCategory', el)
+      // },
       // duplicateCategory(el) {
       //   this.$emit('duplCategory', el)
       // },
@@ -168,7 +170,7 @@
         height: auto;
     }
     .list-group {
-        padding-left: 10px;
+        padding-left: 50px;
     }
 
     .attr-list-item p {
