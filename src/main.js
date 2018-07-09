@@ -21,7 +21,11 @@ import './assets/css/component-styles.css'
 import './assets/css/custom-buttons.css'
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-import Editor from '@tinymce/tinymce-vue';
+import Editor from '@tinymce/tinymce-vue'
+import VueMoment from 'vue-moment'
+import DateTimePicker from "simple-vue2-datetimepicker";
+
+Vue.use(DateTimePicker)
 
 
 Vue.config.productionTip = false
@@ -35,8 +39,11 @@ Vue.component('single-select', singleSelect)
 Vue.use(VueSweetalert2)
 Vue.use(Vuex)
 Vue.use(VModal)
+Vue.use(VueMoment)
+// Vue.use(moment)
 Vue.component('editor', Editor)
 Vue.component('vue2Dropzone', vue2Dropzone)
+
 
 vue2Dropzone.autoDiscover = false;
 

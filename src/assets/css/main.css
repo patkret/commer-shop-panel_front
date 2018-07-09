@@ -226,6 +226,8 @@ a {
 
 .c-form {
   display: block;
+  background-color: #fff;
+  padding: 20px;
 }
 
 .c-form__fieldset {
@@ -879,7 +881,32 @@ a {
 .l-table-filters__left > :not(:first-child), .l-table-filters__right > :not(:first-child) {
   margin-left: -1px;
 }
-
+.border-tags{
+  margin-top: 5px;
+  height: auto;
+  width: 100%;
+  display: block;
+  border-width: 0.5px;
+  border-color:rgb(232, 230, 230);
+  border-style: solid;
+  background-color: #f5f7fa;
+  padding-top: 10px;
+}
+.border-tags table{
+ 
+  display: block;
+}
+.border-tags table td{
+padding-left:50px;
+padding-bottom: 20px;
+font-size: 12px;
+}
+.border-tags table td:first-child{
+  padding-left: 20px
+}
+.border-tags table tr{
+  
+}
 .c-table {
   padding-top: 20px;
   background-color: #fff;
