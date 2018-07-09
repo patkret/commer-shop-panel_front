@@ -59,6 +59,7 @@ import Gallery from '../components/products/Gallery'
 import Drafts from '../components/products/ProductDrafts'
 import ProductsTable from '../components/products/ProductsTable'
 import ProductTickets from '../components/products/ProductTickets'
+import ProductsSeo from '../components/products/ProductsSeo'
 import ImportedProducts from '../components/products/ImportedProducts'
 import AddVatRate from '../components/vat-rates/AddVatRate'
 import StockForm from '../components/stock/StockForm'
@@ -235,6 +236,11 @@ export default new Router({
               path: 'descriptions',
               name: 'Descriptions',
               component: Descriptions,
+            },
+            {
+              path: 'seo',
+              name: 'ProductsSeo',
+              component:ProductsSeo,
             },
             {
               path: 'attribute-sets',

@@ -47,6 +47,10 @@
                     </ul>
                 </section>
 
+                <div class="c-nav__toggle js-nav-toggle">
+                  <span class="c-nav__toggle-button"></span>
+                </div>
+
             </div>
 
         </header>
@@ -122,7 +126,7 @@
             </div>
 
         </main>
-    
+
     </div>
 
     <!--<div id="main">-->

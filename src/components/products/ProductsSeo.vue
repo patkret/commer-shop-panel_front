@@ -1,26 +1,20 @@
 <template>
-    <div class="product-form-container">
-        <form class="product-form" @submit.prevent="saveProduct()">
-            <div class="form-row">
-                <label class="form-label">Meta description</label>
-                <div class="input-container">
-                    <input v-model="product.metaDescription" class="form-input " type="text" name="metaDescription">
+    <div class="l-wrapper">
+        <div style="width: 50%;">
+                <div class="c-form__fieldset">
+                    <custom-input label="META Description" rules="" v-model="product.meta_description"
+                                  min-input-length="3"></custom-input>
+                </div>
+                <div class="c-form__fieldset">
+                    <custom-input label="META Keywords" rules="" v-model="product.meta_keywords"
+                                  min-input-length="3"></custom-input>
+                </div>
+                <div class="c-form__fieldset">
+                    <custom-input label="URL" rules="" v-model="product.url"
+                                  min-input-length="3"></custom-input>
                 </div>
 
-            </div>
-            <div class="form-row">
-                <label class="form-label">Meta Keywords</label>
-                <div class="input-container">
-                    <input v-model="product.metaKeywords" class="form-input" type="text" name="metaKeywords">
-                </div>
-            </div>
-            <div class="form-row">
-                <label class="form-label">Url</label>
-                <div class="input-container">
-                    <input v-model="product.addressUrl" class="form-input " type="text" name="addressUrl">
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
 </template>
 
@@ -32,20 +26,13 @@
         return this.$store.getters.getProduct;
       },
     },
-    beforeDestroy: function () {
-      this.$validator.validateAll().then((result) => {
-        if (result) {
-          this.$store.commit('addProduct', this.product)
-        }
-      })
-    },
-    data() {
-      return {
-        metaDescription: '',
-        metaKeywords: '',
-        addressUrl: '',
-      }
-    },
+    // data() {
+    //   return {
+    //     metaDescription: '',
+    //     metaKeywords: '',
+    //     addressUrl: '',
+    //   }
+    // },
   }
 </script>
 
