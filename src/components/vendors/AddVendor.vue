@@ -108,7 +108,7 @@
       },
     },
     created(){
-      console.log(env)
+     // console.log(env)
     }
   }
 

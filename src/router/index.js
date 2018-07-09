@@ -66,13 +66,21 @@ import StockForm from '../components/stock/StockForm'
 import StockList from '../components/stock/StockList'
 import addToStock from '../components/stock/addToStock'
 import StockItems from '../components/stock/StockItems'
+import AddPage from '../components/static-pages/AddPage'
+import EditPage from '../components/static-pages/EditPage'
+import PagesList from '../components/static-pages/PagesList'
+import Pages from '../components/static-pages/Pages'
+import Emails from '../components/emails/Emails'
+import AddEmail from '../components/emails/AddEmail'
+import EditEmail from '../components/emails/EditEmail'
+import EmailsList from '../components/emails/EmailsList'
 import variantSets from '../components/products/variantSets'
 import relatedProductsList from '../components/products/relatedProductsList'
 import relatedProducts from '../components/products/relatedProducts'
 import productDetails from '../components/products/productDetails'
-
-
-
+import descriptionTemplates from '../components/description-templates/descriptionTemplates'
+import descriptionTemplatesList from '../components/description-templates/descriptionTemplatesList'
+import descriptionTemplateForm from '../components/description-templates/descriptionTemplateForm'
 
 Vue.use(Router)
 
@@ -302,6 +310,11 @@ export default new Router({
               component: variantSets,
             },
             {
+              path: 'seo',
+              name: 'ProductsSeo',
+              component:ProductsSeo,
+            },
+            {
               path: 'gallery',
               name: 'GalleryEdit',
               component: Gallery,
@@ -453,10 +466,111 @@ export default new Router({
           ]
         },
         {
+          path: '/static-pages',
+          name: 'Pages',
+          component: Pages,
+          children: [
+            {
+              path: 'add',
+              name: 'AddPage',
+              component: AddPage,
+            },
+            {
+              path: 'list',
+              name: 'PagesList',
+              component: PagesList,
+            },
+            {
+              path: 'edit/:item',
+              name: 'EditPage',
+              component: EditPage,
+            }
+          ]
+        },
+        {
+        path: '/emails',
+          name: 'Emails',
+          component: Emails,
+          children: [
+            {
+              path: 'add',
+              name: 'AddEmail',
+              component: AddEmail,
+            },
+            {
+              path: 'list',
+              name: 'EmailsList',
+              component: EmailsList,
+            },
+            {
+              path: 'edit/:item',
+              name: 'EditEmail',
+              component: EditEmail,
+            }
+          ]
+        },
+        {
           path: '/users',
           name: 'Users',
           component: Users,
         },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {
+          path: '/description-templates',
+          name: 'descriptionTemplates',
+          component: descriptionTemplates,
+          children: [
+            {
+              path: 'list',
+              name: 'descriptionTemplatesList',
+              component: descriptionTemplatesList,
+            },
+            {
+              path: 'add',
+              name: 'descriptionTemplateForm',
+              component: descriptionTemplateForm,
+            },
+            {
+              path: 'edit/:id',
+              name: 'descriptionTemplateFormEdit',
+              component: descriptionTemplateForm,
+            },
+          ]
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {
           path: '/permission',
           name: 'permissionList',

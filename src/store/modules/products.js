@@ -30,6 +30,7 @@ const state = {
     weight_unit: '',
     mainCategory: {},
     related_products: [],
+    description_template: ''
   },
 
   stocks: [],
