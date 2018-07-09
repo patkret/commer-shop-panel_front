@@ -243,10 +243,10 @@
                                         </span>
                         <div :class="{'c-actions js-actions': true, 'c-actions js-actions is-active': index === key}">
                             <div class="c-actions__row">
-                                <a href="" class="c-actions__item" @click="deleteProduct(product)">Usuń</a>
+                                <a href="" class="c-actions__item" @click.prevent="deleteProduct(product, key)">Usuń</a>
                                 <router-link :to="`/product-edit/${product.id}/main-info`" class="c-actions__item">Edytuj</router-link>
                                 <a href="" class="c-actions__item">Duplikuj</a>
-                                <a href="" class="c-actions__item">Szczegóły</a>
+                                <router-link :to="`product-details/${product.id}`" class="c-actions__item">Szczegóły</router-link>
                             </div>
                         </div>
                     </td>
@@ -666,7 +666,7 @@
         }
 
       },
-      deleteProduct (item) {
+      deleteProduct (item, index) {
         this.$swal({
           title: 'Czy chcesz usunąć produkt',
           text: 'Ta akcja nieodwracalnie usunie produkt',
@@ -678,8 +678,8 @@
           confirmButtonText: 'Usuń',
         }).then((result) => {
             if (result.value) {
-              let itemIndex = this.items.map(x => x.id).indexOf(item.id)
-              this.items.splice(itemIndex, 1)
+              // let itemIndex = this.items.map(x => x.id).indexOf(item.id)
+              this.items.splice(index, 1)
               axios.delete('products/' + item.id).then(
                 result => {
                   console.log(result)
@@ -846,7 +846,7 @@
       },
       changePage (page) {
         if (page > this.last_page) {
-          page = this.last_page
+          this.current_page = this.last_page
         }
         else {
           this.current_page = page

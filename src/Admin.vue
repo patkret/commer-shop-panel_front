@@ -220,8 +220,8 @@
           {
             icon: icons.orders, text: 'Sprzedaż', path: '', children:
               [
-                {text: 'Lista sprzedaży', path: '/'},
-                {text: 'Dodaj zamówienie', path: '/order-add'},
+                {text: 'Lista sprzedaży', path: '/orders/list'},
+                {text: 'Dodaj zamówienie', path: '/order-add/client-info'},
                 {text: 'Bilety', path: '/'},
                 {text: 'Porzucone koszyki', path: '/'},
               ],

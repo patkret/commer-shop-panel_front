@@ -14,6 +14,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import { store } from './store/store'
 import customInput from './components/custom-input'
+import customTextarea from './components/custom-textarea'
 import singleSelect from './components/singleSelect'
 import VModal from 'vue-js-modal'
 import './assets/css/main.css'
@@ -35,6 +36,7 @@ Vue.use(VeeValidate)
 Vue.use(multiselectStyle)
 Vue.component('multiselect', Multiselect)
 Vue.component('custom-input', customInput)
+Vue.component('custom-textarea', customTextarea)
 Vue.component('single-select', singleSelect)
 Vue.use(VueSweetalert2)
 Vue.use(Vuex)
@@ -86,7 +88,8 @@ const dictionary = {
       numeric: () => 'Pole może zawierać tylko cyfry ',
       max_value: () => 'Podaj odpowiednią wartość',
       confirmed: () => 'Hasła muszą być takie same',
-      decimal: () => 'Podaj odpowiednią cenę np. 100 lub 100.25'
+      decimal: () => 'Podaj odpowiednią cenę np. 100 lub 100.25',
+      email: () => 'Podaj odpowiedni adres e-mail'
     },
   },
 }
@@ -98,7 +101,8 @@ const validator = new Validator({
   numeric: 'numeric',
   max_value: 'max_value',
   confirmed: 'confirmed',
-  decimal: 'decimal'
+  decimal: 'decimal',
+  email: 'email'
 })
 
 validator.localize('pl')

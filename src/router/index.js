@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './../Login'
+import Login from '../Login'
+import LoginForm from '../loginForm'
+import LoginPassword from '../loginPassword'
+import resetPassword from '../resetPassword'
 import Admin from './../Admin'
 import Dashboard from '../components/dashboard/Dashboard'
 import buttons from '../components/buttons'
@@ -33,7 +36,13 @@ import VendorsList from '../components/vendors/VendorsList'
 import EditVendor from '../components/vendors/EditVendor'
 import Users from '../components/users/Users'
 import Stock from '../components/stock/Stock'
+import Orders from '../components/orders/Orders'
 import OrdersList from '../components/orders/OrdersList'
+import clientInfo from '../components/orders/clientInfo'
+import paymentDetails from '../components/orders/paymentDetails'
+import shippingDetails from '../components/orders/shippingDetails'
+import presale from '../components/orders/presale'
+import tickets from '../components/orders/tickets'
 import AddOrder from '../components/orders/AddOrder'
 import Integrations from '../components/integrations/Integrations'
 import permissionList from '../components/users/permissionList'
@@ -64,6 +73,10 @@ import Emails from '../components/emails/Emails'
 import AddEmail from '../components/emails/AddEmail'
 import EditEmail from '../components/emails/EditEmail'
 import EmailsList from '../components/emails/EmailsList'
+import variantSets from '../components/products/variantSets'
+import relatedProductsList from '../components/products/relatedProductsList'
+import relatedProducts from '../components/products/relatedProducts'
+import productDetails from '../components/products/productDetails'
 
 Vue.use(Router)
 
@@ -74,6 +87,23 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login,
+      children: [
+        {
+        path: '',
+        name: 'LoginForm',
+        component: LoginForm,
+        },
+        {
+          path: 'forgot-password',
+          name: 'LoginPassword',
+          component: LoginPassword,
+        },
+      ],
+    },
+    {
+      path: '/user/:id/reset-password',
+      name: 'resetPassword',
+      component: resetPassword,
     },
     {
       path: '/select',
@@ -177,7 +207,7 @@ export default new Router({
                   component: AddCategory,
                 },
                 {
-                  path: 'duplicate',
+                  path: 'duplicate/:id',
                   name: 'DuplicateCategory',
                   component: DuplicateCategory,
                 },
@@ -217,9 +247,24 @@ export default new Router({
               component: attributeSets,
             },
             {
+              path: 'variant-sets',
+              name: 'variantSets',
+              component: variantSets,
+            },
+            {
               path: 'gallery',
               name: 'Gallery',
               component: Gallery,
+            },
+            {
+              path: 'related-products',
+              name: 'relatedProducts',
+              component: relatedProducts,
+            },
+            {
+              path: 'select-related-products',
+              name: 'relatedProductsList',
+              component: relatedProductsList,
             },
 
           ]
@@ -251,9 +296,24 @@ export default new Router({
               component: attributeSets,
             },
             {
+              path: 'variant-sets',
+              name: 'variantSetsEdit',
+              component: variantSets,
+            },
+            {
               path: 'gallery',
               name: 'GalleryEdit',
               component: Gallery,
+            },
+            {
+              path: 'related-products',
+              name: 'relatedProductsEdit',
+              component: relatedProducts,
+            },
+            {
+              path: 'select-related-products',
+              name: 'relatedProductsListEdit',
+              component: relatedProductsList,
             },
 
           ]
@@ -282,6 +342,11 @@ export default new Router({
               path: 'imported',
               name: 'ImportedProducts',
               component: ImportedProducts,
+            },
+            {
+              path: 'product-details/:id',
+              name: 'productDetails',
+              component: productDetails,
             },
           ]
         },
@@ -480,13 +545,47 @@ export default new Router({
         },
         {
           path: '/orders',
-          name: 'OrdersList',
-          component: OrdersList,
+          name: 'Orders',
+          component: Orders,
+          children: [
+            {
+              path: 'list',
+              name: 'OrdersList',
+              component: OrdersList,
+            },
+            {
+              path: 'presale',
+              name: 'presale',
+              component: presale,
+            },
+            {
+              path: 'tickets',
+              name: 'tickets',
+              component: tickets,
+            },
+          ]
         },
         {
           path: '/order-add',
           name: 'AddOrder',
           component: AddOrder,
+          children: [
+            {
+              path: 'client-info',
+              name: 'clientInfo',
+              component: clientInfo,
+            },
+            {
+              path: 'payment-details',
+              name: 'paymentDetails',
+              component: paymentDetails,
+            },
+            {
+              path: 'shipping-details',
+              name: 'shippingDetails',
+              component: shippingDetails,
+            },
+          ]
         },
         {
           path: '/integrations',
