@@ -227,8 +227,10 @@
               this.tempProduct.attributeSets = JSON.stringify(this.tempProduct.attributeSets)
               this.tempProduct.variantSets = JSON.stringify(this.tempProduct.variantSets)
               this.tempProduct.relatedProducts = this.relatedProductsIds
-
-              // console.log(this.tempProduct)
+              if(this.product.description_template){
+                this.tempProduct.description_template_id = this.product.description_template.id
+              }
+                console.log(this.tempProduct)
               axios.post('/products', {
                 product: this.tempProduct,
               }).then(() => {
@@ -275,7 +277,7 @@
 
     },
     created: function () {
-
+console.log(this.product)
     },
   }
 </script>

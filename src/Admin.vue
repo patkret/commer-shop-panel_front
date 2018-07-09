@@ -47,6 +47,10 @@
                     </ul>
                 </section>
 
+                <div class="c-nav__toggle js-nav-toggle">
+                  <span class="c-nav__toggle-button"></span>
+                </div>
+
             </div>
 
         </header>
@@ -122,7 +126,7 @@
             </div>
 
         </main>
-    
+
     </div>
 
     <!--<div id="main">-->
@@ -243,7 +247,7 @@
                 {text: 'Producenci', path: '/vendors/list'},
                 {text: 'Zestawy wariantów', path: '/variants/list'},
                 {text: 'Stawki VAT', path: '/vat-rates/list'},
-                {text: 'Szablony opisów', path: '/'},
+                {text: 'Szablony opisów', path: '/description-templates/list'},
                 {text: 'Magazyn', path: '/stock/list'},
               ],
           },
@@ -258,7 +262,8 @@
           {
             icon: icons.marketing, text: 'Marketing', path: '', children:
               [
-                {text: 'Strony informacyjne', path: '/'},
+                {text: 'Strony informacyjne', path: '/static-pages/list'},
+                {text: 'Mailingi', path: '/emails/list'},
                 {text: 'Banery', path: '/'},
                 {text: 'Rabaty', path: '/'},
                 {text: 'Kody rabatowe', path: '/'},
