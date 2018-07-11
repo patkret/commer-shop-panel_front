@@ -4,12 +4,12 @@
 
             <div class="c-breadcrumb">
                         <span class="c-breadcrumb__item">
-                            Administratorzy
+                            Klienci
                         </span>
             </div>
             <div class="main-header__button" >
                 <router-link to="/users/add" class="c-form__button c-button" v-if="$route.path !== '/users/add'">
-                    <span>Dodaj administratora</span>
+                    <span>Dodaj klienta</span>
                 </router-link>
                 <router-link to="/users/list" class="c-form__button c-button" v-if="$route.path !== '/users/list'">
                     <span>Powrót</span>
@@ -25,21 +25,12 @@
 </template>
 
 <script>
-  import AddUser from './AddUser'
-//   import EditUser from './EditUser'
-  import UsersList from './UsersList'
-//   import DuplicateUser from './DuplicateUser'
-//   import ChangePassword from './changePassword'
-
   export default {
     name: "users",
   
     data: () => {
       return {
-          item: ''
-        // type: 2,
-        // users: '',
-        // userId: ''
+ 
       }
     },
     methods: {
@@ -47,10 +38,6 @@
     }
   }
 </script>
+<style>
 
-<style scoped>
-    .active{
-        background-color: #F4F4F9;
-        border-radius: 5px;
-    }
 </style>

@@ -139,7 +139,6 @@
          }
        })
      },
-      },
     },
     created: function () {
       axios('all-categories').then(result => {

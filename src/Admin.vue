@@ -292,7 +292,7 @@
                 {text: 'Płatności', path: ''},
                 {text: 'Domena', path: ''},
                 {text: 'SMTP', path: ''},
-                {text: 'Administratorzy', path: '/users'},
+                {text: 'Administratorzy', path: '/users/list'},
                 {text: 'Edycja zaawansowana', path: '/logs'},
               ],
           },

@@ -1,29 +1,80 @@
 <template>
-    <div class="container.">
-        <ul class="users-container">
-            <li v-for="(item, key) in items" :class="{'attr-list-item': true, 'attr-list-item active': index === key}">
+  <div>
+    <div class="l-table-filters">
+      <div class="l-table-filters__left">
+        <div class="c-dropdown js-dropdown">
+          <span class="c-dropdown__name">
+            Wybierz działanie
+            <span class="c-arrow-down"></span>
+          </span>
 
-                <p> {{item.id}}. {{item.first_name + ' ' + item.last_name}}  </p>
-
-
-                <div class="buttons-container">
-                    <button @click="showActions(key)" :class="{'more-button': true, 'more-button active': show === true && index === key}">
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                    </button>
-                    <div class="arrow-left"  v-if="index === key && show === true">
-                        <div class="action-buttons">
-                            <button @click="deleteUser(item)" class="delete">Usuń</button>
-                            <button @click="editUser(item,key)" class="edit">Edytuj</button>
-                            <button @click="duplicateUser(item,key)">Duplikuj</button>
-                        </div>
-                    </div>
-                </div>
+          <ul class="c-dropdown__menu">
+            <li class="c-dropdown__menu-item">
+              <a href="">
+                Cena
+                <span class="c-arrow-down"></span>
+              </a>
             </li>
-        </ul>
+            <li class="c-dropdown__menu-item is-active">
+              <a href="">
+                Kto przygotował
+                <span class="c-arrow-down"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
 
+      <div class="l-table-filters__right">
+      </div>
     </div>
+
+    <div class="c-table">
+      <table>
+        <thead>
+          <tr>
+            <th>
+              <input type="checkbox">
+            </th>
+            <th>Nazwa administratora</th>
+            <th>E-mail</th>
+            <th>Numer telefonu</th>
+            <th>Data dodania</th>
+            <th>Akcja</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, key) in items">
+            <td data-th="Wybierz">
+              <input type="checkbox">
+            </td>
+            <td data-th="Nazwa">{{item.first_name}} {{item.last_name}}</td>
+            <td data-th="E-mail">{{item.email}}</td>
+            <td data-th="Telefon">{{item.phone_no}}</td>
+            <td data-th="data">{{item.created_at}}</td>
+            <td data-th="Akcja" class="h-relative">
+              <span class="c-actions-button js-actions-button" @click="showActions(key)">
+                <i></i>
+              </span>
+              <div :class="{'c-actions js-actions': true , 'c-actions js-actions is-active': index === key}">
+                <div class="c-actions__row">
+                  <button class="c-actions__item" @click="deleteUser(item)">Usuń</button>
+                  <router-link :to="'edit/' + item.id" class="c-actions__item" tag="button">Edytuj</router-link>
+                  <router-link :to="'duplicate' + item.id" class="c-actions__item" tag="button">Duplikuj</router-link>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <div class="c-pagination">
+      </div>
+    </div>
+  </div>
+
+
 </template>
 
 <script>
@@ -51,12 +102,12 @@
           }
         },
 
-      editUser (item) {
-        this.$emit('singleUser', item)
-      },
-      duplicateUser (item) {
-        this.$emit('duplUser', item)
-      },
+    //   editUser (item) {
+    //     this.$emit('singleUser', item)
+    //   },
+    //   duplicateUser (item) {
+    //     this.$emit('duplUser', item)
+    //   },
       deleteUser (item) {
         this.$swal({
           title: 'Czy chcesz usunąć użytkownika?',

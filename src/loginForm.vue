@@ -6,7 +6,7 @@
                     <custom-input class="" :label="'E-mail'" v-model="user.email" rules="required" min-input-length="4" />
                 </div>
                 <div class="login-form-row">
-                    <custom-input :label="'Password'" v-model="user.password" rules="required" min-input-length="4" />
+                    <custom-input :label="'Password'" v-model="user.password" rules="required" min-input-length="4" type="password" />
                 </div>
                 <div class="login-form-row">
                     <router-link :to="{name: 'LoginPassword'}">

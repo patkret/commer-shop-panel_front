@@ -1,45 +1,58 @@
 <template>
-        <form action="" @submit.prevent="updateUser">
-            <div class="info" v-if="showInfoEdit == true">
-                <p>Użytkownik został zedytowany!</p>
+  <div>
+    <div class="l-wrapper f-center">
+      <!-- tutaj trzeba zrobić kolumny -->
+      <div style="width: 100%;" class="f-content">
+        <form action="" class="c-form" @submit.prevent="updateUser()">
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Imię'" rules="required"  v-model="user.first_name" />
             </div>
-            <div class="form-row">
-                <label class="form-label col-1">Imię</label>
-                <div class="form-data col-2">
-                    <input  v-model="editingUser.first_name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('first_name') }" class="form-input " type="text" name="first_name">
-                    <span v-show="errors.has('first_name')" class="help is-danger">{{ errors.first('name') }}</span>
-                </div>
+          </div>
+           <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Nazwisko'" rules="required" v-model="user.last_name" />
             </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Email'" rules="required||email" v-model="user.email" />
+            </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Numer telefonu'" rules="required||numeric"  v-model="user.phone_no" />
+            </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input  :label="'Hasło'" rules="required"  min-input-length="4" v-model="user.password" />
+            </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input  :label="'Powtórz hasło'" rules="required||confirmed:pasword" type="password" min-input-length="4" v-model="user.passwordConfirmation" />
+            </div>
+          </div>
+          <div class="c-form__fieldset" v-if="showMessage">
+            <div class="err-info" >
+              <span>{{errorMessage}}</span>
+            </div>
+          </div>
 
-            <div class="form-row">
-                <label class="form-label col-1">Nazwisko</label>
-                <div class="form-data col-2">
-                    <input  v-model="editingUser.last_name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('last_name') }" class="form-input " type="text" name="last_name">
-                    <span v-show="errors.has('last_name')" class="help is-danger">{{ errors.first('last_name') }}</span>
-                </div>
-            </div>
+          <div class="h-center">
+            <button type="submit" class="c-button c-form__button">
+              <span>Zapisz</span>
+            </button>
+          </div>
 
-            <div class="form-row">
-                <label class="form-label col-1">Email</label>
-                <div class="form-data col-2">
-                    <input  v-model="editingUser.email" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('email') }" class="form-input " type="text" name="email">
-                    <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
-                </div>
-            </div>
-            <div class="form-row">
-                <label class="form-label col-1">Nr tel.</label>
-                <div class="form-data col-2">
-                    <input  v-model="editingUser.phone_no" v-validate="'required|numeric'" :class="{'input': true, 'is-danger input-border': errors.has('phone_no') }" class="form-input " type="text" name="phone_no">
-                    <span v-show="errors.has('phone_no')" class="help is-danger">{{ errors.first('phone_no') }}</span>
-                </div>
-            </div>
-
-
-            <div class="form-row  col-2 button-row ">
-                <button type="submit" class="custom-button">Edytuj</button>
-                <div @click="changePassword" class="custom-button showPass">Zmień hasło</div>
-            </div>
         </form>
+
+      </div>
+    </div>
+
+  </div>
+
 </template>
 
 <script>
@@ -47,98 +60,60 @@
 
   export default {
     name: "edit-user",
-    props: ['user'],
     data: () => {
       return {
-        editingUser: {
-          first_name: '',
-          last_name: '',
-          email: '',
-          phone_no: '',
+        user: {
+            first_name: '',
+            last_name: '',
+            email: '',
+            phone_no: '',
+            // password: '',
+            // confirmPassword: '',
         },
-        showInfoEdit: false,
-        showChangePassword: false
+        showMessage: '',
+        // showInfoEdit: false,
+        // showChangePassword: false
       }
     },
-    watch: {
-      showInfoEdit: function () {
-        setTimeout(() => {
-          this.showInfoEdit = false
-          this.$parent.$data.type = 2
-        }, 3000)
-      },
-    },
+    // watch: {
+    //   showInfoEdit: function () {
+    //     setTimeout(() => {
+    //       this.showInfoEdit = false
+    //       this.$parent.$data.type = 2
+    //     }, 3000)
+    //   },
+    // },
     methods: {
+         fetchUser () {
+        axios.get('users/' + this.$route.params.item).then(result => {
+          this.user = result.data
+        })
+      },
       updateUser() {
         delete this.user.password
         this.$validator.validateAll().then((result) => {
           if (result) {
-            axios.put('users/' + this.editingUser.id , {
-              editedUser: this.editingUser,
-            });
-            this.showInfoEdit = true
-            setTimeout(() => {
-              this.$parent.$data.type = 2
-            }, 1500)
+            axios.put('users/' + this.user.id , {
+              editedUser: this.user,
+            }).then(() => {
+             this.$router.push('./list')
+            })
           }
-        })
+        });
       },
 
-      changePassword(){
-        this.$parent.$data.type = 5
-        this.$emit('currUserId', this.editingUser.id)
-      }
+    //   changePassword(){
+    //     this.$parent.$data.type = 5
+    //     this.$emit('currUserId', this.editingUser.id)
+    //   }
     },
     created: function () {
-      this.editingUser = this.user;
-      axios('users')
-        .then(result => {
-          this.items = result.data
-        });
-
+        this.fetchUser();
     }
   }
 </script>
 
 <style scoped>
-    .form-row {
-        display: grid;
-        margin: 20px 0;
-        grid-template-areas: 'col-1 col-2';
-        grid-template-columns: 130px 520px;
-    }
-    .col-1 {
-        grid-area: col-1;
-    }
-    .col-2 {
-        grid-area: col-2;
-    }
-    .form-label {
-        font-weight: 700;
-        margin-top: 10px;
-        margin-right: 15px;
-        font-size: 12px;
-        text-align: right;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
-    .form-input {
-        background-color: #ffffff;
-        margin-left: 10px;
-        margin-right: 10px;
-        border-radius: 5px;
-        height: 35px;
-        line-height: 35px;
-        padding-left: 10px;
-        border:none;
-        font-size: 12px;
-        font-weight: 700;
-        width: 100%;
-    }
-    .form-data {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-    }
     .input-border {
         border: 2px solid red;
         border-bottom-left-radius: 0;

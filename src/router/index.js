@@ -34,6 +34,9 @@ import AddVendor from '../components/vendors/AddVendor'
 import VendorsList from '../components/vendors/VendorsList'
 import EditVendor from '../components/vendors/EditVendor'
 import Users from '../components/users/Users'
+import AddUser from '../components/users/AddUser'
+import UsersList from '../components/users/UsersList'
+import EditUser from '../components/users/EditUser'
 import Stock from '../components/stock/Stock'
 import OrdersList from '../components/orders/OrdersList'
 import AddOrder from '../components/orders/AddOrder'
@@ -398,6 +401,23 @@ export default new Router({
           path: '/users',
           name: 'Users',
           component: Users,
+          children: [
+            {
+              path: 'add',
+              name: 'AddUser',
+              component: AddUser,
+            },
+            {
+              path: 'list',
+              name: 'UsersList',
+              component: UsersList,
+            },
+            {
+              path: 'edit/:item',
+              name: 'EditUser',
+              component: EditUser
+            }
+          ]
         },
         {
           path: '/permission',
