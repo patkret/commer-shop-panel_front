@@ -95,22 +95,20 @@
         }, 7000)
       },
       saveVendor() {
-        this.vendor.logo = this.$refs.vendorDrop.getQueuedFiles()
-        console.log(this.vendor)
-        // this.$validator.validateAll().then((result) => {
-        //   if (result) {
-        //     axios.post('/vendors', {
-        //       vendor: this.vendor
-        //     }).then(() => {
-        //
-        //       this.$router.push('/vendors/list')
-        //     })
-        //   }
-        // });
+        this.vendor.logo = this.$refs.vendorDrop.getQueuedFiles()[0]
+        this.$validator.validateAll().then((result) => {
+          if (result) {
+            axios.post('/vendors', {
+              vendor: this.vendor
+            }).then(() => {
+              this.$router.push('/vendors/list')
+            })
+          }
+        });
       },
     },
     created(){
-      console.log(env)
+     // console.log(env)
     }
   }
 

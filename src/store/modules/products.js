@@ -4,6 +4,7 @@ const state = {
   product: {
     name: '',
     price: '',
+    wholesale_price: '',
     vat_rate: '',
     symbol: '',
     visibility: 1,
@@ -20,14 +21,16 @@ const state = {
     height: '',
     width: '',
     depth: '',
-    metaDescription: '',
-    metaKeywords: '',
-    addressUrl: '',
+    meta_description: '',
+    meta_keywords: '',
+    url: '',
     selectedVariantSet: '',
     variantSets: [],
     warehouse_id: '',
     weight_unit: '',
     mainCategory: {},
+    related_products: [],
+    description_template: ''
   },
 
   stocks: [],
@@ -36,27 +39,17 @@ const state = {
   categories: [],
   attributeSets: [],
   selectedAttributeSets: [],
-  //
-  // sets: [],
-  //   variantSets: [],
-  //   selectedSet: '',
-  //   selectedVariants: [],
-  //   otherVariants: [],
-  //   selectedVariantSet: '',
-  //   selectedRate: '',
-  //   selectedVendor: '',
-  //   selectedStock: '',
-  //   selectedCategories: [],
-  //   selectedMainCategory: '',
-  //   test: [],
-
+  variantSets: [],
+  selectedVariantSet: '',
+  selectedVariants: [],
+  selectedProducts: [],
+  selectedProductsIds: [],
 }
 
 const getters = {
   getProduct: state => {
     return state.product
   },
-
   getVatRates: state => {
     return state.vatRates
   },
@@ -75,34 +68,21 @@ const getters = {
   getselectedAttributeSets: state => {
     return state.selectedAttributeSets
   },
-  //     getProductAttributeSets: state => {
-  //   return state.product.attributeSets
-  // },
-  //   sets: state => state.sets,
-  //   variantSets: state => state.variantSets,
-  //   selectedVariantSet: state => {
-  //   return state.variantSets.find(
-  //     el => el.id === state.product.selectedVariantSet)
-  // },
-  //   selectedVariants: state => state.product.variantSets,
-  //   otherVariants: state => state.otherVariants,
-  //   getNotSelectedSets: state => {
-  //   state.sets.forEach(item => {
-  //     state.product.attributeSets.forEach(el => {
-  //       if (item.id === el.id) {
-  //         let index = state.sets.indexOf(item)
-  //         state.sets.splice(index, 1)
-  //       }
-  //     })
-  //   })
-  //   return state.sets
-  // },
-  //   getVendor: state => state.selectedVendor,
-  //   getVatRate: state => state.selectedRate,
-  //   getStock: state => state.selectedStock,
-  //   getCategory: state => state.selectedCategories,
-  //   getMainCategory: state => state.selectedMainCategory,
-
+  getVariantSets: state => {
+    return state.variantSets
+  },
+  getSelectedVariantSet: state => {
+    return state.selectedVariantSet
+  },
+  getSelectedVariants: state => {
+    return state.selectedVariants
+  },
+  getSelectedProducts: state => {
+    return state.product.related_products
+  },
+  getSelectedProductsIds: state => {
+    return state.selectedProductsIds
+  },
 }
 
 const mutations = {
@@ -127,56 +107,25 @@ const mutations = {
   setProduct: (state, product) => {
     state.product = product
   },
+  setVariantSets: (state, variantSets) => {
+    state.variantSets = variantSets
+  },
+  setSelectedVariantSet: (state, variantSet) => {
+    state.selectedVariantSet = variantSet
+  },
+  addRequiredVariants: (state, variant) => {
+    state.selectedVariants.push(variant)
+  },
+  setSelectedVariants: (state, variants) => {
+    state.selectedVariants = variants
+  },
+  setSelectedProducts: (state, products) => {
+    state.product.related_products = products
+  },
+  setSelectedProductsIds: (state, ids) => {
+    state.selectedProductsIds = ids
+  },
 
-  // addProduct: (state, payload) => {
-  //   state.product = payload
-  // },
-  //
-  //   saveProductAttributes: (state, payload) => {
-  //   state.product.attributeSets = payload
-  // },
-  //
-  //   getSets: (state, payload) => {
-  //   state.sets = payload
-  // },
-  //
-  //   getVariantSets: (state, payload) => {
-  //   state.variantSets = payload
-  // },
-  //
-  //   selectedVariantSet: (state, payload) => {
-  //   state.selectedSet = payload
-  //   if (payload.length !== 0) {
-  //     if (state.product.variantSets.length === 0) {
-  //       console.log('if')
-  //       let req = payload.variants.filter(
-  //         variant => {return variant.required === 1 })
-  //       let other = payload.variants.filter(
-  //         variant => {return variant.required === false })
-  //       state.product.variantSets = req
-  //       state.otherVariants = other
-  //       state.product.selectedVariantSet = payload.id
-  //
-  //     }
-  //     else {
-  //       console.log('else')
-  //       state.product.selectedVariantSet = payload.id
-  //       // let other = payload.variants.filter(variant => {return variant.required === false })
-  //       // state.otherVariants = other
-  //       // state.otherVariants = payload.variants.filter(el => !state.product.variantSets.includes(el))
-  //     }
-  //   }
-  //
-  // },
-  //
-  //   setSelectedVariants: (state, payload) => {
-  //   state.product.variantSets = payload
-  // },
-  //
-  //   setOtherVariants: (state, payload) => {
-  //   state.otherVariants = payload
-  // },
-  //
   clearProduct: state => {
     state.product = {
       name: '',
@@ -207,41 +156,17 @@ const mutations = {
       mainCategory: {},
     }
   },
-  //
-  //   clearSelectedVariants: state => {
-  //   state.selectedVariants = []
-  // },
-  //
-  //   clearSets: state => {
-  //   state.sets = []
-  // },
-  //   clearOtherSets: state => {
-  //   state.otherVariants = []
-  // },
-  //   saveVatRate: (state, payload) => {
-  //   state.selectedRate = payload
-  //   state.product.vat_rate = payload.id
-  // },
-  //   saveVendor: (state, payload) => {
-  //   state.selectedVendor = payload
-  //   state.product.vendor = payload.id
-  // },
-  //   saveCategories: (state, payload) => {
-  //   state.selectedCategories = payload
-  //   state.product.category = payload.id
-  // },
-  //   saveStock: (state, payload) => {
-  //   state.selectedStock = payload
-  //   state.product.stock = payload.id
-  // },
-  //   saveMainCategory: (state, payload) => {
-  //   state.selectedMainCategory = payload
-  //   state.product.main_category = payload.id
-  // },
-  //   getAttrSets: (state, payload) => {
-  //   state.test = payload
-  // },
-
+  clearState: state => {
+    state.stocks = []
+    state.vatRates = []
+    state.vendors = []
+    state.categories = []
+    state.attributeSets = []
+    state.selectedAttributeSets = []
+    state.variantSets = []
+    state.selectedVariantSet = ''
+    state.selectedVariants = []
+  },
 }
 
 const actions = {
@@ -271,67 +196,68 @@ const actions = {
     })
   },
   fetchProduct: ({commit}, id) => {
-    axios(`products/${id}`).then(response => commit('setProduct', response.data),
+    axios(`products/${id}`).then(response => {
+
+        response.data.attributeSets = JSON.parse(response.data.attributeSets)
+        response.data.variantSets = JSON.parse(response.data.variantSets)
+        commit('setProduct', response.data)
+        if(!!response.data.variantSets){
+          let selectedVariants = response.data.variantSets.selectedVariants
+          axios(`variant-groups`).then(result => {
+            //find selected variantSet
+            let variantSet = result.data.find(
+              item => item.id === response.data.variantSets.id)
+            variantSet.variants = JSON.parse(variantSet.variants)
+
+            //remove duplicate variants
+            variantSet.variants.forEach(el => {
+              selectedVariants.forEach(item => {
+                if (item.name === el.name) {
+                  let index = variantSet.variants.indexOf(el)
+                  variantSet.variants.splice(index, 1)
+                }
+              })
+            })
+            variantSet.variants = variantSet.variants.concat(selectedVariants)
+            commit('setSelectedVariantSet', variantSet)
+          })
+          commit('setSelectedVariants', response.data.variantSets.selectedVariants)
+        }
+        if(!!response.data.attributeSets){
+          axios(`categories/${response.data.main_category.id}/attribute-sets`).then(res => {
+
+            res.data.attribute_sets.forEach(item => {
+              item.attributes = JSON.parse(item.attributes)
+
+              response.data.attributeSets.map(el => {
+                if(el.id === item.id){
+                  let indexOfSet = res.data.attribute_sets.indexOf(item)
+                  res.data.attribute_sets.splice(indexOfSet, 1)
+                }
+              })
+            })
+
+
+
+
+            res.data.attribute_sets = res.data.attribute_sets.concat(response.data.attributeSets)
+            commit('setAttributeSets', res.data.attribute_sets)
+          })
+          commit('setSelectedAttributeSets', response.data.attributeSets)
+        }
+
+      // console.log(response.data.attributeSets)
+      },
     )
   },
-  //
-  // getProduct: (context, payload) => {
-  //   axios('products/' + payload).then(result => {
-  //       result.data.attributeSets = JSON.parse(result.data.attributeSets)
-  //       result.data.variantSets = JSON.parse(result.data.variantSets)
-  //
-  //       axios('vendors').then(response => {
-  //         let ven = response.data.find(el => el.id === result.data.vendor)
-  //         context.commit('saveVendor', ven)
-  //       })
-  //       axios('vat-rates').then(response => {
-  //         let rate = response.data.find(el => el.id === result.data.vat_rate)
-  //         context.commit('saveVatRate', rate)
-  //       })
-  //       axios('all-categories').then(response => {
-  //         let main_cat = response.data.find(
-  //           el => el.id === result.data.main_category)
-  //         context.commit('saveMainCategory', main_cat)
-  //       })
-  //       axios('warehouses').then(response => {
-  //         let stoc = response.data.find(el => el.id === result.data.stock)
-  //         context.commit('saveStock', stoc)
-  //       })
-  //       context.commit('addProduct', result.data)
-  //     },
-  //   )
-  // },
-  //
-  //   getSets: context => {
-  //
-  //   axios('attribute-sets').then(result => {
-  //     let sets = result.data
-  //     for (let set of sets) {
-  //       set.attributes = JSON.parse(set.attributes)
-  //     }
-  //     context.commit('getSets', sets)
-  //   })
-  // },
-  //
-  //   getAttributeSets: (context, state) => {
-  //
-  //   axios('attribute-sets-categories/' + state.product.main_category).
-  //     then(result => {
-  //
-  //         context.commit('getAttrSets', result.data)
-  //       },
-  //     )
-  // },
-  //
-  //   getVariantSets: context => {
-  //   axios('variant-groups').then(result => {
-  //     let variantSets = result.data
-  //     for (let set of variantSets) {
-  //       set.variants = JSON.parse(set.variants)
-  //     }
-  //     context.commit('getVariantSets', result.data)
-  //   })
-  // },
+  fetchVariantSets: ({commit}) => {
+    axios(`variant-groups`).then(response => {
+      response.data.forEach(el => {
+        el.variants = JSON.parse(el.variants)
+      })
+      commit('setVariantSets', response.data)
+    })
+  },
 }
 
 export default {

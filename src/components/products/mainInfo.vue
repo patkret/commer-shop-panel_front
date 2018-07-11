@@ -1,215 +1,12 @@
 <template>
-    <!--<div class="product-form-container">-->
-    <!--<form class="product-form" @submit.prevent="saveProduct()">-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Nazwa produktu-->
-    <!--</label>-->
-    <!--<div class="input-container">-->
-    <!--<div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('name')}">-->
-    <!--<input type="text" v-validate="'required'"-->
-    <!--placeholder="Nazwa..." name="name" v-model="product.name">-->
-    <!--</div>-->
-    <!--<span v-show="errors.has('name')" class="validator-help">{{ errors.first('name') }}</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Aktywność-->
-    <!--</label>-->
-    <!--<div class="input-container" style="width: 30%">-->
-    <!--<div class="checkbox-square form-group">-->
-    <!--<input type="checkbox" id="attr-visibility" class="visibility-hidden"-->
-    <!--v-model="product.visibility">-->
-    <!--<label for="attr-visibility" class="square"></label>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Magazyn-->
-    <!--</label>-->
-    <!--<div class="input-container" style="justify-self: start">-->
-    <!--<multiselect-->
-    <!--class="shop-select product-select"-->
-    <!--v-model="selectedStock"-->
-    <!--:options="stocks"-->
-    <!--:allow-empty="false"-->
-    <!--:searchable="false"-->
-    <!--:selectedLabel="''"-->
-    <!--track-by="name"-->
-    <!--label="name"-->
-    <!--:deselectLabel="''"-->
-    <!--:selectLabel="''"-->
-    <!--:hideSelected="true"-->
-    <!--placeholder="Wybierz"/>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Stan dostępności-->
-    <!--</label>-->
-    <!--<div class="input-container" style="width: 30%">-->
-    <!--<div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('stockAvail')}">-->
-    <!--<input type="text" v-validate="'required|numeric'"-->
-    <!--placeholder="..." name="stockAvail" v-model="product.stockAvail">-->
-    <!--</div>-->
-    <!--<span v-show="errors.has('stockAvail')"-->
-    <!--class="validator-help">{{ errors.first('stockAvail') }}</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Kod kreskowy-->
-    <!--</label>-->
-    <!--<div class="input-container" style="width: 30%">-->
-    <!--<div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('barcode')}">-->
-    <!--<input type="text" v-validate="'required'"-->
-    <!--placeholder="Kod..." name="barcode" v-model="product.barcode">-->
-    <!--</div>-->
-    <!--<span v-show="errors.has('barcode')" class="validator-help">{{ errors.first('barcode') }}</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Cena-->
-    <!--</label>-->
-    <!--<div class="input-container" style="width: 30%">-->
-    <!--<div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('price')}">-->
-    <!--<input type="text" v-validate="'required'"-->
-    <!--placeholder="Cena..." name="price" v-model="product.price">-->
-    <!--</div>-->
-    <!--<p>zł</p>-->
-    <!--<span v-show="errors.has('price')" class="validator-help">{{ errors.first('price') }}</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Stawka VAT-->
-    <!--</label>-->
-    <!--<div class="input-container" style="justify-self: start">-->
-    <!--<multiselect-->
-    <!--class="shop-select product-select"-->
-    <!--v-model="selectedRate"-->
-    <!--:options="vat_rates"-->
-    <!--:allow-empty="false"-->
-    <!--:searchable="false"-->
-    <!--:selectedLabel="''"-->
-    <!--track-by="name"-->
-    <!--label="name"-->
-    <!--id="ms-1"-->
-    <!--:custom-label="nameWithRate"-->
-    <!--:deselectLabel="''"-->
-    <!--:selectLabel="''"-->
-    <!--:hideSelected="true"-->
-    <!--placeholder="Wybierz"/>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--SKU-->
-    <!--</label>-->
-    <!--<div class="input-container" style="width: 30%">-->
-    <!--<div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('symbol')}">-->
-    <!--<input type="text" v-validate="'required'"-->
-    <!--placeholder="Kod..." name="symbol" v-model="product.symbol">-->
-    <!--</div>-->
-    <!--<span v-show="errors.has('symbol')" class="validator-help">{{ errors.first('symbol') }}</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--PKWiU-->
-    <!--</label>-->
-    <!--<div class="input-container" style="width: 30%">-->
-    <!--<div :class="{'custom-input': true,  'custom-input inpt-border': errors.has('pkwiuCode')}">-->
-    <!--<input type="text" v-validate="'required'"-->
-    <!--placeholder="..." name="pkwiuCode" v-model="product.pkwiuCode">-->
-    <!--</div>-->
-    <!--<span v-show="errors.has('pkwiuCode')" class="validator-help">{{ errors.first('pkwiuCode') }}</span>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Producent-->
-    <!--</label>-->
-    <!--<div class="input-container" style="justify-self: start">-->
-    <!--<multiselect-->
-    <!--class="shop-select product-select"-->
-    <!--v-model="selectedVendor"-->
-    <!--:options="vendors"-->
-    <!--:allow-empty="false"-->
-    <!--:searchable="false"-->
-    <!--:selectedLabel="''"-->
-    <!--track-by="name"-->
-    <!--label="name"-->
-    <!--:deselectLabel="''"-->
-    <!--:selectLabel="''"-->
-    <!--:hideSelected="true"-->
-    <!--placeholder="Wybierz"/>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Kategoria główna-->
-    <!--</label>-->
-    <!--<div class="input-container" style="justify-self: start">-->
-    <!--<multiselect-->
-    <!--class="shop-select product-categories-select"-->
-    <!--v-model="selectedMainCategory"-->
-    <!--:options="options"-->
-    <!--:multiple="false"-->
-    <!--:close-on-select="true"-->
-    <!--:clear-on-select="false"-->
-    <!--:hide-selected="true"-->
-    <!--label="name"-->
-    <!--track-by="name"-->
-    <!--:selectLabel="''"-->
-    <!--:deselectLabel="''"-->
-    <!--placeholder="Wybierz"-->
-    <!--&gt;-->
-    <!--</multiselect>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-    <!--<label class="form-label">-->
-    <!--Kategorie-->
-    <!--</label>-->
-    <!--<div class="input-container" style="justify-self: start">-->
-    <!--<multiselect-->
-    <!--class="shop-select product-categories-select"-->
-    <!--v-model="selectedCategories"-->
-    <!--:options="options"-->
-    <!--:multiple="true"-->
-    <!--:close-on-select="false"-->
-    <!--:clear-on-select="false"-->
-    <!--:hide-selected="true"-->
-    <!--label="name"-->
-    <!--track-by="name"-->
-    <!--:selectLabel="''"-->
-    <!--:deselectLabel="''"-->
-    <!--placeholder="Wybierz"-->
-    <!--&gt;-->
-
-    <!--<template slot="tag" slot-scope="props">-->
-    <!--<span class="custom__tag">-->
-    <!--&lt;!&ndash;<span>{{ props.option.name }}</span>&ndash;&gt;-->
-    <!--&lt;!&ndash;<span class="custom__remove" @click="props.remove(props.option)">❌</span>&ndash;&gt;-->
-    <!--<span @click="props.remove(props.option)"> {{ props.option.name }} ❌</span>-->
-
-    <!--</span>-->
-    <!--</template>-->
-    <!--</multiselect>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<br>-->
-    <!--<br>-->
-    <!--<button type="submit" class="custom-button">Zapisz</button>-->
-    <!--</form>-->
-    <!--</div>-->
     <div class="l-wrapper">
+        <transition name="fade">
+            <div class="err-info" v-if="errorInfo">
+                <p v-for="message in messages" v-show="message.show">{{message.text}}</p>
+            </div>
+        </transition>
         <div style="width: 50%;">
-            <form action="" class="c-form">
+            <form class="c-form" @submit.prevent="saveProduct">
 
                 <div class="c-form__fieldset">
                     <custom-input label="Nazwa produktu" rules="required" v-model="product.name"
@@ -253,8 +50,10 @@
                     <custom-input label="Cena sprzedaży BRUTTO" v-model="grossPrice" rules="decimal:2"></custom-input>
                 </div>
                 <div class="c-form__fieldset prices__row">
-                    <custom-input label="Cena hurtowa NETTO" v-model="wholesaleGrossPrice" rules="decimal:2"></custom-input>
-                    <custom-input label="Cena hurtowa BRUTTO" v-model="wholesaleNetPrice" rules="decimal:2"></custom-input>
+                    <custom-input label="Cena hurtowa NETTO" v-model="product.wholesale_price"
+                                  rules="decimal:2"></custom-input>
+                    <custom-input label="Cena hurtowa BRUTTO" v-model="wholesaleGrossPrice"
+                                  rules="decimal:2"></custom-input>
                 </div>
                 <div class="h-center">
                     <button type="submit" class="c-button c-form__button">
@@ -274,49 +73,8 @@
       product: function () {
         return this.$store.getters.getProduct
       },
-      // selectedVendor: {
-      //   get: function () {
-      //     return this.$store.getters.getVendor
-      //   },
-      //   set: function (value) {
-      //     this.$store.commit('saveVendor', value)
-      //   },
-      // },
-      // selectedRate: {
-      //   get: function () {
-      //     return this.$store.getters.getVatRate
-      //   },
-      //   set: function (value) {
-      //     this.$store.commit('saveVatRate', value)
-      //   },
-      // },
-      // selectedCategories: {
-      //   get: function () {
-      //     return this.$store.getters.getCategory
-      //   },
-      //   set: function (value) {
-      //     this.$store.commit('saveCategories', value)
-      //   },
-      // },
-      // selectedStock: {
-      //   get: function () {
-      //     return this.$store.getters.getStock
-      //   },
-      //   set: function (value) {
-      //     this.$store.commit('saveStock', value)
-      //   },
-      // },
-      // selectedMainCategory: {
-      //   get: function () {
-      //     return this.$store.getters.getMainCategory
-      //   },
-      //   set: function (value) {
-      //     this.$store.commit('saveMainCategory', value)
-      //   },
-      // },
-
-      price () {
-        return this.product.price
+      relatedProductsIds () {
+        return this.$store.getters.getSelectedProductsIds
       },
       vatRates () {
         return this.$store.getters.getVatRates
@@ -332,66 +90,71 @@
       },
     },
     data: () => ({
-      // vat_rates: [],
-      // vendors: [],
       options: [],
-      // stocks: [],
-      // categories: [],
-      toggleMultiselect: false,
-      toggleVendor: false,
-      toggleCategory: false,
-      showOptions: false,
-      toggleRate: false,
       grossPrice: '',
       wholesaleGrossPrice: '',
-      wholesaleNetPrice: '',
+      // wholesaleNetPrice: '',
       warningInfo: false,
+      errorInfo: false,
+      tempProduct: {},
+      messages: [
+        {
+          show: false,
+          text: 'Wybierz kategorię główną!',
+        },
+        {
+          show: false,
+          text: 'Wybierz stawkę VAT!',
+        },
+        {
+          show: false,
+          text: 'Wybierz magazyn!',
+        },
+        {
+          show: false,
+          text: 'Wybierz producenta!',
+        },
+      ],
     }),
 
     watch: {
-      selectedRate: function (value) {
-        this.product.vat_rate = value.id
-      },
-      selectedVendor: function (value) {
-        this.product.vendor = value.id
-      },
-      selectedCategories: function (value) {
-        value = value.map(el => {return el.id })
-        this.categories = value
-      },
-      selectedStock: function (value) {
-        this.product.stock = value.id
-      },
-      main_category: function (value) {
-        this.product.main_category = value.id
-      },
       'product.vat_rate': function () {
+        // console.log(this.tempProduct.vat_rate)
         if (this.product.price > 0 && this.grossPrice > 0) {
-          console.log('obie')
+          console.log('obie wypełnione')
           this.countGrossPrice(this.product.price)
+
         }
-        else if(this.product.price > 0){
+        else if (this.product.price > 0) {
+          console.log('1')
           this.countGrossPrice(this.product.price)
-          console.log('licz brutto')
+
         }
-        else{
-          console.log('licz netto')
+        else if (this.product.price == 0) {
+          console.log('2')
+          this.grossPrice = ''
+        }
+        else {
+          console.log('3')
           this.countNetPrice(this.grossPrice)
         }
       },
       'product.price': function (price) {
-
-        if(this.checkIfVatRateSelected()){
+        if (this.checkIfVatRateSelected()) {
+          console.log('licze brutto')
           this.countGrossPrice(price)
         }
-
       },
       grossPrice: function (price) {
-        console.log(typeof(price))
-        if(this.checkIfVatRateSelected()){
+
+        if (this.checkIfVatRateSelected()) {
           this.countNetPrice(price)
         }
       },
+
+      'product.main_category'(category){
+        this.$store.dispatch('fetchAttributeSets', category.id)
+      }
     },
 
     methods: {
@@ -411,52 +174,110 @@
       },
 
       countNetPrice (price) {
-        this.$store.state.products.product.price = this.roundPrice(price / ( 1 + (this.product.vat_rate.rate / 100)))
+        // console.log(typeof this.roundPrice(price / (1 + (this.product.vat_rate.rate / 100))))
+        this.$store.state.products.product.price = this.roundPrice(price / (1 + (this.product.vat_rate.rate / 100)))
       },
 
-      countGrossPrice(price){
+      countGrossPrice (price) {
+        // console.log(typeof this.roundPrice(price * (1 + (this.product.vat_rate.rate / 100))))
         this.grossPrice = this.roundPrice(price * (1 + (this.product.vat_rate.rate / 100)))
       },
+      setVariantSetValues () {
+        this.tempProduct.variantSets = this.$store.state.products.selectedVariantSet
+        if (!!this.tempProduct.variantSets) {
+          this.tempProduct.variantSets.selectedVariants = this.$store.state.products.selectedVariants
+        }
+      },
+      setAttributeSets () {
+        this.tempProduct.attributeSets = this.$store.state.products.selectedAttributeSets
+      },
+      validateSelects () {
 
-      saveProduct () {
+        this.messages[0].show = this.product.main_category ? false : true
+        this.messages[1].show = this.product.vat_rate ? false : true
+        this.messages[2].show = this.product.stock ? false : true
+        this.messages[3].show = this.product.vendor ? false : true
+        this.showErrorInfo()
+      },
+      showErrorInfo () {
+        // console.log(this.messages.find(el => el.show == true))
+        if (this.messages.find(el => el.show == true)) {
+          this.errorInfo = true
+          setTimeout(() => {
+            this.errorInfo = false
+          }, 3000)
+        }
+      },
+
+      async saveProduct () {
+
+        this.tempProduct = JSON.parse(JSON.stringify(this.product));
+        this.setVariantSetValues()
+        this.setAttributeSets()
+        this.validateSelects()
+
         this.$validator.validateAll().then((result) => {
-          if (result) {
-            this.product.attributeSets = JSON.stringify(this.product.attributeSets)
-            this.product.variantSets = JSON.stringify(this.product.variantSets)
-            if (this.product.id > 0) {
-              axios.put('/products/' + this.product.id, {
-                product: this.product,
-                categories: this.categories,
-              }).then(() => {
-                this.$router.push('/products')
-                this.$store.commit('clearProduct')
-                this.$store.commit('clearSets')
-                this.$store.state.selectedRate = ''
-                this.$store.state.selectedVendor = ''
-                this.$store.state.selectedStock = ''
-              })
-            } else {
+          if (result && this.errorInfo === false) {
 
+            if(!!this.product.barcode){
+              this.tempProduct.main_category = this.product.main_category.id
+              this.tempProduct.vendor = this.product.vendor.id
+              this.tempProduct.vat_rate = this.product.vat_rate.id
+              this.tempProduct.stock = this.product.stock.id
+              this.tempProduct.attributeSets = JSON.stringify(this.tempProduct.attributeSets)
+              this.tempProduct.variantSets = JSON.stringify(this.tempProduct.variantSets)
+              this.tempProduct.relatedProducts = this.relatedProductsIds
+              if(this.product.description_template){
+                this.tempProduct.description_template_id = this.product.description_template.id
+              }
+                console.log(this.tempProduct)
               axios.post('/products', {
-                product: this.product,
-                categories: this.categories,
+                product: this.tempProduct,
               }).then(() => {
-                this.$router.push('/products')
+                this.$router.push('/products/list')
                 this.$store.commit('clearProduct')
-                this.$store.commit('clearSets')
-                this.$store.state.selectedRate = ''
-                this.$store.state.selectedVendor = ''
-                this.$store.state.selectedStock = ''
+                this.$store.commit('clearState')
               })
             }
+
+            else{
+              this.$parent.currentRoute = 'additional-info'
+              this.$router.replace('additional-info')
+              let fieldError = {
+                  field: "'Kod kreskowy'",
+                  msg: "Pole wymagane",
+                  rule: "required" // optional
+              }
+              this.$validator.errors.add(fieldError)
+              // this.$validator.validateAll().then(() => {
+              //
+              // })
+              console.log(this.$validator)
+            }
+
+
+            // if (this.product.id > 0) {
+            //   axios.put('/products/' + this.product.id, {
+            //     product: this.product,
+            //     categories: this.categories,
+            //   }).then(() => {
+            //     this.$router.push('/products')
+            //     this.$store.commit('clearProduct')
+            //     this.$store.commit('clearSets')
+            //     this.$store.state.selectedRate = ''
+            //     this.$store.state.selectedVendor = ''
+            //     this.$store.state.selectedStock = ''
+            //   })
+            // } else {
+            //
 
           }
         })
       },
 
     },
-
     created: function () {
+console.log(this.product)
     },
   }
 </script>
@@ -479,5 +300,24 @@
         height: 45px;
         font-size: 0.8rem;
         padding-left: 25px;
+    }
+
+    .err-info {
+        position: absolute;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        top: 100px;
+        left: 350px;
+        width: 79vw;
+        background-color: red;
+        color: #ffffff;
+        padding: 20px;
+        border-radius: 3px;
+    }
+
+    .err-info p {
+        padding: 5px 0;
     }
 </style>

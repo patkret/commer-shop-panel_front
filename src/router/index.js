@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './../Login'
-import LoginForm from './../LoginForm'
-import LoginPassword from './../LoginPassword'
+import Login from '../Login'
+import LoginForm from '../loginForm'
+import LoginPassword from '../loginPassword'
+import resetPassword from '../resetPassword'
 import Admin from './../Admin'
 import Dashboard from '../components/dashboard/Dashboard'
 import buttons from '../components/buttons'
@@ -38,7 +39,13 @@ import AddUser from '../components/users/AddUser'
 import UsersList from '../components/users/UsersList'
 import EditUser from '../components/users/EditUser'
 import Stock from '../components/stock/Stock'
+import Orders from '../components/orders/Orders'
 import OrdersList from '../components/orders/OrdersList'
+import clientInfo from '../components/orders/clientInfo'
+import paymentDetails from '../components/orders/paymentDetails'
+import shippingDetails from '../components/orders/shippingDetails'
+import presale from '../components/orders/presale'
+import tickets from '../components/orders/tickets'
 import AddOrder from '../components/orders/AddOrder'
 import Integrations from '../components/integrations/Integrations'
 import permissionList from '../components/users/permissionList'
@@ -55,14 +62,28 @@ import Gallery from '../components/products/Gallery'
 import Drafts from '../components/products/ProductDrafts'
 import ProductsTable from '../components/products/ProductsTable'
 import ProductTickets from '../components/products/ProductTickets'
+import ProductsSeo from '../components/products/ProductsSeo'
 import ImportedProducts from '../components/products/ImportedProducts'
 import AddVatRate from '../components/vat-rates/AddVatRate'
 import StockForm from '../components/stock/StockForm'
 import StockList from '../components/stock/StockList'
 import addToStock from '../components/stock/addToStock'
 import StockItems from '../components/stock/StockItems'
-
-
+import AddPage from '../components/static-pages/AddPage'
+import EditPage from '../components/static-pages/EditPage'
+import PagesList from '../components/static-pages/PagesList'
+import Pages from '../components/static-pages/Pages'
+import Emails from '../components/emails/Emails'
+import AddEmail from '../components/emails/AddEmail'
+import EditEmail from '../components/emails/EditEmail'
+import EmailsList from '../components/emails/EmailsList'
+import variantSets from '../components/products/variantSets'
+import relatedProductsList from '../components/products/relatedProductsList'
+import relatedProducts from '../components/products/relatedProducts'
+import productDetails from '../components/products/productDetails'
+import descriptionTemplates from '../components/description-templates/descriptionTemplates'
+import descriptionTemplatesList from '../components/description-templates/descriptionTemplatesList'
+import descriptionTemplateForm from '../components/description-templates/descriptionTemplateForm'
 
 Vue.use(Router)
 
@@ -77,14 +98,19 @@ export default new Router({
         {
         path: '',
         name: 'LoginForm',
-        component: LoginForm
+        component: LoginForm,
         },
         {
           path: 'forgot-password',
           name: 'LoginPassword',
           component: LoginPassword,
-        }
-      ]
+        },
+      ],
+    },
+    {
+      path: '/user/:id/reset-password',
+      name: 'resetPassword',
+      component: resetPassword,
     },
     {
       path: '/select',
@@ -223,14 +249,34 @@ export default new Router({
               component: Descriptions,
             },
             {
+              path: 'seo',
+              name: 'ProductsSeo',
+              component:ProductsSeo,
+            },
+            {
               path: 'attribute-sets',
               name: 'attributeSets',
               component: attributeSets,
             },
             {
+              path: 'variant-sets',
+              name: 'variantSets',
+              component: variantSets,
+            },
+            {
               path: 'gallery',
               name: 'Gallery',
               component: Gallery,
+            },
+            {
+              path: 'related-products',
+              name: 'relatedProducts',
+              component: relatedProducts,
+            },
+            {
+              path: 'select-related-products',
+              name: 'relatedProductsList',
+              component: relatedProductsList,
             },
 
           ]
@@ -262,9 +308,29 @@ export default new Router({
               component: attributeSets,
             },
             {
+              path: 'variant-sets',
+              name: 'variantSetsEdit',
+              component: variantSets,
+            },
+            {
+              path: 'seo',
+              name: 'ProductsSeo',
+              component:ProductsSeo,
+            },
+            {
               path: 'gallery',
               name: 'GalleryEdit',
               component: Gallery,
+            },
+            {
+              path: 'related-products',
+              name: 'relatedProductsEdit',
+              component: relatedProducts,
+            },
+            {
+              path: 'select-related-products',
+              name: 'relatedProductsListEdit',
+              component: relatedProductsList,
             },
 
           ]
@@ -293,6 +359,11 @@ export default new Router({
               path: 'imported',
               name: 'ImportedProducts',
               component: ImportedProducts,
+            },
+            {
+              path: 'product-details/:id',
+              name: 'productDetails',
+              component: productDetails,
             },
           ]
         },
@@ -398,6 +469,50 @@ export default new Router({
           ]
         },
         {
+          path: '/static-pages',
+          name: 'Pages',
+          component: Pages,
+          children: [
+            {
+              path: 'add',
+              name: 'AddPage',
+              component: AddPage,
+            },
+            {
+              path: 'list',
+              name: 'PagesList',
+              component: PagesList,
+            },
+            {
+              path: 'edit/:item',
+              name: 'EditPage',
+              component: EditPage,
+            }
+          ]
+        },
+        {
+        path: '/emails',
+          name: 'Emails',
+          component: Emails,
+          children: [
+            {
+              path: 'add',
+              name: 'AddEmail',
+              component: AddEmail,
+            },
+            {
+              path: 'list',
+              name: 'EmailsList',
+              component: EmailsList,
+            },
+            {
+              path: 'edit/:item',
+              name: 'EditEmail',
+              component: EditEmail,
+            }
+          ]
+        },
+        {
           path: '/users',
           name: 'Users',
           component: Users,
@@ -419,6 +534,63 @@ export default new Router({
             }
           ]
         },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {
+          path: '/description-templates',
+          name: 'descriptionTemplates',
+          component: descriptionTemplates,
+          children: [
+            {
+              path: 'list',
+              name: 'descriptionTemplatesList',
+              component: descriptionTemplatesList,
+            },
+            {
+              path: 'add',
+              name: 'descriptionTemplateForm',
+              component: descriptionTemplateForm,
+            },
+            {
+              path: 'edit/:id',
+              name: 'descriptionTemplateFormEdit',
+              component: descriptionTemplateForm,
+            },
+          ]
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {
           path: '/permission',
           name: 'permissionList',
@@ -464,13 +636,47 @@ export default new Router({
         },
         {
           path: '/orders',
-          name: 'OrdersList',
-          component: OrdersList,
+          name: 'Orders',
+          component: Orders,
+          children: [
+            {
+              path: 'list',
+              name: 'OrdersList',
+              component: OrdersList,
+            },
+            {
+              path: 'presale',
+              name: 'presale',
+              component: presale,
+            },
+            {
+              path: 'tickets',
+              name: 'tickets',
+              component: tickets,
+            },
+          ]
         },
         {
           path: '/order-add',
           name: 'AddOrder',
           component: AddOrder,
+          children: [
+            {
+              path: 'client-info',
+              name: 'clientInfo',
+              component: clientInfo,
+            },
+            {
+              path: 'payment-details',
+              name: 'paymentDetails',
+              component: paymentDetails,
+            },
+            {
+              path: 'shipping-details',
+              name: 'shippingDetails',
+              component: shippingDetails,
+            },
+          ]
         },
         {
           path: '/integrations',

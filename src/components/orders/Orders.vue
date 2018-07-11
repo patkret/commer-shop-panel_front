@@ -3,7 +3,7 @@
         <header class="l-main__header">
             <div class="c-breadcrumb">
                 <span class="c-breadcrumb__item">
-                    <a href="">Dodaj zamówienie</a>
+                    <a href="">Lista zamówień</a>
                 </span>
             </div>
 
@@ -21,34 +21,25 @@
             <router-view></router-view>
         </section>
     </main>
-
 </template>
 
 <script>
   export default {
-    name: 'add-order',
+    name: 'orders',
     data: () => ({
       currentRoute: '',
       items: [
-        {name: 'Dane klienta', path: 'client-info'},
-        {name: 'Dane do płatności', path: 'payment-details'},
-        {name: 'Dane do wysyłki', path: 'shipping-details'},
-        {name: 'Wyszukaj produkty', path: 'seo'},
-        {name: 'Dodane produkty', path: 'gallery'},
+        {name: 'Wszystkie zamówienia', path: 'list'},
+        {name: 'Przedsprzedaż', path: 'presale'},
+        {name: 'Opisy', path: 'tickets'},
       ],
     }),
-    methods: {
-      fetchClients(){
-        this.$store.dispatch('fetchClients')
-      }
-    },
     created() {
-      this.currentRoute = 'client-info'
-      this.fetchClients()
+      this.currentRoute = 'list'
     }
+
   }
 </script>
 
 <style scoped>
-
 </style>

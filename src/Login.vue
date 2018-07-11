@@ -31,8 +31,8 @@
 
 <script>
   import icon from './assets/icons.js'
-  import LoginForm from './LoginForm'
-  import LoginPassword from './LoginPassword'
+  import LoginForm from './loginForm'
+  import LoginPassword from './loginPassword'
   export default {
       components: {
           LoginForm,

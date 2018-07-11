@@ -139,7 +139,7 @@
          }
        })
      },
-    },
+      },
     created: function () {
       axios('all-categories').then(result => {
         this.items = result.data

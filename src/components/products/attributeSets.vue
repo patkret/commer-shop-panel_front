@@ -3,15 +3,15 @@
         <div class="items__info" v-if="!$store.state.products.product.main_category">
             <span>WYBIERZ KATEGORIĘ GŁÓWNĄ DLA PRODUKTU</span>
         </div>
-        <div :class="{'items-list__item': true, 'item-active': selectedAttributeSets.includes(set.id)}" v-for="set in attributeSets">
+        <div :class="{'items-list__item': true, 'item-active': selectedAttributeSets.includes(set)}" v-for="set in attributeSets">
             <div class="c-form__checkbox">
-                <input type="checkbox" :id="set.id" :value="set.id" @change="toggleItem(set.id)" :checked="selectedAttributeSets.includes(set.id)">
+                <input type="checkbox" :id="set.id" :value="set" v-model="selectedAttributeSets" :checked="selectedAttributeSets.includes(set.id)">
                 <label :for="set.id">
                     <span>{{set.name}}</span>
                 </label>
             </div>
             <div class="line"></div>
-            <div class="item__content" v-if="selectedAttributeSets.includes(set.id)">
+            <div class="item__content" v-if="selectedAttributeSets.includes(set)">
                 <div class="attributes-container">
                     <div class="single-attribute" v-for="attribute in set.attributes">
                         <span>{{attribute.name}}</span>
@@ -23,7 +23,6 @@
                                 <input type="checkbox" v-model="attribute.checked">
                                 <span class="checkmark"></span>
                             </label>
-                            <!--<input type="checkbox" v-model="attribute.checked" >-->
                         </div>
                         <div class="" v-if="attribute.type.type === 2">
                             <select  v-model="attribute.defaultValue" class="attribute__select">
@@ -61,9 +60,6 @@
         }
       }
     },
-    data: () => ({
-      // selectedAttributeSets: []
-    }),
 
     methods: {
       fetchAttributeSets() {
@@ -71,26 +67,26 @@
           this.$store.dispatch('fetchAttributeSets', this.$store.state.products.product.main_category.id)
         }
       },
-      toggleItem(id){
-        if(this.selectedAttributeSets.includes(id)){
-          let index = this.selectedAttributeSets.indexOf(id)
-          this.selectedAttributeSets.splice(index, 1)
-        }
-        else{
-          this.selectedAttributeSets.push(id)
-        }
-      },
-      removeFromSets (set) {
-        this.selectedSets.push(set)
-        // let index = this.sets.indexOf(set)
-        // this.sets.splice(index, 1)
-
-      },
-      addToSets (item) {
-        this.sets.unshift(item)
-        let index = this.selectedSets.indexOf(item)
-        this.selectedSets.splice(index, 1)
-      },
+      // toggleItem(id){
+      //   if(this.selectedAttributeSets.includes(id)){
+      //     let index = this.selectedAttributeSets.indexOf(id)
+      //     this.selectedAttributeSets.splice(index, 1)
+      //   }
+      //   else{
+      //     this.selectedAttributeSets.push(id)
+      //   }
+      // },
+      // removeFromSets (set) {
+      //   this.selectedSets.push(set)
+      //   // let index = this.sets.indexOf(set)
+      //   // this.sets.splice(index, 1)
+      //
+      // },
+      // addToSets (item) {
+      //   this.sets.unshift(item)
+      //   let index = this.selectedSets.indexOf(item)
+      //   this.selectedSets.splice(index, 1)
+      // },
     },
 
     created: function () {

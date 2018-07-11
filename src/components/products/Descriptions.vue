@@ -12,7 +12,7 @@
                 </div>
                 <div class="description__row">
                     <label>Dodaj szablon</label>
-                    <single-select label="Szablon" options=""></single-select>
+                    <single-select placeholder="Szablon" :options="options" v-model="product.description_template"></single-select>
                 </div>
             </form>
         </div>
@@ -27,11 +27,24 @@
     components: {
       'editor': editor,
     },
+    data: () => ({
+      options: []
+    }),
     computed: {
       product: function () {
         return this.$store.getters.getProduct
       },
     },
+    methods: {
+      fetchTemplates() {
+        axios('description-templates').then(result => {
+          this.options = result.data
+        })
+      }
+    },
+    created() {
+      this.fetchTemplates();
+    }
   }
 </script>
 
