@@ -4,6 +4,7 @@ import attributeSets from './modules/attributeSets'
 import products from './modules/products'
 import variantSets from './modules/variantSets'
 import orders from './modules/orders'
+import clients from './modules/clients'
 
 Vue.use(Vuex)
 
@@ -12,7 +13,8 @@ export const store = new Vuex.Store({
     attributeSets,
     products,
     variantSets,
-    orders
+    orders,
+    clients
   }
 
 })
