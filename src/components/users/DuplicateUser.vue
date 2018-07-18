@@ -1,5 +1,4 @@
-<template>
-    <form action="" @submit.prevent="duplicateUser">
+ <!-- <form action="" @submit.prevent="duplicateUser">
         <div class="info" v-if="showInfoEdit == true">
             <p>Użytkownik został zduplikowany!</p>
         </div>
@@ -67,21 +66,75 @@
         <div class="form-row  col-2 button-row ">
             <button type="submit" class="custom-button">Duplikuj</button>
         </div>
-    </form>
+    </form> -->
+<template>
+  <div>
+    <div class="l-wrapper f-center">
+      <!-- tutaj trzeba zrobić kolumny -->
+      <div style="width: 100%;" class="f-content">
+        <form action="" class="c-form" @submit.prevent="duplicateUser()">
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Imię'" rules="required"  v-model="duplicatingUser.first_name" />
+            </div>
+          </div>
+           <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Nazwisko'" rules="required" v-model="duplicatingUser.last_name" />
+            </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Email'" rules="required||email" v-model="duplicatingUser.email" />
+            </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Numer telefonu'" rules="required||numeric"  v-model="duplicatingUser.phone_no" />
+            </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <password-input label="Nowe haslo" rules="required" min-inpt-length="4" v-model="duplicatingUser.password"></password-input>
+            </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <password-input label="Powtórz haslo" rules="required" min-inpt-length="4" v-model="duplicatingUser.passwordConfirmation"></password-input>
+            </div>
+          </div>
+          <div class="c-form__fieldset" v-if="showMessage">
+            <div class="err-info" >
+              <span>{{errorMessage}}</span>
+            </div>
+          </div>
+
+          <div class="h-center">
+            <button type="submit" class="c-button c-form__button">
+              <span>Zapisz</span>
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+
 </template>
 
 <script>
 
   export default {
     name: 'duplicate-user',
-    props: ['user'],
     data: () => {
       return {
         duplicatingUser: {
-          first_name: '',
-          last_name: '',
-          email: '',
-          password: '',
+          // first_name: '',
+          // last_name: '',
+          // email: '',
+          // password: '',
         },
         showInfoEdit: false,
         errorInfo: false,
@@ -96,6 +149,13 @@
       },
     },
     methods: {
+
+        fetchUser () {
+        axios.get('users/' + this.$route.params.item).then(result => {
+          this.duplicatingUser = result.data
+        })
+        },
+
       duplicateUser () {
 
         this.$validator.validateAll().then((result) => {
@@ -104,7 +164,7 @@
               duplicatingUser: this.duplicatingUser,
             }).then(response => {
               if (response.status === 200) {
-                this.$parent.$data.type = 2
+                this.$router.push('/users/list')
               }
               else {
                 this.errorInfo = true
@@ -121,100 +181,14 @@
     },
 
     created: function () {
-      axios('users').then(result => {
-        this.items = result.data
-      })
-      this.duplicatingUser.first_name = this.user.first_name
-      this.duplicatingUser.last_name = this.user.last_name
-      this.duplicatingUser.phone_no = this.user.phone_no
+        this.fetchUser();
     },
+      // this.duplicatingUser.first_name = this.user.first_name
+      // this.duplicatingUser.last_name = this.user.last_name
+      // this.duplicatingUser.phone_no = this.user.phone_no
   }
 </script>
 
 <style scoped>
-    .form-row {
-        display: grid;
-        margin: 20px 0;
-        grid-template-areas: 'col-1 col-2';
-        grid-template-columns: 130px 520px;
-    }
 
-    .col-1 {
-        grid-area: col-1;
-    }
-
-    .col-2 {
-        grid-area: col-2;
-    }
-
-    .form-label {
-        font-weight: 700;
-        margin-top: 10px;
-        margin-right: 15px;
-        font-size: 12px;
-        text-align: right;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
-
-    .form-input {
-        background-color: #ffffff;
-        margin-left: 10px;
-        margin-right: 10px;
-        border-radius: 5px;
-        height: 35px;
-        line-height: 35px;
-        padding-left: 10px;
-        border: none;
-        font-size: 12px;
-        font-weight: 700;
-        width: 100%;
-    }
-
-    .form-data {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-    }
-
-    .input-border {
-        border: 2px solid red;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-
-    .form-data span {
-        background-color: red;
-        border-radius: 5px;
-        color: #fff;
-        padding: 10px 0 10px 14px;
-        font-size: 12px;
-        font-weight: 700;
-        margin-left: 10px;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-        width: 100%;
-    }
-
-    .button-row {
-        display: flex;
-        justify-content: flex-start;
-        margin-left: 100px;
-    }
-
-    .info {
-        width: 100%;
-        height: 50px;
-        background-color: #94C01E;
-        margin-bottom: 50px;
-        color: #FFFFFF;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 5px;
-    }
-
-    .error {
-        background-color: #ff0e02;
-    }
 </style>

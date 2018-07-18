@@ -1,45 +1,61 @@
 <template>
-        <form action="" @submit.prevent="updateUser">
-            <div class="info" v-if="showInfoEdit == true">
-                <p>Użytkownik został zedytowany!</p>
+  <div>
+    <div class="l-wrapper f-center">
+      <!-- tutaj trzeba zrobić kolumny -->
+      <div style="width: 100%;" class="f-content">
+        <form action="" class="c-form" @submit.prevent="updateUser()">
+          <div class="first__column">
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Imię'" rules="required"  v-model="user.first_name" />
             </div>
-            <div class="form-row">
-                <label class="form-label col-1">Imię</label>
-                <div class="form-data col-2">
-                    <input  v-model="editingUser.first_name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('first_name') }" class="form-input " type="text" name="first_name">
-                    <span v-show="errors.has('first_name')" class="help is-danger">{{ errors.first('name') }}</span>
-                </div>
+          </div>
+           <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Nazwisko'" rules="required" v-model="user.last_name" />
             </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Email'" rules="required||email" v-model="user.email" />
+            </div>
+          </div>
+          <div class="c-form__fieldset">
+            <div class="c-form__field-wrapper">
+              <custom-input :label="'Numer telefonu'" rules="required||numeric"  v-model="user.phone_no" />
+            </div>
+          </div>
+          <div class="h-center">
+            <router-link :to="`/users/${user.id}/change-password`" tag="button" class="c-button c-form__button"><span>Zmień hasło</span> </router-link>
+          </div>
+          <div class="c-form__fieldset" v-if="showMessage">
+            <div class="err-info" >
+              <span>{{errorMessage}}</span>
+            </div>
+          </div>
+          </div>
+          <div class="second__column">
+            <ul class="permission__module--name" v-for="module in modules">{{module.name}}
+              <li v-for="permission in permissions">
+                <label class="permission__label">
+                  <input type="checkbox" v-model="selectedPermissions" :value="module.id + '|' + permission.id">{{permission.name}}</label>
+              </li>
+            </ul>
+          </div>
 
-            <div class="form-row">
-                <label class="form-label col-1">Nazwisko</label>
-                <div class="form-data col-2">
-                    <input  v-model="editingUser.last_name" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('last_name') }" class="form-input " type="text" name="last_name">
-                    <span v-show="errors.has('last_name')" class="help is-danger">{{ errors.first('last_name') }}</span>
-                </div>
-            </div>
+          <div class="h-center">
+            <button type="submit" class="c-button c-form__button">
+              <span>Zapisz</span>
+            </button>
+          </div>
 
-            <div class="form-row">
-                <label class="form-label col-1">Email</label>
-                <div class="form-data col-2">
-                    <input  v-model="editingUser.email" v-validate="'required'" :class="{'input': true, 'is-danger input-border': errors.has('email') }" class="form-input " type="text" name="email">
-                    <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
-                </div>
-            </div>
-            <div class="form-row">
-                <label class="form-label col-1">Nr tel.</label>
-                <div class="form-data col-2">
-                    <input  v-model="editingUser.phone_no" v-validate="'required|numeric'" :class="{'input': true, 'is-danger input-border': errors.has('phone_no') }" class="form-input " type="text" name="phone_no">
-                    <span v-show="errors.has('phone_no')" class="help is-danger">{{ errors.first('phone_no') }}</span>
-                </div>
-            </div>
-
-
-            <div class="form-row  col-2 button-row ">
-                <button type="submit" class="custom-button">Edytuj</button>
-                <div @click="changePassword" class="custom-button showPass">Zmień hasło</div>
-            </div>
         </form>
+
+      </div>
+    </div>
+
+  </div>
+
 </template>
 
 <script>
@@ -47,135 +63,72 @@
 
   export default {
     name: "edit-user",
-    props: ['user'],
     data: () => {
       return {
-        editingUser: {
-          first_name: '',
-          last_name: '',
-          email: '',
-          phone_no: '',
+        user: {
+            first_name: '',
+            last_name: '',
+            email: '',
+            phone_no: '',
         },
-        showInfoEdit: false,
-        showChangePassword: false
+        showMessage: '',
+        permissions: '',
+        modules: '',
+        temp: [],
+        selectedPermissions: [
+          // {module_id : '',
+          //  permissions: []
+          // }
+        ],
       }
     },
-    watch: {
-      showInfoEdit: function () {
-        setTimeout(() => {
-          this.showInfoEdit = false
-          this.$parent.$data.type = 2
-        }, 3000)
-      },
-    },
     methods: {
+         fetchUser () {
+        axios.get('users/' + this.$route.params.item).then(result => {
+          this.user = result.data
+        })
+      },
       updateUser() {
         delete this.user.password
         this.$validator.validateAll().then((result) => {
           if (result) {
-            axios.put('users/' + this.editingUser.id , {
-              editedUser: this.editingUser,
-            });
-            this.showInfoEdit = true
-            setTimeout(() => {
-              this.$parent.$data.type = 2
-            }, 1500)
+            axios.put('users/' + this.user.id , {
+              editedUser: this.user,
+            }).then(() => {
+             this.$router.push('/users/list')
+            })
           }
-        })
+        });
       },
-
-      changePassword(){
-        this.$parent.$data.type = 5
-        this.$emit('currUserId', this.editingUser.id)
-      }
     },
     created: function () {
-      this.editingUser = this.user;
-      axios('users')
-        .then(result => {
-          this.items = result.data
-        });
-
+        this.fetchUser();
+        axios('modules').then(result => {
+        this.modules = result.data
+      })
+      axios('access-rights').then(result => {
+        this.permissions = result.data
+      })
     }
   }
 </script>
 
 <style scoped>
-    .form-row {
-        display: grid;
-        margin: 20px 0;
-        grid-template-areas: 'col-1 col-2';
-        grid-template-columns: 130px 520px;
-    }
-    .col-1 {
-        grid-area: col-1;
-    }
-    .col-2 {
-        grid-area: col-2;
-    }
-    .form-label {
-        font-weight: 700;
-        margin-top: 10px;
-        margin-right: 15px;
-        font-size: 12px;
-        text-align: right;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
-    .form-input {
-        background-color: #ffffff;
-        margin-left: 10px;
-        margin-right: 10px;
-        border-radius: 5px;
-        height: 35px;
-        line-height: 35px;
-        padding-left: 10px;
-        border:none;
-        font-size: 12px;
-        font-weight: 700;
-        width: 100%;
-    }
-    .form-data {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-    }
-    .input-border {
-        border: 2px solid red;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-    .form-data span {
-        background-color: red;
-        border-radius: 5px;
-        color: #fff;
-        padding: 10px 0 10px 14px;
-        font-size: 12px;
-        font-weight: 700;
-        margin-left: 10px;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-        width: 100%;
-    }
-   .button-row {
-       display: flex;
-       justify-content: flex-start;
-       margin-left: 100px;
-   }
-    .info {
-        width: 100%;
-        height: 50px;
-        background-color: #94C01E;
-        margin-bottom: 50px;
-        color: #FFFFFF;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 5px;
-    }
-    .showPass {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+   form {
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+  .first-column, .second__column {
+    margin: auto;
+  }
+  .permission__module--name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+  .permission__label {
+    font-weight: 500;
+    font-size:  14px;
+    padding-left: 20px;
+  }
 </style>
