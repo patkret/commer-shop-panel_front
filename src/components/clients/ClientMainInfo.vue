@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="">
-                  <input type="checkbox" >
+                <label><input type="checkbox" v-model="ifShippingDetails">Użyj jako dane do wysyłki</label>
                 </div>
 
                 <!--<div class="f-second-col">-->
@@ -61,7 +61,8 @@
   export default {
     name: 'client-main-info',
     data: () =>({
-      nipCheckResults: []
+      nipCheckResults: [],
+      ifShippingDetails: false,
     }),
     computed: {
       client: {
@@ -85,9 +86,22 @@
         else if(nip.length === 0){
           this.nipCheckResults = []
         }
+      },
+      ifShippingDetails(ifChecked){
+        ifChecked ? setShippingDetails() : ''
       }
     },
     methods: {
+      setShippingDetails() {
+        let tempClient = JSON.stringify(JSON.parse(this.client))
+        this.client.shippingDetails.first_name = this.client.first_name;
+        this.client.shippingDetails.last_name = this.client.last_name;
+        this.client.shippingDetails.city = this.client.city;
+        this.client.shippingDetails.street = this.client.street;
+        this.client.shippingDetails.house_no = this.client.house_no;
+        this.client.shippingDetails.apartment_no = this.client.apartment_no;
+        this.client.shippingDetails.zip_code = this.client.zip_code;
+      },
       selectClient(client) {
         client.shippingDetails = {
           first_name: '',
