@@ -254,8 +254,8 @@
           {
             icon: icons.clients, text: 'Klienci', path: '/clients/list', children:
               [
-                {text: 'Lista klientów', path: ''},
-                {text: 'Dodaj klienta', path: ''},
+                {text: 'Lista klientów', path: '/clients/list'},
+                {text: 'Dodaj klienta', path: '/client-add/main-info'},
                 {text: 'Zgłoszenia hurtowników', path: ''},
               ],
           },
