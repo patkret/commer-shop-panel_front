@@ -38,6 +38,7 @@ import Users from '../components/users/Users'
 import AddUser from '../components/users/AddUser'
 import UsersList from '../components/users/UsersList'
 import EditUser from '../components/users/EditUser'
+import DuplicateUser from '../components/users/DuplicateUser'
 import Stock from '../components/stock/Stock'
 import Orders from '../components/orders/Orders'
 import OrdersList from '../components/orders/OrdersList'
@@ -84,6 +85,8 @@ import productDetails from '../components/products/productDetails'
 import descriptionTemplates from '../components/description-templates/descriptionTemplates'
 import descriptionTemplatesList from '../components/description-templates/descriptionTemplatesList'
 import descriptionTemplateForm from '../components/description-templates/descriptionTemplateForm'
+import changePassword from '../components/users/changePassword'
+
 
 Vue.use(Router)
 
@@ -530,30 +533,21 @@ export default new Router({
             {
               path: 'edit/:item',
               name: 'EditUser',
-              component: EditUser
+              component: EditUser,
+            },
+            {
+              path: ':id/change-password',
+              name: 'changePassword',
+              component: changePassword
+            },
+            {
+              path: 'duplicate/:item',
+              name: 'DuplicateUser',
+              component: DuplicateUser,
             }
+          
           ]
         },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         {
           path: '/description-templates',
           name: 'descriptionTemplates',

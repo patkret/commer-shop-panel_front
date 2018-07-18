@@ -252,7 +252,7 @@
               ],
           },
           {
-            icon: icons.clients, text: 'Klienci', path: '', children:
+            icon: icons.clients, text: 'Klienci', path: '/clients/list', children:
               [
                 {text: 'Lista klientów', path: ''},
                 {text: 'Dodaj klienta', path: ''},

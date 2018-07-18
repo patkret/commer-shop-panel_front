@@ -25,21 +25,12 @@
 </template>
 
 <script>
-  import AddUser from './AddUser'
-//   import EditUser from './EditUser'
-  import UsersList from './UsersList'
-//   import DuplicateUser from './DuplicateUser'
-//   import ChangePassword from './changePassword'
-
   export default {
     name: "users",
   
     data: () => {
       return {
           item: ''
-        // type: 2,
-        // users: '',
-        // userId: ''
       }
     },
     methods: {
@@ -49,8 +40,5 @@
 </script>
 
 <style scoped>
-    .active{
-        background-color: #F4F4F9;
-        border-radius: 5px;
-    }
+
 </style>

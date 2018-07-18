@@ -14,6 +14,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import { store } from './store/store'
 import customInput from './components/custom-input'
+import passwordInput from './components/password-input'
 import customTextarea from './components/custom-textarea'
 import singleSelect from './components/singleSelect'
 import VModal from 'vue-js-modal'
@@ -36,6 +37,7 @@ Vue.use(VeeValidate)
 Vue.use(multiselectStyle)
 Vue.component('multiselect', Multiselect)
 Vue.component('custom-input', customInput)
+Vue.component('password-input', passwordInput)
 Vue.component('custom-textarea', customTextarea)
 Vue.component('single-select', singleSelect)
 Vue.use(VueSweetalert2)

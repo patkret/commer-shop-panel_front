@@ -4,6 +4,7 @@
       <!-- tutaj trzeba zrobić kolumny -->
       <div style="width: 100%;" class="f-content">
         <form action="" class="c-form" @submit.prevent="updateUser()">
+          <div class="first__column">
           <div class="c-form__fieldset">
             <div class="c-form__field-wrapper">
               <custom-input :label="'Imię'" rules="required"  v-model="user.first_name" />
@@ -24,20 +25,22 @@
               <custom-input :label="'Numer telefonu'" rules="required||numeric"  v-model="user.phone_no" />
             </div>
           </div>
-          <div class="c-form__fieldset">
-            <div class="c-form__field-wrapper">
-              <custom-input  :label="'Hasło'" rules="required"  min-input-length="4" v-model="user.password" />
-            </div>
-          </div>
-          <div class="c-form__fieldset">
-            <div class="c-form__field-wrapper">
-              <custom-input  :label="'Powtórz hasło'" rules="required||confirmed:pasword" type="password" min-input-length="4" v-model="user.passwordConfirmation" />
-            </div>
+          <div class="h-center">
+            <router-link :to="`/users/${user.id}/change-password`" tag="button" class="c-button c-form__button"><span>Zmień hasło</span> </router-link>
           </div>
           <div class="c-form__fieldset" v-if="showMessage">
             <div class="err-info" >
               <span>{{errorMessage}}</span>
             </div>
+          </div>
+          </div>
+          <div class="second__column">
+            <ul class="permission__module--name" v-for="module in modules">{{module.name}}
+              <li v-for="permission in permissions">
+                <label class="permission__label">
+                  <input type="checkbox" v-model="selectedPermissions" :value="module.id + '|' + permission.id">{{permission.name}}</label>
+              </li>
+            </ul>
           </div>
 
           <div class="h-center">
@@ -67,22 +70,18 @@
             last_name: '',
             email: '',
             phone_no: '',
-            // password: '',
-            // confirmPassword: '',
         },
         showMessage: '',
-        // showInfoEdit: false,
-        // showChangePassword: false
+        permissions: '',
+        modules: '',
+        temp: [],
+        selectedPermissions: [
+          // {module_id : '',
+          //  permissions: []
+          // }
+        ],
       }
     },
-    // watch: {
-    //   showInfoEdit: function () {
-    //     setTimeout(() => {
-    //       this.showInfoEdit = false
-    //       this.$parent.$data.type = 2
-    //     }, 3000)
-    //   },
-    // },
     methods: {
          fetchUser () {
         axios.get('users/' + this.$route.params.item).then(result => {
@@ -96,61 +95,40 @@
             axios.put('users/' + this.user.id , {
               editedUser: this.user,
             }).then(() => {
-             this.$router.push('./list')
+             this.$router.push('/users/list')
             })
           }
         });
       },
-
-    //   changePassword(){
-    //     this.$parent.$data.type = 5
-    //     this.$emit('currUserId', this.editingUser.id)
-    //   }
     },
     created: function () {
         this.fetchUser();
+        axios('modules').then(result => {
+        this.modules = result.data
+      })
+      axios('access-rights').then(result => {
+        this.permissions = result.data
+      })
     }
   }
 </script>
 
 <style scoped>
-    .input-border {
-        border: 2px solid red;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-    }
-    .form-data span {
-        background-color: red;
-        border-radius: 5px;
-        color: #fff;
-        padding: 10px 0 10px 14px;
-        font-size: 12px;
-        font-weight: 700;
-        margin-left: 10px;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-        width: 100%;
-    }
-   .button-row {
-       display: flex;
-       justify-content: flex-start;
-       margin-left: 100px;
-   }
-    .info {
-        width: 100%;
-        height: 50px;
-        background-color: #94C01E;
-        margin-bottom: 50px;
-        color: #FFFFFF;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 5px;
-    }
-    .showPass {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+   form {
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+  .first-column, .second__column {
+    margin: auto;
+  }
+  .permission__module--name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+  .permission__label {
+    font-weight: 500;
+    font-size:  14px;
+    padding-left: 20px;
+  }
 </style>

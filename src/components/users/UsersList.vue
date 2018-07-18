@@ -60,7 +60,7 @@
                 <div class="c-actions__row">
                   <button class="c-actions__item" @click="deleteUser(item)">Usuń</button>
                   <router-link :to="'edit/' + item.id" class="c-actions__item" tag="button">Edytuj</router-link>
-                  <router-link :to="'duplicate' + item.id" class="c-actions__item" tag="button">Duplikuj</router-link>
+                  <router-link :to="'duplicate/' + item.id" class="c-actions__item" tag="button">Duplikuj</router-link>
                 </div>
               </div>
             </td>
@@ -101,13 +101,6 @@
             this.index = key
           }
         },
-
-    //   editUser (item) {
-    //     this.$emit('singleUser', item)
-    //   },
-    //   duplicateUser (item) {
-    //     this.$emit('duplUser', item)
-    //   },
       deleteUser (item) {
         this.$swal({
           title: 'Czy chcesz usunąć użytkownika?',
