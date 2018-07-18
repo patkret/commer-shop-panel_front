@@ -3,10 +3,10 @@
 <h3 class="login-header">Logowanie do panelu admina</h3>
   <form class="login-form" action="" @submit.prevent="login()">
                 <div class="login-form-row">
-                    <custom-input class="" :label="'E-mail'" v-model="user.email" rules="required" min-input-length="4" />
+                    <password-input label="E-mail" rules="required" min-inpt-length="4" v-model="user.email"></password-input>
                 </div>
                 <div class="login-form-row">
-                    <custom-input :label="'Password'" v-model="user.password" rules="required" min-input-length="4" type="password"/>
+                    <password-input label="Haslo" rules="required" min-inpt-length="4" v-model="user.password"></password-input>
                 </div>
                 <div class="login-form-row">
                     <router-link :to="{name: 'LoginPassword'}">

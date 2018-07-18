@@ -252,10 +252,10 @@
               ],
           },
           {
-            icon: icons.clients, text: 'Klienci', path: '', children:
+            icon: icons.clients, text: 'Klienci', path: '/clients/list', children:
               [
-                {text: 'Lista klientów', path: ''},
-                {text: 'Dodaj klienta', path: ''},
+                {text: 'Lista klientów', path: '/clients/list'},
+                {text: 'Dodaj klienta', path: '/client-add/main-info'},
                 {text: 'Zgłoszenia hurtowników', path: ''},
               ],
           },
@@ -297,7 +297,7 @@
                 {text: 'Płatności', path: ''},
                 {text: 'Domena', path: ''},
                 {text: 'SMTP', path: ''},
-                {text: 'Administratorzy', path: '/users'},
+                {text: 'Administratorzy', path: '/users/list'},
                 {text: 'Edycja zaawansowana', path: '/logs'},
               ],
           },

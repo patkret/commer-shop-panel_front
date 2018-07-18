@@ -51,7 +51,7 @@
                 </div>
                 <div class="c-form__fieldset prices__row">
                     <custom-input label="Cena hurtowa NETTO" v-model="product.wholesale_price"
-                                  rules="decimal:2"></custom-input>
+                                  rules="decimal:2|required"></custom-input>
                     <custom-input label="Cena hurtowa BRUTTO" v-model="wholesaleGrossPrice"
                                   rules="decimal:2"></custom-input>
                 </div>

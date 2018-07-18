@@ -35,6 +35,10 @@ import AddVendor from '../components/vendors/AddVendor'
 import VendorsList from '../components/vendors/VendorsList'
 import EditVendor from '../components/vendors/EditVendor'
 import Users from '../components/users/Users'
+import AddUser from '../components/users/AddUser'
+import UsersList from '../components/users/UsersList'
+import EditUser from '../components/users/EditUser'
+import DuplicateUser from '../components/users/DuplicateUser'
 import Stock from '../components/stock/Stock'
 import Orders from '../components/orders/Orders'
 import OrdersList from '../components/orders/OrdersList'
@@ -81,6 +85,11 @@ import productDetails from '../components/products/productDetails'
 import descriptionTemplates from '../components/description-templates/descriptionTemplates'
 import descriptionTemplatesList from '../components/description-templates/descriptionTemplatesList'
 import descriptionTemplateForm from '../components/description-templates/descriptionTemplateForm'
+import Clients from '../components/clients/Clients'
+import ClientsList from '../components/clients/ClientsList'
+import ClientForm from '../components/clients/ClientForm'
+import ClientMainInfo from '../components/clients/ClientMainInfo'
+import ShippingDetails from '../components/clients/ShippingDetails'
 
 Vue.use(Router)
 
@@ -311,7 +320,7 @@ export default new Router({
             },
             {
               path: 'seo',
-              name: 'ProductsSeo',
+              name: 'ProductsSeoEdit',
               component:ProductsSeo,
             },
             {
@@ -513,27 +522,35 @@ export default new Router({
           path: '/users',
           name: 'Users',
           component: Users,
+          children: [
+            {
+              path: 'add',
+              name: 'AddUser',
+              component: AddUser,
+            },
+            {
+              path: 'list',
+              name: 'UsersList',
+              component: UsersList,
+            },
+            {
+              path: 'edit/:item',
+              name: 'EditUser',
+              component: EditUser,
+            },
+            {
+              path: ':id/change-password',
+              name: 'changePassword',
+              component: changePassword
+            },
+            {
+              path: 'duplicate/:item',
+              name: 'DuplicateUser',
+              component: DuplicateUser,
+            }
+          
+          ]
         },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         {
           path: '/description-templates',
           name: 'descriptionTemplates',
@@ -556,21 +573,6 @@ export default new Router({
             },
           ]
         },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         {
           path: '/permission',
           name: 'permissionList',
@@ -663,6 +665,61 @@ export default new Router({
           name: 'Integrations',
           component: Integrations,
         },
+        {
+          path: '/clients',
+          name: 'Clients',
+          component: Clients,
+          children: [
+            {
+              path: 'list',
+              name: 'ClientsList',
+              component: ClientsList,
+            },
+          ]
+        },
+        {
+          path: '/client-add',
+          name: 'ClientForm',
+          component: ClientForm,
+          children: [
+            {
+              path: 'main-info',
+              name: 'ClientMainInfo',
+              component: ClientMainInfo,
+            },
+            {
+              path: 'shipping-details',
+              name: 'ShippingDetails',
+              component: ShippingDetails,
+            },
+          ]
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {
           path: '/logs',
           name: 'Logs',
