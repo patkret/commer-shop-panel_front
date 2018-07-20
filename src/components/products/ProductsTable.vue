@@ -443,6 +443,7 @@
 <script>
   import changeVisibility from './changeVisibibility'
   import icon from '../../assets/icons'
+  import ax from 'axios'
 
   export default {
     name: 'products-table',
@@ -591,7 +592,7 @@
     },
     watch: {
       searchFor: function (value) {
-        axios('/products-filter/?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
+        ax('https://dev.esstet.pl/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
           '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
           '&main_category=' +
           this.main_category + '&visibility=' + this.visibility + '&search=' + value).
@@ -638,7 +639,7 @@
           this.order = 'desc'
         }
 
-        axios('/products-filter/?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
+        ax('https://dev.esstet.pl/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
           '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
           '&main_category=' +
           this.main_category + '&visibility=' + this.visibility + '&search=' + this.searchFor).
@@ -829,7 +830,7 @@
         })
       },
       filter () {
-        axios('/products-filter/?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
+        ax('https://dev.esstet.pl/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
           '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
           '&main_category=' +
           this.main_category + '&visibility=' + this.visibility + '&search=' + this.searchFor).
@@ -862,7 +863,7 @@
           this.current_page = page
         }
         // if (this.filtered === true) {
-        axios('/products-filter/?page=' + page + '&order_by=' + this.orderBy + '&order=' + this.order + '&rows=' +
+        ax('https://dev.esstet.pl/api/krzysiek?page=' + page + '&order_by=' + this.orderBy + '&order=' + this.order + '&rows=' +
           this.rows + '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
           '&main_category=' +
           this.main_category + '&visibility=' + this.visibility).
@@ -884,17 +885,23 @@
     },
     created: function () {
 
-      // axios('/products-filter/?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
-      //   '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
-      //   '&main_category=' +
-      //   this.main_category + '&visibility=' + this.visibility).
-      //   then(result => {
-      //
-      //     this.items = result.data.data
-      //     this.current_page = result.data.current_page
-      //     this.last_page = result.data.last_page
-      //   })
-        this.filter();
+      ax('https://dev.esstet.pl/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
+        '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
+        '&main_category=' +
+        this.main_category + '&visibility=' + this.visibility).
+        then(result => {
+
+          this.items = result.data.data
+          this.current_page = result.data.current_page
+          this.last_page = result.data.last_page
+          console.log(result.data)
+        })
+
+      // axios('products').then(result => {
+      //   this.items = result.data.data
+      //   this.current_page = result.data.current_page
+      //   this.last_page = result.data.last_page
+      // })
 
       axios('all-categories').then(result => {
         this.categories = result.data

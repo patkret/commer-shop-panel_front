@@ -539,11 +539,11 @@ export default new Router({
               name: 'EditUser',
               component: EditUser,
             },
-            {
-              path: ':id/change-password',
-              name: 'changePassword',
-              component: changePassword
-            },
+            // {
+            //   path: ':id/change-password',
+            //   name: 'changePassword',
+            //   component: changePassword
+            // },
             {
               path: 'duplicate/:item',
               name: 'DuplicateUser',
