@@ -94,13 +94,13 @@
     methods: {
       setShippingDetails() {
         let tempClient = JSON.stringify(JSON.parse(this.client))
-        this.client.shippingDetails.first_name = this.client.first_name;
-        this.client.shippingDetails.last_name = this.client.last_name;
-        this.client.shippingDetails.city = this.client.city;
-        this.client.shippingDetails.street = this.client.street;
-        this.client.shippingDetails.house_no = this.client.house_no;
-        this.client.shippingDetails.apartment_no = this.client.apartment_no;
-        this.client.shippingDetails.zip_code = this.client.zip_code;
+        this.client.shippingDetails.first_name = tempClient.first_name;
+        this.client.shippingDetails.last_name = tempClient.last_name;
+        this.client.shippingDetails.city = tempClient.city;
+        this.client.shippingDetails.street = tempClient.street;
+        this.client.shippingDetails.house_no = tempClient.house_no;
+        this.client.shippingDetails.apartment_no = tempClient.apartment_no;
+        this.client.shippingDetails.zip_code = tempClient.zip_code;
       },
       selectClient(client) {
         client.shippingDetails = {

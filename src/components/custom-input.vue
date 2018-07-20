@@ -3,7 +3,7 @@
         <transition name="slide-fade">
             <span :class="{'label': true}" v-if="showCustLabel" >{{label}}</span>
         </transition>
-        <input type="text" :class="{'my-input__input' : true, 'my-input__input red-label': errors.has(label)}" :name="label" :value="value" :placeholder="label" v-validate="{ rules }" @input="updateField($event.target.value)"/>
+        <input type="text" :class="{'my-input__input' : true, 'my-input__input red-label': errors.has(label)}" :name="label" :value="value" :disabled="ifDisabled" :placeholder="label" v-validate="{ rules }" @input="updateField($event.target.value)"/>
         <span class="not-valid__error" v-if="errors.has(label)">{{errors.first(label)}}</span>
     </div>
 </template>
@@ -12,7 +12,7 @@
   export default {
     name: 'custom-input',
     inject: ['$validator'],
-    props: ['label', 'rules', 'minInputLength', 'value'],
+    props: ['label', 'rules', 'minInputLength', 'value', 'ifDisabled'],
     data: () => ({
       showCustLabel: false,
     }),
@@ -107,7 +107,7 @@
     .my-input__input{
         height: 36px;
         max-width: 695px;
-        width: 99%;
+        width: 100%;
         font-size: 130%;
         border: transparent;
         padding-left: 15px;

@@ -1,12 +1,12 @@
 <template>
     <div class="l-wrapper">
-        <transition name="fade">
+        <!-- <transition name="fade">
             <div class="err-info" v-if="errorInfo">
                 <p v-for="message in messages" v-show="message.show">{{message.text}}</p>
             </div>
-        </transition>
+        </transition> -->
         <div style="width: 50%;">
-            <form class="c-form" @submit.prevent="saveProduct">
+            <!-- <form class="c-form" @submit.prevent="saveProduct"> -->
 
                 <div class="c-form__fieldset">
                     <custom-input label="Nazwa produktu" rules="required" v-model="product.name"
@@ -46,22 +46,22 @@
                     <span>Aby automatycznie przeliczyć cenę wybierz stawkę VAT</span>
                 </div>
                 <div class="c-form__fieldset prices__row">
-                    <custom-input label="Cena sprzedaży NETTO" v-model="product.price" rules="decimal:2"></custom-input>
-                    <custom-input label="Cena sprzedaży BRUTTO" v-model="grossPrice" rules="decimal:2"></custom-input>
+                    <custom-input label="Cena sprzedaży NETTO" v-model="product.price" rules="decimal:2|required"></custom-input>
+                    <custom-input label="Cena sprzedaży BRUTTO" v-model="grossPrice" rules="decimal:2" ifDisabled="true"></custom-input>
                 </div>
                 <div class="c-form__fieldset prices__row">
                     <custom-input label="Cena hurtowa NETTO" v-model="product.wholesale_price"
                                   rules="decimal:2|required"></custom-input>
                     <custom-input label="Cena hurtowa BRUTTO" v-model="wholesaleGrossPrice"
-                                  rules="decimal:2"></custom-input>
+                                  rules="decimal:2" ifDisabled="true"></custom-input>
                 </div>
-                <div class="h-center">
+                <!-- <div class="h-center">
                     <button type="submit" class="c-button c-form__button">
                         <span>Zapisz</span>
                     </button>
-                </div>
+                </div>-->
 
-            </form>
+            <!-- </form> -->
         </div>
     </div>
 </template>
@@ -119,42 +119,59 @@
 
     watch: {
       'product.vat_rate': function () {
-        // console.log(this.tempProduct.vat_rate)
         if (this.product.price > 0 && this.grossPrice > 0) {
-          console.log('obie wypełnione')
           this.countGrossPrice(this.product.price)
-
         }
         else if (this.product.price > 0) {
-          console.log('1')
           this.countGrossPrice(this.product.price)
-
         }
         else if (this.product.price == 0) {
-          console.log('2')
           this.grossPrice = ''
         }
-        else {
-          console.log('3')
-          this.countNetPrice(this.grossPrice)
+        // else {
+        //   this.countNetPrice(this.grossPrice)
+        // }
+
+
+        if (this.product.wholesale_price > 0 && this.wholesaleGrossPrice > 0) {
+          this.countWholesaleGrossPrice(this.product.wholesale_price)
         }
+        else if (this.product.wholesale_price > 0) {
+          this.countWholesaleGrossPrice(this.product.wholesale_price)
+        }
+        // else if (this.product.wholesale_price == 0) {
+        //   this.wholesaleGrossPrice = ''
+        // }
+        // else {
+        //   console.log('liczę netto')
+        //   this.countWholesaleNetPrice(this.wholesaleGrossPrice)
+        // }
       },
       'product.price': function (price) {
         if (this.checkIfVatRateSelected()) {
-          console.log('licze brutto')
           this.countGrossPrice(price)
         }
       },
-      grossPrice: function (price) {
-
-        if (this.checkIfVatRateSelected()) {
-          this.countNetPrice(price)
-        }
-      },
+      // grossPrice: function (price) {
+      //
+      //   if (this.checkIfVatRateSelected()) {
+      //     this.countNetPrice(price)
+      //   }
+      // },
 
       'product.main_category'(category){
         this.$store.dispatch('fetchAttributeSets', category.id)
-      }
+      },
+      'product.wholesale_price': function (price) {
+        if (this.checkIfVatRateSelected()) {
+          this.countWholesaleGrossPrice(price)
+        }
+      },
+      // wholesaleGrossPrice: function(price){
+      //   if (this.checkIfVatRateSelected()) {
+      //       this.countWholesaleNetPrice(price)
+      //   }
+      // }
     },
 
     methods: {
@@ -174,106 +191,104 @@
       },
 
       countNetPrice (price) {
-        // console.log(typeof this.roundPrice(price / (1 + (this.product.vat_rate.rate / 100))))
         this.$store.state.products.product.price = this.roundPrice(price / (1 + (this.product.vat_rate.rate / 100)))
       },
-
       countGrossPrice (price) {
-        // console.log(typeof this.roundPrice(price * (1 + (this.product.vat_rate.rate / 100))))
         this.grossPrice = this.roundPrice(price * (1 + (this.product.vat_rate.rate / 100)))
       },
-      setVariantSetValues () {
-        this.tempProduct.variantSets = this.$store.state.products.selectedVariantSet
-        if (!!this.tempProduct.variantSets) {
-          this.tempProduct.variantSets.selectedVariants = this.$store.state.products.selectedVariants
-        }
+      countWholesaleNetPrice(price) {
+        this.$store.state.products.product.wholesale_price = this.roundPrice(price * (1 + (this.product.vat_rate.rate / 100)))
       },
-      setAttributeSets () {
-        this.tempProduct.attributeSets = this.$store.state.products.selectedAttributeSets
+      countWholesaleGrossPrice(price) {
+        this.wholesaleGrossPrice = this.roundPrice(price * (1 + (this.product.vat_rate.rate / 100)))
       },
-      validateSelects () {
-
-        this.messages[0].show = this.product.main_category ? false : true
-        this.messages[1].show = this.product.vat_rate ? false : true
-        this.messages[2].show = this.product.stock ? false : true
-        this.messages[3].show = this.product.vendor ? false : true
-        this.showErrorInfo()
-      },
-      showErrorInfo () {
-        // console.log(this.messages.find(el => el.show == true))
-        if (this.messages.find(el => el.show == true)) {
-          this.errorInfo = true
-          setTimeout(() => {
-            this.errorInfo = false
-          }, 3000)
-        }
-      },
-
-      async saveProduct () {
-
-        this.tempProduct = JSON.parse(JSON.stringify(this.product));
-        this.setVariantSetValues()
-        this.setAttributeSets()
-        this.validateSelects()
-
-        this.$validator.validateAll().then((result) => {
-          if (result && this.errorInfo === false) {
-
-            if(!!this.product.barcode){
-              this.tempProduct.main_category = this.product.main_category.id
-              this.tempProduct.vendor = this.product.vendor.id
-              this.tempProduct.vat_rate = this.product.vat_rate.id
-              this.tempProduct.stock = this.product.stock.id
-              this.tempProduct.attributeSets = JSON.stringify(this.tempProduct.attributeSets)
-              this.tempProduct.variantSets = JSON.stringify(this.tempProduct.variantSets)
-              this.tempProduct.relatedProducts = this.relatedProductsIds
-              if(this.product.description_template){
-                this.tempProduct.description_template_id = this.product.description_template.id
-              }
-                console.log(this.tempProduct)
-              axios.post('/products', {
-                product: this.tempProduct,
-              }).then(() => {
-                this.$router.push('/products/list')
-                this.$store.commit('clearProduct')
-                this.$store.commit('clearState')
-              })
-            }
-
-            else{
-              this.$parent.currentRoute = 'additional-info'
-              this.$router.replace('additional-info')
-              let fieldError = {
-                  field: "'Kod kreskowy'",
-                  msg: "Pole wymagane",
-                  rule: "required" // optional
-              }
-              this.$validator.errors.add(fieldError)
-              // this.$validator.validateAll().then(() => {
-              //
-              // })
-              console.log(this.$validator)
-            }
-
-
-            // if (this.product.id > 0) {
-            //   axios.put('/products/' + this.product.id, {
-            //     product: this.product,
-            //     categories: this.categories,
-            //   }).then(() => {
-            //     this.$router.push('/products')
-            //     this.$store.commit('clearProduct')
-            //     this.$store.commit('clearSets')
-            //     this.$store.state.selectedRate = ''
-            //     this.$store.state.selectedVendor = ''
-            //     this.$store.state.selectedStock = ''
-            //   })
-            // } else {
-            //
-
-          }
-        })
-      },
+      // setVariantSetValues () {
+      //   this.tempProduct.variantSets = this.$store.state.products.selectedVariantSet
+      //   if (!!this.tempProduct.variantSets) {
+      //     this.tempProduct.variantSets.selectedVariants = this.$store.state.products.selectedVariants
+      //   }
+      // },
+      // setAttributeSets () {
+      //   this.tempProduct.attributeSets = this.$store.state.products.selectedAttributeSets
+      // },
+      // validateSelects () {
+      //
+      //   this.messages[0].show = this.product.main_category ? false : true
+      //   this.messages[1].show = this.product.vat_rate ? false : true
+      //   this.messages[2].show = this.product.stock ? false : true
+      //   this.messages[3].show = this.product.vendor ? false : true
+      //   this.showErrorInfo()
+      // },
+      // showErrorInfo () {
+      //   if (this.messages.find(el => el.show == true)) {
+      //     this.errorInfo = true
+      //     setTimeout(() => {
+      //       this.errorInfo = false
+      //     }, 3000)
+      //   }
+      // },
+      //
+      // async saveProduct () {
+      //
+      //   this.tempProduct = JSON.parse(JSON.stringify(this.product));
+      //   this.setVariantSetValues()
+      //   this.setAttributeSets()
+      //   this.validateSelects()
+      //
+      //   this.$validator.validateAll().then((result) => {
+      //     if (result && this.errorInfo === false) {
+      //
+      //       if(!!this.product.barcode){
+      //         this.tempProduct.main_category = this.product.main_category.id
+      //         this.tempProduct.vendor = this.product.vendor.id
+      //         this.tempProduct.vat_rate = this.product.vat_rate.id
+      //         this.tempProduct.stock = this.product.stock.id
+      //         this.tempProduct.attributeSets = JSON.stringify(this.tempProduct.attributeSets)
+      //         this.tempProduct.variantSets = JSON.stringify(this.tempProduct.variantSets)
+      //         this.tempProduct.relatedProducts = this.relatedProductsIds
+      //         if(this.product.description_template){
+      //           this.tempProduct.description_template_id = this.product.description_template.id
+      //         }
+      //           console.log(this.tempProduct)
+      //         axios.post('/products', {
+      //           product: this.tempProduct,
+      //         }).then(() => {
+      //           this.$router.push('/products/list')
+      //           this.$store.commit('clearProduct')
+      //           this.$store.commit('clearState')
+      //         })
+      //       }
+      //
+      //       else{
+      //         this.$parent.currentRoute = 'additional-info'
+      //         this.$router.replace('additional-info')
+      //         let fieldError = {
+      //             field: "'Kod kreskowy'",
+      //             msg: "Pole wymagane",
+      //             rule: "required" // optional
+      //         }
+      //         this.$validator.errors.add(fieldError)
+      //       }
+      //
+      //
+      //       // if (this.product.id > 0) {
+      //       //   axios.put('/products/' + this.product.id, {
+      //       //     product: this.product,
+      //       //     categories: this.categories,
+      //       //   }).then(() => {
+      //       //     this.$router.push('/products')
+      //       //     this.$store.commit('clearProduct')
+      //       //     this.$store.commit('clearSets')
+      //       //     this.$store.state.selectedRate = ''
+      //       //     this.$store.state.selectedVendor = ''
+      //       //     this.$store.state.selectedStock = ''
+      //       //   })
+      //       // } else {
+      //       //
+      //
+      //     }
+      //   })
+      // },
 
     },
     created: function () {

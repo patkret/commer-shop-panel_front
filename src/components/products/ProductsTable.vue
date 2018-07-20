@@ -54,7 +54,7 @@
 
                     <ul class="c-dropdown__menu">
                         <li :class="{'c-dropdown__menu-item':true, 'c-dropdown__menu-item is-active': row.number === rows }"
-                            v-for="row in rowsPerPage" @click.prevent="rows = row.number; filter()">
+                            v-for="row in rowsPerPage" @click.prevent="rows = row.number">
                             <a href="">
                                 {{row.number}}
                                 <!--<span class="c-arrow-down"></span>-->
@@ -121,7 +121,7 @@
                                 </span>
                     <ul class="c-dropdown__menu">
                         <li :class="{'c-dropdown__menu-item': true, 'c-dropdown__menu-item is-active': selectedVendor.id === vendor.id}"
-                            v-for="vendor in vendors" @click.prevent="selectedVendor = vendor; filter()">
+                            v-for="vendor in vendors" @click.prevent="selectedVendor = vendor">
                             <a href="">
                                 {{vendor.name}}
                             </a>
@@ -143,7 +143,7 @@
                                 </span>
                     <ul class="c-dropdown__menu">
                         <li :class="{'c-dropdown__menu-item': true, 'c-dropdown__menu-item is-active': selectedMainCategory.id === category.id}"
-                            v-for="category in categories" @click.prevent="selectedMainCategory = category; filter()">
+                            v-for="category in categories" @click.prevent="selectedMainCategory = category">
                             <a href="">
                                 {{category.name}}
                             </a>
@@ -178,14 +178,14 @@
                     </div>
                 </div>
             </div>
-            <div class="single-filter">
+            <!-- <div class="single-filter">
                 <div class="filter-name">
                     <button class="c-button c-form__button"><span>Filtruj</span></button>
                 </div>
                 <div class="filter-name">
                     <button class="c-button c-form__button"><span>Wyczyść filtry</span></button>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="c-table">
@@ -600,15 +600,21 @@
             this.current_page = result.data.current_page
             this.last_page = result.data.last_page
           })
+          console.log('searchFor')
       },
       selectedProducts: function (selected) {
         this.selectedProductsIds = selected.map(el => el.id)
       },
       selectedMainCategory: function (value) {
         this.main_category = value.id
+        this.filter();
       },
       selectedVendor: function (value, old) {
         this.vendor_id = value.id
+      },
+      visibility(visibility) {
+        visibility ? this.visibility = 1 : this.visibility = 0
+        this.filter();
       },
       selectedFilter: function (value) {
         if (value.id === 0) {
@@ -641,7 +647,11 @@
             this.current_page = result.data.current_page
             this.last_page = result.data.last_page
           })
+          console.log('when selected filter')
       },
+      price_from(value) {
+        this.filter();
+      }
     },
     methods: {
       showActions (key) {
@@ -828,6 +838,7 @@
             this.current_page = result.data.current_page
             this.last_page = result.data.last_page
           })
+          console.log('filter method')
         // this.filtered = true
         // axios.post('/products-filter', {
         //   price_from: this.price_from,
@@ -859,8 +870,9 @@
             this.items = result.data.data
             this.current_page = result.data.current_page
             this.last_page = result.data.last_page
-            console.log(result.data)
+
           })
+          console.log('change page')
         // }
         // else {
         //   axios('/products?page=' + page).then(result => {
@@ -872,23 +884,17 @@
     },
     created: function () {
 
-      axios('/products-filter/?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
-        '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
-        '&main_category=' +
-        this.main_category + '&visibility=' + this.visibility).
-        then(result => {
-
-          this.items = result.data.data
-          this.current_page = result.data.current_page
-          this.last_page = result.data.last_page
-          console.log(result.data)
-        })
-
-      // axios('products').then(result => {
-      //   this.items = result.data.data
-      //   this.current_page = result.data.current_page
-      //   this.last_page = result.data.last_page
-      // })
+      // axios('/products-filter/?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
+      //   '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
+      //   '&main_category=' +
+      //   this.main_category + '&visibility=' + this.visibility).
+      //   then(result => {
+      //
+      //     this.items = result.data.data
+      //     this.current_page = result.data.current_page
+      //     this.last_page = result.data.last_page
+      //   })
+        this.filter();
 
       axios('all-categories').then(result => {
         this.categories = result.data

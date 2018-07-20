@@ -38,6 +38,7 @@ import Users from '../components/users/Users'
 import AddUser from '../components/users/AddUser'
 import UsersList from '../components/users/UsersList'
 import EditUser from '../components/users/EditUser'
+import changePassword from '../components/users/changePassword'
 import DuplicateUser from '../components/users/DuplicateUser'
 import Stock from '../components/stock/Stock'
 import Orders from '../components/orders/Orders'
@@ -548,7 +549,7 @@ export default new Router({
               name: 'DuplicateUser',
               component: DuplicateUser,
             }
-          
+
           ]
         },
         {
