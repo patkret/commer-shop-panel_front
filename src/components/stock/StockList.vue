@@ -131,6 +131,15 @@
             </table>
 
             <div class="c-pagination">
+                <button type="button" @click.prevent="changePage(current_page - 1)" :disabled="current_page === 1"><i
+                        class="fa fa-chevron-left"></i></button>
+                <input type="number" id="page" v-model="current_page" class="paginator--input"
+                       @keyup.enter="changePage(current_page)"/>
+                <span>z</span>
+                <span class="paginator--last_page"> {{last_page}}</span>
+                <button type="button" :disabled="current_page === last_page">
+                    <i class="fa fa-chevron-right" @click.prevent="changePage(current_page +1)"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -143,7 +152,10 @@
       return {
         items: [],
         showButtons: {},
-        index: ''
+        index: '',
+        current_page: '',
+        last_page: '',
+
       }
     },
     methods: {
@@ -196,12 +208,28 @@
           dismiss => {
           }).catch(this.$swal.noop)
       },
+      changePage (page) {
+        if (page > this.last_page) {
+          this.current_page = this.last_page
+        }
+        else {
+          this.current_page = page
+        }
+        axios(`/warehouses-all/?page=${page}`).
+          then(result => {
+            this.items = result.data.data
+            this.current_page = result.data.current_page
+            this.last_page = result.data.last_page
+          })
+      },
 
     },
     created: function () {
-      axios('warehouses').
+      axios('warehouses-all').
         then(result => {
-          this.items = result.data
+          this.items = result.data.data
+          this.current_page = result.data.current_page
+          this.last_page = result.data.last_page
           this.items.forEach((v, k) => {
             this.showButtons[k] = false
           })

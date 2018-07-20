@@ -178,18 +178,19 @@
                 this.tempProduct.attributeSets = JSON.stringify(this.tempProduct.attributeSets)
                 this.tempProduct.variantSets = JSON.stringify(this.tempProduct.variantSets)
                 this.tempProduct.relatedProducts = this.relatedProductsIds
+                this.tempProduct.weight_unit = this.product.weight_unit.id
                 if(this.product.description_template){
                   this.tempProduct.description_template_id = this.product.description_template.id
                 }
                 if(!!this.$route.params.id){
-                  console.log('edytuje')
+                  console.log(this.tempProduct)
                   axios.put('/products/' + this.product.id, {
                       product: this.tempProduct,
                   //     categories: this.categories,
                     }).then(() => {
-                      this.$router.push('/products/list')
-                      this.$store.commit('clearProduct')
-                      this.$store.commit('clearState')
+                      // this.$router.push('/products/list')
+                      // this.$store.commit('clearProduct')
+                      // this.$store.commit('clearState')
                     })
                 }
                 else{

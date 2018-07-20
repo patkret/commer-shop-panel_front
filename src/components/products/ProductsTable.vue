@@ -592,7 +592,7 @@
     },
     watch: {
       searchFor: function (value) {
-        ax('https://dev.esstet.pl/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
+        ax('http://127.0.0.1:8000/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
           '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
           '&main_category=' +
           this.main_category + '&visibility=' + this.visibility + '&search=' + value).
@@ -612,6 +612,7 @@
       },
       selectedVendor: function (value, old) {
         this.vendor_id = value.id
+        this.filter();
       },
       visibility(visibility) {
         visibility ? this.visibility = 1 : this.visibility = 0
@@ -639,7 +640,7 @@
           this.order = 'desc'
         }
 
-        ax('https://dev.esstet.pl/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
+        ax('http://127.0.0.1:8000/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
           '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
           '&main_category=' +
           this.main_category + '&visibility=' + this.visibility + '&search=' + this.searchFor).
@@ -651,6 +652,9 @@
           console.log('when selected filter')
       },
       price_from(value) {
+        this.filter();
+      },
+      price_to(value) {
         this.filter();
       }
     },
@@ -830,7 +834,7 @@
         })
       },
       filter () {
-        ax('https://dev.esstet.pl/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
+        ax('http://127.0.0.1:8000/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
           '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
           '&main_category=' +
           this.main_category + '&visibility=' + this.visibility + '&search=' + this.searchFor).
@@ -863,7 +867,7 @@
           this.current_page = page
         }
         // if (this.filtered === true) {
-        ax('https://dev.esstet.pl/api/krzysiek?page=' + page + '&order_by=' + this.orderBy + '&order=' + this.order + '&rows=' +
+        ax('http://127.0.0.1:8000/api/krzysiek?page=' + page + '&order_by=' + this.orderBy + '&order=' + this.order + '&rows=' +
           this.rows + '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
           '&main_category=' +
           this.main_category + '&visibility=' + this.visibility).
@@ -885,7 +889,7 @@
     },
     created: function () {
 
-      ax('https://dev.esstet.pl/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
+      ax('http://127.0.0.1:8000/api/krzysiek?order_by=' + this.orderBy + '&order=' + this.order + '&rows=' + this.rows +
         '&price_from=' + this.price_from + '&price_to=' + this.price_to + '&vendor=' + this.vendor_id +
         '&main_category=' +
         this.main_category + '&visibility=' + this.visibility).
